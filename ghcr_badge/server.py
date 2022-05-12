@@ -1,3 +1,4 @@
+from os import environ
 from typing import Any
 
 from flask import Flask, jsonify, request
@@ -71,7 +72,7 @@ def get_size(package_owner: str, package_name: str) -> Any:
 
 
 def main() -> None:
-    app.run(debug=True)
+    app.run(host="0.0.0.0", port=int(environ.get("PORT", 5000)), debug=True)
 
 
 if __name__ == "__main__":
