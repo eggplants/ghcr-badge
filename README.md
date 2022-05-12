@@ -1,4 +1,4 @@
-# ghcr-badge
+# ghcr-badge: Generate ghcr.io container's status badge
 
 [![Heroku App Status](http://heroku-shields.herokuapp.com/ghcr-badge)](https://ghcr-badge.herokuapp.com)
 
@@ -22,9 +22,11 @@
   https://github.com/eggplants/ghcr-badge/actions/workflows/release.yml
 )
 
-Generate ghcr.io container's status badge
+## Motivation
 
-## demo
+<https://github.com/badges/shields/issues/5594>
+
+## DEMO
 
 - `/<string:package_owner>/<string:package_name>/tags?color=...`
   - <https://ghcr-badge.herokuapp.com/eggplants/ghcr-badge/tags>
@@ -34,4 +36,4 @@ Generate ghcr.io container's status badge
   - 👉: ![2](https://ghcr-badge.herokuapp.com/eggplants/ghcr-badge/latest_tag)
 - `/<string:package_owner>/<string:package_name>/size?tag=...&color=...`
   - <https://ghcr-badge.herokuapp.com/eggplants/ghcr-badge/size?tag=latest>
-  - 👉: ![2](https://ghcr-badge.herokuapp.com/eggplants/ghcr-badge/size?tag=latest)
+  - 👉: ![3](https://ghcr-badge.herokuapp.com/eggplants/ghcr-badge/size?tag=latest)
