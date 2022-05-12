@@ -2,4 +2,7 @@
 
 set -euo pipefail
 
-pip install . && ghcr-badge-server
+if ! command -v ghcr-badge-server &>/dev/null; then
+  pip install .
+fi
+ghcr-badge-server
