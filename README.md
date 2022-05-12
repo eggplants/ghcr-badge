@@ -34,4 +34,4 @@ Generate ghcr.io container's status badge
   - 👉: ![2](https://ghcr-badge.herokuapp.com/eggplants/ghcr-badge/latest_tag)
 - `/<string:package_owner>/<string:package_name>/size?tag=...&color=...`
   - <https://ghcr-badge.herokuapp.com/eggplants/ghcr-badge/size?tag=latest>
-  - 👉: ![2](https://ghcr-badge.herokuapp.com/eggplants/ghcr-badge/size?tag=latest)
+  - 👉: ![3](https://ghcr-badge.herokuapp.com/eggplants/ghcr-badge/size?tag=latest)
