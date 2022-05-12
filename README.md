@@ -23,3 +23,15 @@
 )
 
 Generate ghcr.io container's status badge
+
+## demo
+
+- `/<string:package_owner>/<string:package_name>/tags?color=...`
+  - <https://ghcr-badge.herokuapp.com/eggplants/ghcr-badge/tags>
+  - 👉: ![1](https://ghcr-badge.herokuapp.com/eggplants/ghcr-badge/tags)
+- `/<string:package_owner>/<string:package_name>/latest_tag?color=...`
+  - <https://ghcr-badge.herokuapp.com/eggplants/ghcr-badge/latest_tag>
+  - 👉: ![2](https://ghcr-badge.herokuapp.com/eggplants/ghcr-badge/latest_tag)
+- `/<string:package_owner>/<string:package_name>/size?tag=...&color=...`
+  - <https://ghcr-badge.herokuapp.com/eggplants/ghcr-badge/size?tag=latest>
+  - 👉: ![2](https://ghcr-badge.herokuapp.com/eggplants/ghcr-badge/size?tag=latest)
