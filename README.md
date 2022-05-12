@@ -1,9 +1,5 @@
 # ghcr-badge: Generate ghcr.io container's status badge
 
-[![Heroku App Status](http://heroku-shields.herokuapp.com/ghcr-badge)](https://ghcr-badge.herokuapp.com)
-
-**🖕If the status badge is not shown correctly, please click to wake up hibernated server.**
-
 [![PyPI version](
   https://badge.fury.io/py/ghcr-badge.svg
   )](
@@ -25,6 +21,13 @@
 ## Motivation
 
 <https://github.com/badges/shields/issues/5594>
+
+## Deployment
+
+- <http://heroku-shields.herokuapp.com/ghcr-badge>
+
+  - [![Heroku App Status](http://heroku-shields.herokuapp.com/ghcr-badge)](https://ghcr-badge.herokuapp.com)
+  - **🖕If this status badge is not shown correctly, please click to wake up hibernated server.**
 
 ## DEMO
 
