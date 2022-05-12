@@ -23,7 +23,13 @@ def get_index() -> Any:
                     "/<string:package_owner>/<string:package_name>/tags?color=...",
                     "/<string:package_owner>/<string:package_name>/latest_tag?color=...",
                     "/<string:package_owner>/<string:package_name>/size?tag=...&color=...",
-                ]
+                ],
+                "example_paths": [
+                    "/",
+                    "/eggplants/ghcr-badge/tags",
+                    "/eggplants/ghcr-badge/latest_tag",
+                    "/eggplants/ghcr-badge/size?tag=latest",
+                ],
             }
         )
     except Exception as err:
@@ -34,7 +40,7 @@ def get_index() -> Any:
 def get_tags(package_owner: str, package_name: str) -> Any:
     try:
         q_params = request.args
-        color_type = q_params.get("color", "lime")
+        color_type = q_params.get("color", "#44cc11")
         return return_svg(
             GHCRBadgeGenerator(color_type).generate_tags(package_owner, package_name)
         )
@@ -46,7 +52,7 @@ def get_tags(package_owner: str, package_name: str) -> Any:
 def get_latest_tag(package_owner: str, package_name: str) -> Any:
     try:
         q_params = request.args
-        color_type = q_params.get("color", "lime")
+        color_type = q_params.get("color", "#44cc11")
         return return_svg(
             GHCRBadgeGenerator(color_type).generate_latest_tag(
                 package_owner, package_name
@@ -61,7 +67,7 @@ def get_size(package_owner: str, package_name: str) -> Any:
     try:
         q_params = request.args
         tag_type = q_params.get("tag", "latest")
-        color_type = q_params.get("color", "lime")
+        color_type = q_params.get("color", "#44cc11")
         return return_svg(
             GHCRBadgeGenerator(color_type).generate_size(
                 package_owner, package_name, tag_type

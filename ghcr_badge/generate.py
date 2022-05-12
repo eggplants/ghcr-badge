@@ -49,12 +49,14 @@ _USER_AGENT = "Docker-Client/20.10.2 (linux)"
 
 
 class GHCRBadgeGenerator:
-    def __init__(self, color: str = "lime") -> None:
+    def __init__(self, color: str = "#44cc11") -> None:
         self.color = color
 
     def generate_latest_tag(self, package_owner: str, package_name: str) -> str:
         try:
-            latest_tag = self.get_tags(package_owner, package_name)[-1]
+            tags = self.get_tags(package_owner, package_name)
+            tags.remove("latest")
+            latest_tag = tags[-1]
         except InvalidTagListError:
             return self.get_invalid_badge("version")
         badge = anybadge.Badge(
@@ -66,9 +68,9 @@ class GHCRBadgeGenerator:
         try:
             tags = self.get_tags(package_owner, package_name)
         except InvalidTagListError:
-            return self.get_invalid_badge("versions")
+            return self.get_invalid_badge("image tags")
         badge = anybadge.Badge(
-            label="versions", value="|".join(tags), default_color=self.color
+            label="image tags", value=" | ".join(tags), default_color=self.color
         )
         return str(badge.badge_svg_text)
 
@@ -78,14 +80,14 @@ class GHCRBadgeGenerator:
         try:
             manifest = self.get_manifest(package_owner, package_name, tag)
         except InvalidManifestError:
-            return self.get_invalid_badge("size")
+            return self.get_invalid_badge("image size")
         config_size = int(manifest.get("config", {"size": 0}).get("size", 0))
         layer_size = sum(
             int(layer.get("size", 0)) for layer in manifest.get("layers", [])
         )
         size = f"{config_size + layer_size}B"
         badge = anybadge.Badge(
-            label="size",
+            label="image size",
             value=format_size(parse_size(size), binary=True),
             default_color=self.color,
         )
