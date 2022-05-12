@@ -24,8 +24,7 @@
 
 ## Deployment
 
-- <http://heroku-shields.herokuapp.com/ghcr-badge>
-
+- <https://ghcr-badge.herokuapp.com/>
   - [![Heroku App Status](http://heroku-shields.herokuapp.com/ghcr-badge)](https://ghcr-badge.herokuapp.com)
   - **🖕If this status badge is not shown correctly, please click to wake up hibernated server.**
 
