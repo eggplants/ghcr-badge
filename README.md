@@ -1,9 +1,9 @@
 # ghcr-badge
 
 [![PyPI version](
-  https://badge.fury.io/py/getjump.svg
+  https://badge.fury.io/py/ghcr-badge.svg
   )](
-  https://badge.fury.io/py/getjump
+  https://badge.fury.io/py/ghcr-badge
 ) [![pre-commit.ci status](
   https://results.pre-commit.ci/badge/github/eggplants/ghcr-badge/master.svg
   )](
