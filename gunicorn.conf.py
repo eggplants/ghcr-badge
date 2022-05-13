@@ -1,6 +1,3 @@
-limit_request_field_size = 1000
-limit_request_fields = 10
-limit_request_line = 1000
 max_requests = 1200
 preload_app = True
 timeout = 5
