@@ -20,15 +20,15 @@ def get_index() -> Any:
             {
                 "available_paths": [
                     "/",
-                    "/<string:package_owner>/<string:package_name>/tags?color=...",
-                    "/<string:package_owner>/<string:package_name>/latest_tag?color=...",
+                    "/<string:package_owner>/<string:package_name>/tags?color=...&ignore=...&n=...",
+                    "/<string:package_owner>/<string:package_name>/latest_tag?color=...&ignore=...",
                     "/<string:package_owner>/<string:package_name>/size?tag=...&color=...",
                 ],
                 "example_paths": [
                     "/",
                     "/eggplants/ghcr-badge/tags",
                     "/eggplants/ghcr-badge/latest_tag",
-                    "/eggplants/ghcr-badge/size?tag=latest",
+                    "/eggplants/ghcr-badge/size",
                 ],
             }
         )
@@ -42,13 +42,14 @@ def get_tags(package_owner: str, package_name: str) -> Any:
         q_params = request.args
         color_type = q_params.get("color", "#44cc11")
         ignore_tag = q_params.get("ignore", "latest")
+        tag_num = q_params.get("n", 3)
         return return_svg(
             GHCRBadgeGenerator(color_type, ignore_tag).generate_tags(
-                package_owner, package_name
+                package_owner, package_name, n=int(tag_num)
             )
         )
     except Exception as err:
-        return jsonify(exception=type(err).__name__)
+        return jsonify(exception=type(err).__name__, message=str(err))
 
 
 @app.route("/<string:package_owner>/<string:package_name>/latest_tag", methods=["GET"])

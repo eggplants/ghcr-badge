@@ -6,7 +6,6 @@ from typing import TypedDict, cast
 import anybadge  # type: ignore[import]
 import requests
 from humanfriendly import format_size, parse_size
-from natsort import natsorted
 
 
 class InvalidTokenError(Exception):
@@ -68,13 +67,15 @@ class GHCRBadgeGenerator:
         )
         return str(badge.badge_svg_text)
 
-    def generate_tags(self, package_owner: str, package_name: str) -> str:
+    def generate_tags(self, package_owner: str, package_name: str, n: int = 10) -> str:
+        if n < 0:
+            raise ValueError(f"{n} should be positive.")
         try:
             tags = [
                 tag
                 for tag in self.get_tags(package_owner, package_name)
                 if tag not in self.ignore_tags
-            ]
+            ][:n]
         except InvalidTagListError:
             return self.get_invalid_badge("image tags")
         badge = anybadge.Badge(
@@ -112,8 +113,8 @@ class GHCRBadgeGenerator:
         manifest = requests.get(
             url, headers={"User-Agent": _USER_AGENT, "Authorization": f"Bearer {token}"}
         ).json()
-        if manifest is None:
-            raise InvalidManifestError
+        if manifest is None or "errors" in manifest:
+            raise InvalidManifestError(str(manifest.get("errors")))
         return cast(Manifest, manifest)
 
     def get_tags(self, package_owner: str, package_name: str) -> list[str]:
@@ -129,7 +130,7 @@ class GHCRBadgeGenerator:
         )
         if not isinstance(tags, list) or len(tags) == 0:
             raise InvalidTagListError
-        return [str(tag) for tag in natsorted(tags)]
+        return [str(tag) for tag in tags]
 
     @staticmethod
     def get_invalid_badge(label: str) -> str:

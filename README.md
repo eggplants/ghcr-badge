@@ -30,12 +30,15 @@
 
 ## DEMO
 
-- `/<string:package_owner>/<string:package_name>/tags?color=...`
+- `/<string:package_owner>/<string:package_name>/tags?color=...&ignore=...&n=...`
+  - defaults: `color=#e05d44`, `ignore=latest`, `n=3`
   - <https://ghcr-badge.herokuapp.com/eggplants/ghcr-badge/tags>
   - 👉: ![1](https://ghcr-badge.herokuapp.com/eggplants/ghcr-badge/tags)
-- `/<string:package_owner>/<string:package_name>/latest_tag?color=...`
+- `/<string:package_owner>/<string:package_name>/latest_tag?color=...&ignore=...`
+  - defaults: `color=#e05d44`, `ignore=latest`
   - <https://ghcr-badge.herokuapp.com/eggplants/ghcr-badge/latest_tag>
   - 👉: ![2](https://ghcr-badge.herokuapp.com/eggplants/ghcr-badge/latest_tag)
-- `/<string:package_owner>/<string:package_name>/size?tag=...&color=...`
-  - <https://ghcr-badge.herokuapp.com/eggplants/ghcr-badge/size?tag=latest>
-  - 👉: ![3](https://ghcr-badge.herokuapp.com/eggplants/ghcr-badge/size?tag=latest)
+- `/<string:package_owner>/<string:package_name>/size?color=...&tag=...`
+  - defaults: `color=#e05d44`, `tag=latest`
+  - <https://ghcr-badge.herokuapp.com/eggplants/ghcr-badge/size>
+  - 👉: ![3](https://ghcr-badge.herokuapp.com/eggplants/ghcr-badge/size)
