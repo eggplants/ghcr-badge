@@ -75,7 +75,7 @@ class GHCRBadgeGenerator:
                 tag
                 for tag in self.get_tags(package_owner, package_name)
                 if tag not in self.ignore_tags
-            ][:n]
+            ][::-1][:n][::-1]
         except InvalidTagListError:
             return self.get_invalid_badge("image tags")
         badge = anybadge.Badge(
