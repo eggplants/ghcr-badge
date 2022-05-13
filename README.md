@@ -42,3 +42,7 @@
   - defaults: `color=#e05d44`, `tag=latest`
   - <https://ghcr-badge.herokuapp.com/eggplants/ghcr-badge/size>
   - 👉: ![3](https://ghcr-badge.herokuapp.com/eggplants/ghcr-badge/size)
+
+## Note
+
+GitHub caches badge data in 604800 seconds(=7 days). To update, try: `curl -X PURGE "https://camo.githubusercontent.com/..."` (it's badge image link)
