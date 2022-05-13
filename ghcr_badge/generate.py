@@ -49,13 +49,17 @@ _USER_AGENT = "Docker-Client/20.10.2 (linux)"
 
 
 class GHCRBadgeGenerator:
-    def __init__(self, color: str = "#44cc11") -> None:
+    def __init__(self, color: str = "#44cc11", ignore_tag: str = "latest") -> None:
         self.color = color
+        self.ignore_tags: list[str] = ignore_tag.split(",")
 
     def generate_latest_tag(self, package_owner: str, package_name: str) -> str:
         try:
-            tags = self.get_tags(package_owner, package_name)
-            tags.remove("latest")
+            tags = [
+                tag
+                for tag in self.get_tags(package_owner, package_name)
+                if tag not in self.ignore_tags
+            ]
             latest_tag = tags[-1]
         except InvalidTagListError:
             return self.get_invalid_badge("version")
@@ -66,7 +70,11 @@ class GHCRBadgeGenerator:
 
     def generate_tags(self, package_owner: str, package_name: str) -> str:
         try:
-            tags = self.get_tags(package_owner, package_name)
+            tags = [
+                tag
+                for tag in self.get_tags(package_owner, package_name)
+                if tag not in self.ignore_tags
+            ]
         except InvalidTagListError:
             return self.get_invalid_badge("image tags")
         badge = anybadge.Badge(

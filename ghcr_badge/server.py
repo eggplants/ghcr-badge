@@ -41,8 +41,11 @@ def get_tags(package_owner: str, package_name: str) -> Any:
     try:
         q_params = request.args
         color_type = q_params.get("color", "#44cc11")
+        ignore_tag = q_params.get("ignore", "latest")
         return return_svg(
-            GHCRBadgeGenerator(color_type).generate_tags(package_owner, package_name)
+            GHCRBadgeGenerator(color_type, ignore_tag).generate_tags(
+                package_owner, package_name
+            )
         )
     except Exception as err:
         return jsonify(exception=type(err).__name__)
@@ -53,8 +56,9 @@ def get_latest_tag(package_owner: str, package_name: str) -> Any:
     try:
         q_params = request.args
         color_type = q_params.get("color", "#44cc11")
+        ignore_tag = q_params.get("ignore", "latest")
         return return_svg(
-            GHCRBadgeGenerator(color_type).generate_latest_tag(
+            GHCRBadgeGenerator(color_type, ignore_tag).generate_latest_tag(
                 package_owner, package_name
             )
         )
