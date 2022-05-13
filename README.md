@@ -32,8 +32,8 @@
 
 - `/<string:package_owner>/<string:package_name>/tags?color=...&ignore=...&n=...`
   - defaults: `color=#e05d44`, `ignore=latest`, `n=3`
-  - <https://ghcr-badge.herokuapp.com/eggplants/ghcr-badge/tags>
-  - 👉: ![1](https://ghcr-badge.herokuapp.com/eggplants/ghcr-badge/tags)
+  - <https://ghcr-badge.herokuapp.com/eggplants/ghcr-badge/tags?ignore=latest,0.0>
+  - 👉: ![1](https://ghcr-badge.herokuapp.com/eggplants/ghcr-badge/tags?ignore=latest,0.0)
 - `/<string:package_owner>/<string:package_name>/latest_tag?color=...&ignore=...`
   - defaults: `color=#e05d44`, `ignore=latest`
   - <https://ghcr-badge.herokuapp.com/eggplants/ghcr-badge/latest_tag>
