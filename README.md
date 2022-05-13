@@ -1,5 +1,7 @@
 # ghcr-badge: Generate ghcr.io container's status badge
 
+[![1] ![2] ![3]](https://github.com/eggplants/ghcr-badge/pkgs/container/ghcr-badge)
+
 [![PyPI version](
   https://badge.fury.io/py/ghcr-badge.svg
   )](
@@ -33,16 +35,20 @@
 - `/<string:package_owner>/<string:package_name>/tags?color=...&ignore=...&n=...`
   - defaults: `color=#e05d44`, `ignore=latest`, `n=3`
   - <https://ghcr-badge.herokuapp.com/eggplants/ghcr-badge/tags?ignore=latest,0.0>
-  - 👉: ![1](https://ghcr-badge.herokuapp.com/eggplants/ghcr-badge/tags?ignore=latest,0.0)
+  - 👉: ![1]
 - `/<string:package_owner>/<string:package_name>/latest_tag?color=...&ignore=...`
   - defaults: `color=#e05d44`, `ignore=latest`
   - <https://ghcr-badge.herokuapp.com/eggplants/ghcr-badge/latest_tag>
-  - 👉: ![2](https://ghcr-badge.herokuapp.com/eggplants/ghcr-badge/latest_tag)
+  - 👉: ![2]
 - `/<string:package_owner>/<string:package_name>/size?color=...&tag=...`
   - defaults: `color=#e05d44`, `tag=latest`
   - <https://ghcr-badge.herokuapp.com/eggplants/ghcr-badge/size>
-  - 👉: ![3](https://ghcr-badge.herokuapp.com/eggplants/ghcr-badge/size)
+  - 👉: ![3]
 
 ## Note
 
 GitHub caches badge data in 604800 seconds(=7 days). To update, try: `curl -X PURGE "https://camo.githubusercontent.com/..."` (it's badge image link)
+
+[1]: https://ghcr-badge.herokuapp.com/eggplants/ghcr-badge/tags?ignore=latest,0.0
+[2]: https://ghcr-badge.herokuapp.com/eggplants/ghcr-badge/latest_tag
+[3]: https://ghcr-badge.herokuapp.com/eggplants/ghcr-badge/size
