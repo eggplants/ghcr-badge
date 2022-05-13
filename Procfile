@@ -1,1 +1,1 @@
-web: ghcr-badge-server
+web: gunicorn ghcr_badge.server:app
