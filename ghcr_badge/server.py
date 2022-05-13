@@ -83,7 +83,7 @@ def get_size(package_owner: str, package_name: str) -> Any:
 
 
 def main() -> None:
-    app.run(host="0.0.0.0", port=int(environ.get("PORT", 5000)), debug=True)
+    app.run(host="0.0.0.0", port=int(environ.get("PORT", 5000)))
 
 
 if __name__ == "__main__":
