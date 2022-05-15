@@ -91,6 +91,21 @@ class GHCRBadgeGenerator:
         )
         return str(badge.badge_svg_text)
 
+    def generate_develop_tag(
+        self, package_owner: str, package_name: str, label: str = "version"
+    ) -> str:
+        try:
+            tags = [tag for tag in self.get_tags(package_owner, package_name)]
+            if "develop" not in tags or tags.index("develop") + 1 == len(tags):
+                return self.get_invalid_badge(label)
+            develop_tag = tags[tags.index("develop") + 1]
+        except InvalidTagListError:
+            return self.get_invalid_badge(label)
+        badge = anybadge.Badge(
+            label=label, value=str(develop_tag), default_color=self.color
+        )
+        return str(badge.badge_svg_text)
+
     def generate_size(
         self,
         package_owner: str,
