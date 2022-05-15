@@ -1,7 +1,7 @@
 from os import environ
 from typing import Any
 
-from flask import Flask, jsonify, request
+from flask import Flask, jsonify, make_response, request
 from flask.wrappers import Response
 
 from .generate import GHCRBadgeGenerator
@@ -10,7 +10,13 @@ app = Flask(__name__)
 
 
 def return_svg(svg: str) -> Response:
-    return Response(svg, mimetype="image/svg+xml")
+    res = make_response(
+        svg,
+    )
+    res.mimetype = "image/svg+xml"
+    res.headers["Cache-Control"] = "max-age=3600, s-maxage=3600"
+    # res.headers["Cache-Control"] = "nocache"
+    return res
 
 
 @app.route("/", methods=["GET"])
