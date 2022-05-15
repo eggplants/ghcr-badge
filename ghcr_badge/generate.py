@@ -95,7 +95,11 @@ class GHCRBadgeGenerator:
         self, package_owner: str, package_name: str, label: str = "version"
     ) -> str:
         try:
-            tags = [tag for tag in self.get_tags(package_owner, package_name)]
+            tags = [
+                tag
+                for tag in self.get_tags(package_owner, package_name)
+                if tag != "latest"
+            ]
             if "develop" not in tags or tags.index("develop") + 1 == len(tags):
                 return self.get_invalid_badge(label)
             develop_tag = tags[tags.index("develop") + 1]
