@@ -20,9 +20,9 @@ def get_index() -> Any:
             {
                 "available_paths": [
                     "/",
-                    "/<string:package_owner>/<string:package_name>/tags?color=...&ignore=...&n=...",
-                    "/<string:package_owner>/<string:package_name>/latest_tag?color=...&ignore=...",
-                    "/<string:package_owner>/<string:package_name>/size?tag=...&color=...",
+                    "/<string:package_owner>/<string:package_name>/tags?color=...&ignore=...&n=...&label=...",
+                    "/<string:package_owner>/<string:package_name>/latest_tag?color=...&ignore=...&label=...",
+                    "/<string:package_owner>/<string:package_name>/size?tag=...&color=...&label=...",
                 ],
                 "example_paths": [
                     "/",
@@ -42,10 +42,12 @@ def get_tags(package_owner: str, package_name: str) -> Any:
         q_params = request.args
         color_type = q_params.get("color", "#44cc11")
         ignore_tag = q_params.get("ignore", "latest")
+        label = q_params.get("label", "image tags")
+
         tag_num = q_params.get("n", 3)
         return return_svg(
             GHCRBadgeGenerator(color_type, ignore_tag).generate_tags(
-                package_owner, package_name, n=int(tag_num)
+                package_owner, package_name, n=int(tag_num), label=label
             )
         )
     except Exception as err:
@@ -58,9 +60,10 @@ def get_latest_tag(package_owner: str, package_name: str) -> Any:
         q_params = request.args
         color_type = q_params.get("color", "#44cc11")
         ignore_tag = q_params.get("ignore", "latest")
+        label = q_params.get("label", "version")
         return return_svg(
             GHCRBadgeGenerator(color_type, ignore_tag).generate_latest_tag(
-                package_owner, package_name
+                package_owner, package_name, label=label
             )
         )
     except Exception as err:
@@ -73,9 +76,10 @@ def get_size(package_owner: str, package_name: str) -> Any:
         q_params = request.args
         tag_type = q_params.get("tag", "latest")
         color_type = q_params.get("color", "#44cc11")
+        label = q_params.get("label", "image size")
         return return_svg(
             GHCRBadgeGenerator(color_type).generate_size(
-                package_owner, package_name, tag_type
+                package_owner, package_name, tag_type, label=label
             )
         )
     except Exception as err:

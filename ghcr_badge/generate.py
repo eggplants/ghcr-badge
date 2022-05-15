@@ -52,22 +52,13 @@ class GHCRBadgeGenerator:
         self.color = color
         self.ignore_tags: list[str] = ignore_tag.split(",")
 
-    def generate_latest_tag(self, package_owner: str, package_name: str) -> str:
-        try:
-            tags = [
-                tag
-                for tag in self.get_tags(package_owner, package_name)
-                if tag not in self.ignore_tags
-            ]
-            latest_tag = tags[-1]
-        except InvalidTagListError:
-            return self.get_invalid_badge("version")
-        badge = anybadge.Badge(
-            label="version", value=str(latest_tag), default_color=self.color
-        )
-        return str(badge.badge_svg_text)
-
-    def generate_tags(self, package_owner: str, package_name: str, n: int = 10) -> str:
+    def generate_tags(
+        self,
+        package_owner: str,
+        package_name: str,
+        n: int = 10,
+        label: str = "image tags",
+    ) -> str:
         if n < 0:
             raise ValueError(f"{n} should be positive.")
         try:
@@ -77,26 +68,47 @@ class GHCRBadgeGenerator:
                 if tag not in self.ignore_tags
             ][::-1][:n][::-1]
         except InvalidTagListError:
-            return self.get_invalid_badge("image tags")
+            return self.get_invalid_badge(label)
         badge = anybadge.Badge(
-            label="image tags", value=" | ".join(tags), default_color=self.color
+            label=label, value=" | ".join(tags), default_color=self.color
+        )
+        return str(badge.badge_svg_text)
+
+    def generate_latest_tag(
+        self, package_owner: str, package_name: str, label: str = "version"
+    ) -> str:
+        try:
+            tags = [
+                tag
+                for tag in self.get_tags(package_owner, package_name)
+                if tag not in self.ignore_tags
+            ]
+            latest_tag = tags[-1]
+        except InvalidTagListError:
+            return self.get_invalid_badge(label)
+        badge = anybadge.Badge(
+            label=label, value=str(latest_tag), default_color=self.color
         )
         return str(badge.badge_svg_text)
 
     def generate_size(
-        self, package_owner: str, package_name: str, tag: str = "latest"
+        self,
+        package_owner: str,
+        package_name: str,
+        tag: str = "latest",
+        label: str = "image size",
     ) -> str:
         try:
             manifest = self.get_manifest(package_owner, package_name, tag)
         except InvalidManifestError:
-            return self.get_invalid_badge("image size")
+            return self.get_invalid_badge(label)
         config_size = int(manifest.get("config", {"size": 0}).get("size", 0))
         layer_size = sum(
             int(layer.get("size", 0)) for layer in manifest.get("layers", [])
         )
         size = f"{config_size + layer_size}B"
         badge = anybadge.Badge(
-            label="image size",
+            label=label,
             value=format_size(parse_size(size), binary=True),
             default_color=self.color,
         )
