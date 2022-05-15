@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import base64
 import re
 from typing import TypedDict, cast
 
@@ -180,12 +181,5 @@ class GHCRBadgeGenerator:
         m2 = re.match(_GITHUB_REPO_PATTERN, package_owner)
         if m1 is None or m2 is None:
             raise InvalidImageError
-        auth_url = f"https://ghcr.io/token?scope=repository:{package_owner}/{package_name}:pull"
-        token = (
-            requests.get(auth_url, headers={"User-Agent": _USER_AGENT})
-            .json()
-            .get("token")
-        )
-        if token is None:
-            raise InvalidTokenError
-        return str(token)
+        token = base64.b64encode(f"v1:{package_owner}/{package_name}:0".encode())
+        return token.decode("utf-8")
