@@ -1,6 +1,6 @@
 # ghcr-badge: Generate ghcr.io container's status badge
 
-[![1] ![2] ![3] ![4]](https://github.com/eggplants/ghcr-badge/pkgs/container/ghcr-badge)
+[![1] ![2] ![4]](https://github.com/eggplants/ghcr-badge/pkgs/container/ghcr-badge)
 
 [![PyPI version](
   https://badge.fury.io/py/ghcr-badge.svg
