@@ -33,32 +33,42 @@
 ## Available paths
 
 - `/<string:package_owner>/<string:package_name>/tags?color=...&ignore=...&n=...&label=...&trim=...`
-  - defaults: `color=#e05d44`, `ignore=latest`, `n=3`, `label=image tags`, `trim=`
+  - defaults: `color=#e05d44`, `ignore=latest`, `n=3`, `label=image tags`
   - <https://ghcr-badge.herokuapp.com/eggplants/ghcr-badge/tags?trim=major>
   - 👉: ![1]
 - `/<string:package_owner>/<string:package_name>/latest_tag?color=...&ignore=...&label=...&trim=...`
-  - defaults: `color=#e05d44`, `ignore=latest`, `label=version`, `trim=`
-  - <https://ghcr-badge.herokuapp.com/eggplants/ghcr-badge/latest_tag>
+  - defaults: `color=#e05d44`, `ignore=latest`, `label=version`
+  - <https://ghcr-badge.herokuapp.com/eggplants/ghcr-badge/latest_tag?trim=major>
   - 👉: ![2]
 - `/<string:package_owner>/<string:package_name>/develop_tag?color=...&label=...`
-  - defaults: `color=#e05d44`, `label=develop`, `label=develop`, `trim=`
+  - defaults: `color=#e05d44`, `label=develop`
   - <https://ghcr-badge.herokuapp.com/ptr727/plexcleaner/develop_tag>
   - 👉: ![3]
 - `/<string:package_owner>/<string:package_name>/size?color=...&tag=...&label=...&trim=...`
-  - defaults: `color=#e05d44`, `tag=latest`, `label=image size`, `trim=`
+  - defaults: `color=#e05d44`, `tag=latest`, `label=image size`
   - <https://ghcr-badge.herokuapp.com/eggplants/ghcr-badge/size>
   - 👉: ![4]
 
-## `trim` parameter
+## Common parameters
+
+### `label` parameter
+
+- `label=🤔`: ![label=🤔](https://ghcr-badge.herokuapp.com/eggplants/ghcr-badge/tags?trim=major&label=🤔)
+
+### `trim` parameter
 
 - `trim=patch` trims `^\d+\.\d+\.\d+[^.]*$` tags.
 - `trim=major` trims `^\d+\.\d+[^.]*$` tags.
+
+### `color` parameter
+
+Available color names and hex codes are listed on [here](https://github.com/jongracecox/anybadge#colors).
 
 ## Note
 
 GitHub caches badge data in 604800 seconds(=7 days). To update, try: `curl -X PURGE "https://camo.githubusercontent.com/..."` (it's badge image link)
 
 [1]: https://ghcr-badge.herokuapp.com/eggplants/ghcr-badge/tags?trim=major
-[2]: https://ghcr-badge.herokuapp.com/eggplants/ghcr-badge/latest_tag
+[2]: https://ghcr-badge.herokuapp.com/eggplants/ghcr-badge/latest_tag?trim=major
 [3]: https://ghcr-badge.herokuapp.com/ptr727/plexcleaner/develop_tag
 [4]: https://ghcr-badge.herokuapp.com/eggplants/ghcr-badge/size
