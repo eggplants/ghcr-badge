@@ -38,6 +38,7 @@ def get_index() -> Any:
                     "/ptr727/plexcleaner/develop_tag",
                     "/eggplants/ghcr-badge/size",
                 ],
+                "repo": "https://github.com/eggplants/ghcr-badge",
             }
         )
     except Exception as err:
