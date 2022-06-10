@@ -55,10 +55,18 @@
 
 - `label=🤔`: ![label=🤔](https://ghcr-badge.herokuapp.com/eggplants/ghcr-badge/tags?trim=major&label=🤔)
 
+### `ignore` parameter
+
+Use the ignore parameter to filter returned tags, supports pattern matching and a comma separated list.
+
+- `ignore=latest` ignores the `latest` tag (default).
+- `ignore=sha256*` ignores all tags prefixed with `sha256`.
+- `ignore=v0.0.1,latest,sha256*` ignores the `latest` and `v0.0.1` tags, and all tags prefixed with `sha256*`.
+
 ### `trim` parameter
 
-- `trim=patch` trims `^\d+\.\d+\.\d+[^.]*$` tags.
-- `trim=major` trims `^\d+\.\d+[^.]*$` tags.
+- `trim=patch` trims `^v?\d+\.\d+\.\d+[^.]*$` tags.
+- `trim=major` trims `^v?\d+\.\d+[^.]*$` tags.
 
 ### `color` parameter
 

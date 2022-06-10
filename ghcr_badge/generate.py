@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import base64
+import fnmatch
 import re
 from typing import TypedDict, cast
 
@@ -55,8 +56,8 @@ class GHCRBadgeGenerator:
         self.color = color
         self.ignore_tags: list[str] = ignore_tag.split(",")
         self.trim_pattern = {
-            "patch": r"^\d+\.\d+\.\d+[^.]*$",
-            "major": r"^\d+\.\d+[^.]*$",
+            "patch": r"^v?\d+\.\d+\.\d+[^.]*$",
+            "major": r"^v?\d+\.\d+[^.]*$",
         }.get(trim_type, "^$")
 
     def generate_tags(
@@ -69,11 +70,7 @@ class GHCRBadgeGenerator:
         if n < 0:
             raise ValueError(f"{n} should be positive.")
         try:
-            tags = [
-                tag
-                for tag in self.get_tags(package_owner, package_name)
-                if tag not in self.ignore_tags and not re.match(self.trim_pattern, tag)
-            ][::-1][:n][::-1]
+            tags = self.filter_tags(package_owner, package_name)[::-1][:n][::-1]
         except InvalidTagListError:
             return self.get_invalid_badge(label)
         badge = anybadge.Badge(
@@ -85,12 +82,7 @@ class GHCRBadgeGenerator:
         self, package_owner: str, package_name: str, label: str = "version"
     ) -> str:
         try:
-            tags = [
-                tag
-                for tag in self.get_tags(package_owner, package_name)
-                if tag not in self.ignore_tags and not re.match(self.trim_pattern, tag)
-            ]
-            latest_tag = tags[-1]
+            latest_tag = self.filter_tags(package_owner, package_name)[-1]
         except InvalidTagListError:
             return self.get_invalid_badge(label)
         badge = anybadge.Badge(
@@ -169,6 +161,19 @@ class GHCRBadgeGenerator:
         if not isinstance(tags, list) or len(tags) == 0:
             raise InvalidTagListError
         return [str(tag) for tag in tags]
+
+    def filter_tags(self, package_owner: str, package_name: str) -> list[str]:
+        tags = []
+        for tag in self.get_tags(package_owner, package_name):
+            if not re.match(self.trim_pattern, tag):
+                match = False
+                for ignore_tag in self.ignore_tags:
+                    if fnmatch.fnmatch(tag, ignore_tag):
+                        match = True
+                        break
+                if not match:
+                    tags.append(tag)
+        return tags
 
     @staticmethod
     def get_invalid_badge(label: str) -> str:
