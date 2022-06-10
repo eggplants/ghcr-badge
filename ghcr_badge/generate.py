@@ -165,16 +165,17 @@ class GHCRBadgeGenerator:
     def filter_tags(self, package_owner: str, package_name: str) -> list[str]:
         tags: list[str] = []
         target_tags = [
-            t for t in self.get_tags(package_owner, package_name)
+            t
+            for t in self.get_tags(package_owner, package_name)
             if not re.match(self.trim_pattern, t)
         ]
         for tag in target_tags:
-            match = False
+            matched = False
             for ignore_tag in self.ignore_tags:
                 if fnmatch.fnmatch(tag, ignore_tag):
-                    match = True
+                    matched = True
                     break
-            if not match:
+            if not matched:
                 tags.append(tag)
         return tags
 
