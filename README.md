@@ -38,7 +38,7 @@
   - 👉: ![1]
 - `/<string:package_owner>/<string:package_name>/latest_tag?color=...&ignore=...&label=...&trim=...`
   - defaults: `color=#e05d44`, `ignore=latest`, `label=version`
-  - <https://ghcr-badge.herokuapp.com/eggplants/ghcr-badge/latest_tag?trim=major>
+  - <https://ghcr-badge.herokuapp.com/eggplants/ghcr-badge/latest_tag?trim=major&label=latest>
   - 👉: ![2]
 - `/<string:package_owner>/<string:package_name>/develop_tag?color=...&label=...`
   - defaults: `color=#e05d44`, `label=develop`
@@ -77,6 +77,6 @@ Available color names and hex codes are listed on [here](https://github.com/jong
 GitHub caches badge data in 604800 seconds(=7 days). To update, try: `curl -X PURGE "https://camo.githubusercontent.com/..."` (it's badge image link)
 
 [1]: https://ghcr-badge.herokuapp.com/eggplants/ghcr-badge/tags?trim=major
-[2]: https://ghcr-badge.herokuapp.com/eggplants/ghcr-badge/latest_tag?trim=major
+[2]: https://ghcr-badge.herokuapp.com/eggplants/ghcr-badge/latest_tag?trim=major&label=latest
 [3]: https://ghcr-badge.herokuapp.com/ptr727/plexcleaner/develop_tag
 [4]: https://ghcr-badge.herokuapp.com/eggplants/ghcr-badge/size
