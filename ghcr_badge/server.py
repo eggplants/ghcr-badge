@@ -7,6 +7,7 @@ from flask.wrappers import Response
 from .generate import GHCRBadgeGenerator
 
 app = Flask(__name__)
+app.config["JSONIFY_PRETTYPRINT_REGULAR"] = True
 
 
 def return_svg(svg: str) -> Response:
@@ -37,6 +38,7 @@ def get_index() -> Any:
                     "/eggplants/ghcr-badge/latest_tag",
                     "/ptr727/plexcleaner/develop_tag",
                     "/eggplants/ghcr-badge/size",
+                    "/frysztak/orpington-news/size",
                 ],
                 "repo": "https://github.com/eggplants/ghcr-badge",
             }

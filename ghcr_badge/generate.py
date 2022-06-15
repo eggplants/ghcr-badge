@@ -3,11 +3,13 @@ from __future__ import annotations
 import base64
 import fnmatch
 import re
-from typing import TypedDict, cast
+from typing import cast
 
 import anybadge  # type: ignore[import]
 import requests
 from humanfriendly import format_size, parse_size
+
+from .dicts import ManifestListV2, ManifestV2
 
 
 class InvalidTokenError(Exception):
@@ -30,23 +32,18 @@ class InvalidImageError(Exception):
     pass
 
 
-class Manifest(TypedDict):
-    mediaType: str
-    schemaVersion: int
-    config: Layer
-    layers: list[Layer]
-
-
-class Layer(TypedDict):
-    mediaType: str
-    digest: str
-    size: int
+class InvalidMediaTypeError(Exception):
+    pass
 
 
 _GITHUB_USER_PATTERN = r"^[a-zA-Z0-9]([a-zA-Z0-9]?|[-]?([a-zA-Z0-9])){0,38}$"
 _GITHUB_REPO_PATTERN = r"^[-a-zA-Z0-9]{1,100}$"
 _IMAGE_TAG_PATTERN = r"^[a-zA-Z0-9_][a-zA-Z0-9_.-]{0,127}$"
 _USER_AGENT = "Docker-Client/20.10.2 (linux)"
+_MEDIA_TYPE_MANIFEST_V2 = "application/vnd.docker.distribution.manifest.v2+json"
+_MEDIA_TYPE_MANIFEST_LIST_V2 = (
+    "application/vnd.docker.distribution.manifest.list.v2+json"
+)
 
 
 class GHCRBadgeGenerator:
@@ -118,13 +115,24 @@ class GHCRBadgeGenerator:
     ) -> str:
         try:
             manifest = self.get_manifest(package_owner, package_name, tag)
-        except InvalidManifestError:
+        except (InvalidManifestError, InvalidMediaTypeError):
             return self.get_invalid_badge(label)
-        config_size = int(manifest.get("config", {"size": 0}).get("size", 0))
-        layer_size = sum(
-            int(layer.get("size", 0)) for layer in manifest.get("layers", [])
-        )
-        size = f"{config_size + layer_size}B"
+        if manifest.get("mediaType") == _MEDIA_TYPE_MANIFEST_V2:
+            manifest = cast(ManifestV2, manifest)
+            config_size = int(manifest.get("config", {"size": 0}).get("size", 0))
+            layer_size = sum(
+                int(layer.get("size", 0)) for layer in manifest.get("layers", [])
+            )
+            size = f"{config_size + layer_size}B"
+        else:
+            manifest = cast(ManifestListV2, manifest)
+            layer_sizes = manifest.get("manifests", [{"size": 0}])
+            layer_size = (
+                int(layer_sizes[0].get("size", 0))
+                if isinstance(layer_sizes, list)
+                else 0
+            )
+            size = f"{layer_size}B"
         badge = anybadge.Badge(
             label=label,
             value=format_size(parse_size(size), binary=True),
@@ -134,7 +142,7 @@ class GHCRBadgeGenerator:
 
     def get_manifest(
         self, package_owner: str, package_name: str, tag: str = "latest"
-    ) -> Manifest:
+    ) -> ManifestV2 | ManifestListV2:
         m0 = re.match(_IMAGE_TAG_PATTERN, tag)
         if m0 is None:
             raise InvalidTagError
@@ -145,7 +153,13 @@ class GHCRBadgeGenerator:
         ).json()
         if manifest is None or "errors" in manifest:
             raise InvalidManifestError(str(manifest.get("errors")))
-        return cast(Manifest, manifest)
+
+        media_type = manifest.get("mediaType")
+        if media_type == _MEDIA_TYPE_MANIFEST_V2:
+            return cast(ManifestV2, manifest)
+        elif media_type == _MEDIA_TYPE_MANIFEST_LIST_V2:
+            return cast(ManifestListV2, manifest)
+        raise InvalidMediaTypeError(media_type)
 
     def get_tags(self, package_owner: str, package_name: str) -> list[str]:
         token = self.__auth(package_owner, package_name)
