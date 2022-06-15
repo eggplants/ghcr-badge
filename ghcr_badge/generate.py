@@ -38,7 +38,7 @@ class InvalidMediaTypeError(Exception):
 
 _GITHUB_USER_PATTERN = r"^[a-zA-Z0-9]([a-zA-Z0-9]?|[-]?([a-zA-Z0-9])){0,38}$"
 _GITHUB_REPO_PATTERN = r"^[-a-zA-Z0-9]{1,100}$"
-_IMAGE_TAG_PATTERN = r"^[a-zA-Z0-9_][a-zA-Z0-9_.-]{0,127}$"
+_IMAGE_TAG_PATTERN = r"^([a-zA-Z0-9_][a-zA-Z0-9_.-]{0,127}|sha256:[a-z0-9]{64})$"
 _USER_AGENT = "Docker-Client/20.10.2 (linux)"
 _MEDIA_TYPE_MANIFEST_V2 = "application/vnd.docker.distribution.manifest.v2+json"
 _MEDIA_TYPE_MANIFEST_LIST_V2 = (
@@ -117,22 +117,11 @@ class GHCRBadgeGenerator:
             manifest = self.get_manifest(package_owner, package_name, tag)
         except (InvalidManifestError, InvalidMediaTypeError):
             return self.get_invalid_badge(label)
-        if manifest.get("mediaType") == _MEDIA_TYPE_MANIFEST_V2:
-            manifest = cast(ManifestV2, manifest)
-            config_size = int(manifest.get("config", {"size": 0}).get("size", 0))
-            layer_size = sum(
-                int(layer.get("size", 0)) for layer in manifest.get("layers", [])
-            )
-            size = f"{config_size + layer_size}B"
-        else:
-            manifest = cast(ManifestListV2, manifest)
-            layer_sizes = manifest.get("manifests", [{"size": 0}])
-            layer_size = (
-                int(layer_sizes[0].get("size", 0))
-                if isinstance(layer_sizes, list)
-                else 0
-            )
-            size = f"{layer_size}B"
+        config_size = int(manifest.get("config", {"size": 0}).get("size", 0))
+        layer_size = sum(
+            int(layer.get("size", 0)) for layer in manifest.get("layers", [])
+        )
+        size = f"{config_size + layer_size}B"
         badge = anybadge.Badge(
             label=label,
             value=format_size(parse_size(size), binary=True),
@@ -142,10 +131,9 @@ class GHCRBadgeGenerator:
 
     def get_manifest(
         self, package_owner: str, package_name: str, tag: str = "latest"
-    ) -> ManifestV2 | ManifestListV2:
-        m0 = re.match(_IMAGE_TAG_PATTERN, tag)
-        if m0 is None:
-            raise InvalidTagError
+    ) -> ManifestV2:
+        if re.match(_IMAGE_TAG_PATTERN, tag) is None:
+            raise InvalidTagError(tag)
         token = self.__auth(package_owner, package_name)
         url = f"https://ghcr.io/v2/{package_owner}/{package_name}/manifests/{tag}"
         manifest = requests.get(
@@ -154,11 +142,18 @@ class GHCRBadgeGenerator:
         if manifest is None or "errors" in manifest:
             raise InvalidManifestError(str(manifest.get("errors")))
 
-        media_type = manifest.get("mediaType")
-        if media_type == _MEDIA_TYPE_MANIFEST_V2:
+        if (media_type := manifest.get("mediaType")) == _MEDIA_TYPE_MANIFEST_V2:
             return cast(ManifestV2, manifest)
         elif media_type == _MEDIA_TYPE_MANIFEST_LIST_V2:
-            return cast(ManifestListV2, manifest)
+            manifest = cast(ManifestListV2, manifest)
+            manifests = manifest.get("manifests")
+            if not isinstance(manifests, list) or len(manifests) == 0:
+                raise InvalidManifestError("Returned list of manifest is empty.")
+            if (digest := manifests[0].get("digest")) is None:
+                raise InvalidManifestError(
+                    f"Digest of a manifest is empty:\n{manifests[0]}"
+                )
+            return self.get_manifest(package_owner, package_name, digest)
         raise InvalidMediaTypeError(media_type)
 
     def get_tags(self, package_owner: str, package_name: str) -> list[str]:
@@ -200,9 +195,9 @@ class GHCRBadgeGenerator:
 
     @staticmethod
     def __auth(package_owner: str, package_name: str) -> str:
-        m1 = re.match(_GITHUB_USER_PATTERN, package_owner)
-        m2 = re.match(_GITHUB_REPO_PATTERN, package_owner)
-        if m1 is None or m2 is None:
+        m_user = re.match(_GITHUB_USER_PATTERN, package_owner)
+        m_repo = re.match(_GITHUB_REPO_PATTERN, package_owner)
+        if m_user is None or m_repo is None:
             raise InvalidImageError
         token = base64.b64encode(f"v1:{package_owner}/{package_name}:0".encode())
         return token.decode("utf-8")
