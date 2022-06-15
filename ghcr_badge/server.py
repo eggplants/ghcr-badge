@@ -4,6 +4,7 @@ from typing import Any
 from flask import Flask, jsonify, make_response, request
 from flask.wrappers import Response
 
+from . import __version__
 from .generate import GHCRBadgeGenerator
 
 app = Flask(__name__)
@@ -41,6 +42,7 @@ def get_index() -> Any:
                     "/frysztak/orpington-news/size",
                 ],
                 "repo": "https://github.com/eggplants/ghcr-badge",
+                "version": __version__,
             }
         )
     except Exception as err:
