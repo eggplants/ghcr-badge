@@ -53,6 +53,6 @@ repos:
         files: ^ghcr_badge/
         args: [--strict]
   - repo: https://github.com/codespell-project/codespell
-    rev: v2.1.0
+    rev: v2.2.1
     hooks:
       - id: codespell
