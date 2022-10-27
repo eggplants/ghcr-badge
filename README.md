@@ -26,10 +26,15 @@
 
 ## Deployment
 
+- <https://ghcr-badge.deta.dev/>
+  - [![Website](https://img.shields.io/website?label=deta.dev&url=https%3A%2F%2Fghcr-badge.deta.dev)](https://ghcr-badge.deta.dev)
+
 - <https://ghcr-badge.herokuapp.com/>
+  - **planned to stop**
   - [![Heroku App Status](http://heroku-shields.herokuapp.com/ghcr-badge)](https://ghcr-badge.herokuapp.com)
   - **🖕If this status badge is not shown correctly, please click to wake up hibernated server.**
 
+[![Heroku App Status](http://heroku-shields.herokuapp.com/ghcr-badge)](https://ghcr-badge.herokuapp.com)
 ## Available paths
 
 - `/<string:package_owner>/<string:package_name>/tags?color=...&ignore=...&n=...&label=...&trim=...`
