@@ -29,36 +29,30 @@
 - <https://ghcr-badge.deta.dev/>
   - [![Website](https://img.shields.io/website?label=deta.dev&url=https%3A%2F%2Fghcr-badge.deta.dev)](https://ghcr-badge.deta.dev)
 
-- <https://ghcr-badge.herokuapp.com/>
-  - **planned to stop**
-  - [![Heroku App Status](http://heroku-shields.herokuapp.com/ghcr-badge)](https://ghcr-badge.herokuapp.com)
-  - **🖕If this status badge is not shown correctly, please click to wake up hibernated server.**
-
-[![Heroku App Status](http://heroku-shields.herokuapp.com/ghcr-badge)](https://ghcr-badge.herokuapp.com)
 ## Available paths
 
 - `/<string:package_owner>/<string:package_name>/tags?color=...&ignore=...&n=...&label=...&trim=...`
   - defaults: `color=#e05d44`, `ignore=latest`, `n=3`, `label=image tags`
-  - <https://ghcr-badge.herokuapp.com/eggplants/ghcr-badge/tags?trim=major>
+  - <https://ghcr-badge.deta.dev/eggplants/ghcr-badge/tags?trim=major>
   - 👉: ![1]
 - `/<string:package_owner>/<string:package_name>/latest_tag?color=...&ignore=...&label=...&trim=...`
   - defaults: `color=#e05d44`, `ignore=latest`, `label=version`
-  - <https://ghcr-badge.herokuapp.com/eggplants/ghcr-badge/latest_tag?trim=major&label=latest>
+  - <https://ghcr-badge.deta.dev/eggplants/ghcr-badge/latest_tag?trim=major&label=latest>
   - 👉: ![2]
 - `/<string:package_owner>/<string:package_name>/develop_tag?color=...&label=...`
   - defaults: `color=#e05d44`, `label=develop`
-  - <https://ghcr-badge.herokuapp.com/ptr727/plexcleaner/develop_tag>
+  - <https://ghcr-badge.deta.dev/ptr727/plexcleaner/develop_tag>
   - 👉: ![3]
 - `/<string:package_owner>/<string:package_name>/size?color=...&tag=...&label=...&trim=...`
   - defaults: `color=#e05d44`, `tag=latest`, `label=image size`
-  - <https://ghcr-badge.herokuapp.com/eggplants/ghcr-badge/size>
+  - <https://ghcr-badge.deta.dev/eggplants/ghcr-badge/size>
   - 👉: ![4]
 
 ## Common parameters
 
 ### `label` parameter
 
-- `label=🤔`: ![label=🤔](https://ghcr-badge.herokuapp.com/eggplants/ghcr-badge/tags?trim=major&label=🤔)
+- `label=🤔`: ![label=🤔](https://ghcr-badge.deta.dev/eggplants/ghcr-badge/tags?trim=major&label=🤔)
 
 ### `ignore` parameter
 
@@ -81,7 +75,7 @@ Available color names and hex codes are listed on [here](https://github.com/jong
 
 GitHub caches badge data in 604800 seconds(=7 days). To update, try: `curl -X PURGE "https://camo.githubusercontent.com/..."` (it's badge image link)
 
-[1]: https://ghcr-badge.herokuapp.com/eggplants/ghcr-badge/tags?trim=major
-[2]: https://ghcr-badge.herokuapp.com/eggplants/ghcr-badge/latest_tag?trim=major&label=latest
-[3]: https://ghcr-badge.herokuapp.com/ptr727/plexcleaner/develop_tag
-[4]: https://ghcr-badge.herokuapp.com/eggplants/ghcr-badge/size
+[1]: https://ghcr-badge.deta.dev/eggplants/ghcr-badge/tags?trim=major
+[2]: https://ghcr-badge.deta.dev/eggplants/ghcr-badge/latest_tag?trim=major&label=latest
+[3]: https://ghcr-badge.deta.dev/ptr727/plexcleaner/develop_tag
+[4]: https://ghcr-badge.deta.dev/eggplants/ghcr-badge/size
