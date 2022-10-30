@@ -52,7 +52,7 @@
 
 ### `label` parameter
 
-- `label=🤔`: ![label=🤔](https://ghcr-badge.deta.dev/eggplants/ghcr-badge/tags?trim=major&label=🤔)
+- `label=hello`: ![label=hello](https://ghcr-badge.deta.dev/eggplants/ghcr-badge/tags?trim=major&label=hello)
 
 ### `ignore` parameter
 
