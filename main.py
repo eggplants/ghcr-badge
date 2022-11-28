@@ -1,0 +1,1 @@
+from ghcr_badge.server import app

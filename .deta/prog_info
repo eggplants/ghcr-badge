@@ -1,0 +1,1 @@
+{"id":"c8887231-28de-43a0-a95b-42f809be1a28","space":35710,"runtime":"python3.9","name":"ghcr-badge","path":"mdd7f7","project":"c0kzh7mo","account":"144798365827","region":"ap-southeast-1","deps":["git+https://github.com/eggplants/ghcr-badge"],"envs":null,"public":true,"log_level":"off","cron":""}
