@@ -140,7 +140,7 @@ class GHCRBadgeGenerator:
             url, headers={"User-Agent": _USER_AGENT, "Authorization": f"Bearer {token}"}
         ).json()
         if manifest is None or "errors" in manifest:
-            raise InvalidManifestError(str(manifest.get("errors")))
+            raise InvalidManifestError(manifest.get("errors"))
 
         if (media_type := manifest.get("mediaType")) == _MEDIA_TYPE_MANIFEST_V2:
             return cast(ManifestV2, manifest)
