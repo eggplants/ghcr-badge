@@ -1,45 +1,64 @@
+"""Main script."""
+
 from __future__ import annotations
 
-import argparse
-import http.client as httplib
-import sys
+from argparse import (
+    ArgumentDefaultsHelpFormatter,
+    ArgumentParser,
+    ArgumentTypeError,
+    Namespace,
+    RawDescriptionHelpFormatter,
+)
+from http.client import CannotSendRequest, HTTPConnection
+from pathlib import Path
 from shutil import get_terminal_size
 
 from . import GHCRBadgeGenerator, __version__
 
 
 class HttpConnectionNotFountError(Exception):
-    pass
+    """Raise if offline."""
 
 
-class HelpFormatter(
-    argparse.ArgumentDefaultsHelpFormatter, argparse.RawDescriptionHelpFormatter
-):
-    pass
+class HelpFormatter(ArgumentDefaultsHelpFormatter, RawDescriptionHelpFormatter):
+    """Help formatter for argparse."""
 
 
 def check_connectivity(url: str = "www.google.com", timeout: int = 3) -> bool:
-    conn = httplib.HTTPConnection(url, timeout=timeout)
+    """Check connectivity.
+
+    Parameters
+    ----------
+    url : str, optional
+        site URL, by default "www.google.com"
+    timeout : int, optional
+        second to wait, by default 3
+
+    Returns
+    -------
+    bool
+        True if online.
+    """
+    conn = HTTPConnection(url, timeout=timeout)
     try:
         conn.request("HEAD", "/")
         conn.close()
-        return True
-    except Exception as e:
-        print(e, file=sys.stderr)
-        return False
+    except CannotSendRequest as e:
+        msg = "No connection."
+        raise ArgumentTypeError(msg) from e
+
+    return True
 
 
-def parse_args(test: list[str] | None = None) -> argparse.Namespace:
+def parse_args(test: list[str] | None = None) -> Namespace:
     """Parse arguments."""
-    parser = argparse.ArgumentParser(
+    parser = ArgumentParser(
         prog="ghcr-badge",
         formatter_class=(
             lambda prog: HelpFormatter(
                 prog,
-                **{
-                    "width": get_terminal_size(fallback=(120, 50)).columns,
-                    "max_help_position": 25,
-                },
+                width=get_terminal_size(fallback=(120, 50)).columns,
+                max_help_position=25,
             )
         ),
         description="Generate ghcr.io container's status badge",
@@ -75,19 +94,30 @@ def parse_args(test: list[str] | None = None) -> argparse.Namespace:
         help="save path",
     )
     parser.add_argument("-V", "--version", action="version", version=__version__)
-    return parser.parse_args()
+    return parser.parse_args(args=test)
 
 
 def main() -> None:
+    """Execute main script.
+
+    Raises
+    ------
+    HttpConnectionNotFountError
+        raise if offline
+    """
     args = parse_args()
+    color = str(args.color)
+    user = str(args.user)
+    name = str(args.name)
+    out = Path(args.out)
     if not check_connectivity():
         raise HttpConnectionNotFountError
-    g = GHCRBadgeGenerator(args.color)
-    data = g.generate_tags(args.user, args.name)
+    g = GHCRBadgeGenerator(color=color)
+    data = g.generate_tags(user, name)
     if args.out:
-        print(data, file=open(args.out, "w"))
+        print(data, file=out.open("w"))
     else:
-        print(data)
+        print(data)  # noqa: T201
 
 
 if __name__ == "__main__":

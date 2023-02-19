@@ -3,21 +3,21 @@
 [![1] ![2] ![4]](https://github.com/eggplants/ghcr-badge/pkgs/container/ghcr-badge)
 
 [![PyPI version](
-  https://badge.fury.io/py/ghcr-badge.svg
+  <https://badge.fury.io/py/ghcr-badge.svg>
   )](
-  https://badge.fury.io/py/ghcr-badge
+  <https://badge.fury.io/py/ghcr-badge>
 ) [![pre-commit.ci status](
-  https://results.pre-commit.ci/badge/github/eggplants/ghcr-badge/master.svg
+  <https://results.pre-commit.ci/badge/github/eggplants/ghcr-badge/master.svg>
   )](
-  https://results.pre-commit.ci/latest/github/eggplants/ghcr-badge/master
+  <https://results.pre-commit.ci/latest/github/eggplants/ghcr-badge/master>
 ) [![Maintainability](
-  https://api.codeclimate.com/v1/badges/f77401f6fb543dd8c436/maintainability
+  <https://api.codeclimate.com/v1/badges/f77401f6fb543dd8c436/maintainability>
   )](
-  https://codeclimate.com/github/eggplants/ghcr-badge/maintainability
+  <https://codeclimate.com/github/eggplants/ghcr-badge/maintainability>
 ) [![Release Package](
-  https://github.com/eggplants/ghcr-badge/actions/workflows/release.yml/badge.svg
+  <https://github.com/eggplants/ghcr-badge/actions/workflows/release.yml/badge.svg>
   )](
-  https://github.com/eggplants/ghcr-badge/actions/workflows/release.yml
+  <https://github.com/eggplants/ghcr-badge/actions/workflows/release.yml>
 )
 
 ## Motivation
@@ -75,7 +75,7 @@ Available color names and hex codes are listed on [here](https://github.com/jong
 
 GitHub caches badge data in 604800 seconds(=7 days). To update, try: `curl -X PURGE "https://camo.githubusercontent.com/..."` (it's badge image link)
 
-[1]: https://ghcr-badge.deta.dev/eggplants/ghcr-badge/tags?trim=major
-[2]: https://ghcr-badge.deta.dev/eggplants/ghcr-badge/latest_tag?trim=major&label=latest
-[3]: https://ghcr-badge.deta.dev/ptr727/plexcleaner/develop_tag
-[4]: https://ghcr-badge.deta.dev/eggplants/ghcr-badge/size
+[1]: <https://ghcr-badge.deta.dev/eggplants/ghcr-badge/tags?trim=major>
+[2]: <https://ghcr-badge.deta.dev/eggplants/ghcr-badge/latest_tag?trim=major&label=latest>
+[3]: <https://ghcr-badge.deta.dev/ptr727/plexcleaner/develop_tag>
+[4]: <https://ghcr-badge.deta.dev/eggplants/ghcr-badge/size>
