@@ -62,7 +62,7 @@ typing-extensions = "^4.5.0"
 
 [tool.poetry.group.dev.dependencies]
 mypy = "^0.991"
-pre-commit = "^2.20.0"
+pre-commit = ">=2.20,<4.0"
 taskipy = "^1.10.3"
 
 [tool.poetry.scripts]
