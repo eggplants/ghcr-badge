@@ -64,6 +64,7 @@ def get_index() -> Response:
                     "/ptr727/plexcleaner/develop_tag",
                     "/eggplants/ghcr-badge/size",
                     "/frysztak/orpington-news/size",
+                    "/tuananh/aws-cli/size",
                 ],
                 "repo": "https://github.com/eggplants/ghcr-badge",
                 "version": __version__,

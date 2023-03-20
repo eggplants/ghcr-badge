@@ -1,7 +1,8 @@
-"""Define objects of Image Manifest V 2, Schema 2 by TypedDict.
+"""Define TypedDict classes of Image Manifest (V2-2) and OCI Image Manifest (V1).
 
 See:
 https://docs.docker.com/registry/spec/manifest-v2-2/#manifest-list-field-descriptions
+https://github.com/opencontainers/image-spec/blob/main/manifest.md
 """
 
 from __future__ import annotations
@@ -9,42 +10,41 @@ from __future__ import annotations
 from typing import TypedDict
 
 
-class ManifestV2(TypedDict):
-    """Image Manifest root."""
-
-    mediaType: str  # noqa: N815
-    schemaVersion: int  # noqa: N815
-    config: ManifestV2Layer
-    layers: list[ManifestV2Layer]
-
-
-class ManifestV2Layer(TypedDict):
-    """Fields of an item in the layers list."""
-
+class _ManifestV2Layer(TypedDict):
     mediaType: str  # noqa: N815
     digest: str
     size: int
 
+class ManifestV2(TypedDict):
+    """Image Manifest V2."""
+
+    mediaType: str  # noqa: N815
+    schemaVersion: int  # noqa: N815
+    config: _ManifestV2Layer
+    layers: list[_ManifestV2Layer]
 
 class ManifestListV2(TypedDict):
-    """The manifests field contains a list of manifests."""
+    """Manifest List V2."""
 
     mediaType: str  # noqa: N815
     schemaVersion: int  # noqa: N815
-    manifests: list[ManifestV2Layer]
+    manifests: list[_ManifestV2Layer]
 
-
-class ManifestListV2Layer(TypedDict):
-    """The manifests field contains a list of manifests."""
-
+class _OCIImageManifestV1Config(TypedDict):
     mediaType: str  # noqa: N815
-    digest: str
     size: int
-    platform: ManifestListV2Platform
+    digest: str
 
+class _OCIImageManifestV1Layer(TypedDict):
+    mediaType: str  # noqa: N815
+    size: int
+    digest: str
 
-class ManifestListV2Platform(TypedDict):
-    """The platform object describes the platform."""
+class OCIImageManifestV1(TypedDict):
+    """Manifest V2 for OCI Image."""
 
-    architecture: str
-    os: str
+    schemaVersion: int  # noqa: N815
+    mediaType: str  # noqa: N815
+    config: _OCIImageManifestV1Config
+    layers: list[_OCIImageManifestV1Layer]
+    annotations: dict[str, str]

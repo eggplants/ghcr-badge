@@ -11,7 +11,7 @@ import requests
 from anybadge import Badge  # type: ignore[import]
 from humanfriendly import format_size, parse_size
 
-from .dicts import ManifestListV2, ManifestV2
+from .dicts import ManifestListV2, ManifestV2, OCIImageManifestV1
 
 if TYPE_CHECKING:
     from typing_extensions import Self
@@ -50,7 +50,8 @@ _USER_AGENT = "Docker-Client/20.10.2 (linux)"
 _MEDIA_TYPE_MANIFEST = "application/vnd.docker.distribution.manifest"
 _MEDIA_TYPE_MANIFEST_V2 = f"{_MEDIA_TYPE_MANIFEST}.v2+json"
 _MEDIA_TYPE_MANIFEST_LIST_V2 = f"{_MEDIA_TYPE_MANIFEST}.list.v2+json"
-
+_MEDIA_TYPE_OCI_IMAGE_MANIFEST = "application/vnd.oci.image.manifest"
+_MEDIA_TYPE_OCI_IMAGE_MANIFEST_V1 = f"{_MEDIA_TYPE_OCI_IMAGE_MANIFEST}.v1+json"
 
 class GHCRBadgeGenerator:
     """Generator for GHCR Badge."""
@@ -248,7 +249,7 @@ class GHCRBadgeGenerator:
         package_name: str,
         *,
         tag: str = "latest",
-    ) -> ManifestV2:
+    ) -> ManifestV2 | OCIImageManifestV1:
         """Get manifest from ghcr api.
 
         Parameters
@@ -283,7 +284,11 @@ class GHCRBadgeGenerator:
         url = f"https://ghcr.io/v2/{package_owner}/{package_name}/manifests/{tag}"
         manifest = requests.get(
             url,
-            headers={"User-Agent": _USER_AGENT, "Authorization": f"Bearer {token}"},
+            headers={
+                "User-Agent": _USER_AGENT,
+                "Authorization": f"Bearer {token}",
+                "Accept": f"{_MEDIA_TYPE_MANIFEST_V2},{_MEDIA_TYPE_OCI_IMAGE_MANIFEST_V1}",
+                },
             timeout=_TIMEOUT,
         ).json()
 
@@ -295,8 +300,10 @@ class GHCRBadgeGenerator:
             msg = f"manifest contains some error: {manifest.get('errors')}"
             raise InvalidManifestError(msg)
 
-        if (media_type := manifest.get("mediaType")) == _MEDIA_TYPE_MANIFEST_V2:
+        if (media_type := manifest.get("mediaType")) ==_MEDIA_TYPE_MANIFEST_V2:
             return cast(ManifestV2, manifest)
+        if (media_type := manifest.get("mediaType")) ==_MEDIA_TYPE_OCI_IMAGE_MANIFEST_V1:
+            return cast(OCIImageManifestV1, manifest)
 
         if media_type == _MEDIA_TYPE_MANIFEST_LIST_V2:
             manifest = cast(ManifestListV2, manifest)
@@ -308,6 +315,7 @@ class GHCRBadgeGenerator:
                 msg = f"Digest of a manifest is empty:\n{manifests[0]}"
                 raise InvalidManifestError(msg)
             return self.get_manifest(package_owner, package_name, tag=digest)
+
         raise InvalidMediaTypeError(media_type)
 
     def get_tags(self: Self, package_owner: str, package_name: str) -> list[str]:
