@@ -4,6 +4,9 @@ from __future__ import annotations
 
 from os import environ
 from typing import TYPE_CHECKING
+from datetime import datetime
+from datetime import timedelta
+
 
 from flask import Flask, jsonify, make_response, request
 
@@ -34,7 +37,23 @@ def return_svg(svg: str) -> Response:
         svg,
     )
     res.mimetype = "image/svg+xml"
-    res.headers["Cache-Control"] = "max-age=3600, s-maxage=3600"
+    """Expiry
+    Header Formats: Expires is "-1" OR a HTTP time stamp e.g. "Expires: Wed, 21 Oct 2015 07:28:00 GMT"
+    expiredate=( datetime.now() + timedelta(hours=1, minutes=1,seconds=6) ).strftime('%a, %d %b %Y %H:%M:%S GMT')
+    print(f"CACHE EXPIRY will be {expiredate}.")
+    For NO cache at all :
+    Cache-Control: no-cache,max-age=0,no-store,s-maxage=0
+    Expires: -1
+    Pragma: no-cache
+    
+    Using 3666 Seconds below
+    """
+    res.headers["Cache-Control"] = "max-age=3666, s-maxage=3666,no-store,proxy-revalidate"
+    res.headers["Pragma"] = "no-cache"
+    res.headers["Expires"] = ( datetime.now() + timedelta(hours=1, minutes=1,seconds=6) ).strftime('%a, %d %b %Y %H:%M:%S GMT')
+
+
+
     return res
 
 
