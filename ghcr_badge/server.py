@@ -2,11 +2,9 @@
 
 from __future__ import annotations
 
+from datetime import datetime, timedelta
 from os import environ
 from typing import TYPE_CHECKING
-from datetime import datetime
-from datetime import timedelta
-
 
 from flask import Flask, jsonify, make_response, request
 
@@ -45,14 +43,14 @@ def return_svg(svg: str) -> Response:
     Cache-Control: no-cache,max-age=0,no-store,s-maxage=0
     Expires: -1
     Pragma: no-cache
-    
+
     Using 3666 Seconds below
     """
     res.headers["Cache-Control"] = "max-age=3666, s-maxage=3666,no-store,proxy-revalidate"
     res.headers["Pragma"] = "no-cache"
-    res.headers["Expires"] = ( datetime.now() + timedelta(hours=1, minutes=1,seconds=6) ).strftime('%a, %d %b %Y %H:%M:%S GMT')
-
-
+    res.headers["Expires"] = (datetime.now() + timedelta(hours=1, minutes=1, seconds=6)).strftime(
+        "%a, %d %b %Y %H:%M:%S GMT",
+    )
 
     return res
 
