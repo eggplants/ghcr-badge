@@ -46,10 +46,18 @@ class _OCIImageManifestV1Layer(TypedDict):
 
 
 class OCIImageManifestV1(TypedDict):
-    """Manifest V2 for OCI Image."""
+    """Manifest V1 for OCI Image."""
 
     schemaVersion: int  # noqa: N815
     mediaType: str  # noqa: N815
     config: _OCIImageManifestV1Config
     layers: list[_OCIImageManifestV1Layer]
     annotations: dict[str, str]
+
+
+class OCIImageIndexV1(TypedDict):
+    """Index V1 for OCI Image."""
+
+    schemaVersion: int  # noqa: N815
+    mediaType: str  # noqa: N815
+    manifests: list[OCIImageManifestV1]

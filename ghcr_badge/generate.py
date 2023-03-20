@@ -11,7 +11,7 @@ import requests
 from anybadge import Badge  # type: ignore[import]
 from humanfriendly import format_size, parse_size
 
-from .dicts import ManifestListV2, ManifestV2, OCIImageManifestV1
+from .dicts import ManifestListV2, ManifestV2, OCIImageIndexV1, OCIImageManifestV1
 
 if TYPE_CHECKING:
     from typing_extensions import Self
@@ -47,11 +47,14 @@ _GITHUB_USER_PATTERN = r"^[a-zA-Z0-9]([a-zA-Z0-9]?|[-]?([a-zA-Z0-9])){0,38}$"
 _GITHUB_REPO_PATTERN = r"^[-a-zA-Z0-9]{1,100}$"
 _IMAGE_TAG_PATTERN = r"^([a-zA-Z0-9_][a-zA-Z0-9_.-]{0,127}|sha256:[a-z0-9]{64})$"
 _USER_AGENT = "Docker-Client/20.10.2 (linux)"
+
 _MEDIA_TYPE_MANIFEST = "application/vnd.docker.distribution.manifest"
 _MEDIA_TYPE_MANIFEST_V2 = f"{_MEDIA_TYPE_MANIFEST}.v2+json"
 _MEDIA_TYPE_MANIFEST_LIST_V2 = f"{_MEDIA_TYPE_MANIFEST}.list.v2+json"
+
 _MEDIA_TYPE_OCI_IMAGE_MANIFEST = "application/vnd.oci.image.manifest"
 _MEDIA_TYPE_OCI_IMAGE_MANIFEST_V1 = f"{_MEDIA_TYPE_OCI_IMAGE_MANIFEST}.v1+json"
+_MEDIA_TYPE_OCI_IMAGE_INDEX_V1 = "application/vnd.oci.image.index.v1+json"
 
 
 class GHCRBadgeGenerator:
@@ -288,7 +291,12 @@ class GHCRBadgeGenerator:
             headers={
                 "User-Agent": _USER_AGENT,
                 "Authorization": f"Bearer {token}",
-                "Accept": f"{_MEDIA_TYPE_MANIFEST_V2},{_MEDIA_TYPE_OCI_IMAGE_MANIFEST_V1}",
+                "Accept": ", ".join(
+                    (
+                        _MEDIA_TYPE_OCI_IMAGE_INDEX_V1,
+                        _MEDIA_TYPE_OCI_IMAGE_MANIFEST_V1,
+                    ),
+                ),
             },
             timeout=_TIMEOUT,
         ).json()
@@ -308,6 +316,17 @@ class GHCRBadgeGenerator:
 
         if media_type == _MEDIA_TYPE_MANIFEST_LIST_V2:
             manifest = cast(ManifestListV2, manifest)
+            manifests = manifest.get("manifests")
+            if not isinstance(manifests, list) or len(manifests) == 0:
+                msg = "Returned list of manifest is empty."
+                raise InvalidManifestError(msg)
+            if (digest := manifests[0].get("digest")) is None:
+                msg = f"Digest of a manifest is empty:\n{manifests[0]}"
+                raise InvalidManifestError(msg)
+            return self.get_manifest(package_owner, package_name, tag=digest)
+
+        if media_type == _MEDIA_TYPE_OCI_IMAGE_INDEX_V1:
+            manifest = cast(OCIImageIndexV1, manifest)
             manifests = manifest.get("manifests")
             if not isinstance(manifests, list) or len(manifests) == 0:
                 msg = "Returned list of manifest is empty."
