@@ -15,6 +15,7 @@ class _ManifestV2Layer(TypedDict):
     digest: str
     size: int
 
+
 class ManifestV2(TypedDict):
     """Image Manifest V2."""
 
@@ -23,6 +24,7 @@ class ManifestV2(TypedDict):
     config: _ManifestV2Layer
     layers: list[_ManifestV2Layer]
 
+
 class ManifestListV2(TypedDict):
     """Manifest List V2."""
 
@@ -30,15 +32,18 @@ class ManifestListV2(TypedDict):
     schemaVersion: int  # noqa: N815
     manifests: list[_ManifestV2Layer]
 
+
 class _OCIImageManifestV1Config(TypedDict):
     mediaType: str  # noqa: N815
     size: int
     digest: str
 
+
 class _OCIImageManifestV1Layer(TypedDict):
     mediaType: str  # noqa: N815
     size: int
     digest: str
+
 
 class OCIImageManifestV1(TypedDict):
     """Manifest V2 for OCI Image."""
