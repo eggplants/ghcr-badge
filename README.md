@@ -26,6 +26,12 @@
 
 ## Deployment
 
+[![Deploying on Deta Space](
+  <https://img.shields.io/badge/deploying%20on-Deta%20Space-F26DAA>
+  )](
+  <https://deta.space/discovery/r/zvaecrbqvbr9y7wn>
+)
+
 - <https://ghcr-badge.egpl.dev/>
   - [![Website](https://img.shields.io/website?label=egpl.dev&url=https%3A%2F%2Fghcr-badge.egpl.dev)](https://ghcr-badge.egpl.dev)
 
