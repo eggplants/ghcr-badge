@@ -73,7 +73,11 @@ Available color names and hex codes are listed on [here](https://github.com/jong
 
 ## Note
 
-GitHub caches badge data in 604800 seconds(=7 days). To update, try: `curl -X PURGE "https://camo.githubusercontent.com/..."` (it's badge image link)
+GitHub caches badge data in 604800 seconds(=7 days).
+
+The server will send headers to prevent this and set the cache time to 3666 seconds ,
+to have purge the cache before, try: `curl -X PURGE "https://camo.githubusercontent.com/..."` (it's badge image link)
+in the `server.py` is documented what leads to "no-caching" at all with github camo cache
 
 [1]: <https://ghcr-badge.deta.dev/eggplants/ghcr-badge/tags?trim=major>
 [2]: <https://ghcr-badge.deta.dev/eggplants/ghcr-badge/latest_tag?trim=major&label=latest>
