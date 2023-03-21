@@ -6,35 +6,27 @@ git: "https://github.com/eggplants/ghcr-badge"
 homepage: "https://ghcr-badge.egpl.dev/"
 ---
 
-# ghcr-badge: Generate ghcr.io container's status badge
-
 ## Motivation
 
 <https://github.com/badges/shields/issues/5594>
 
 ## Deployment
 
-[![Deploying on Deta Space](
-  <https://img.shields.io/badge/deploying%20on-Deta%20Space-F26DAA>
-  )](
-  <https://deta.space/discovery/r/zvaecrbqvbr9y7wn>
-)
-
 - <https://ghcr-badge.egpl.dev/>
 - <https://ghcr-badge.deta.dev/>
 
 ## Available paths
 
-- `/<string:package_owner>/<string:package_name>/tags?color=...&ignore=...&n=...&label=...&trim=...`
+- `/<package_owner>/<package_name>/tags?color=...&ignore=...&n=...&label=...&trim=...`
   - defaults: `color=#e05d44`, `ignore=latest`, `n=3`, `label=image tags`
   - <https://ghcr-badge.egpl.dev/eggplants/ghcr-badge/tags?trim=major>
-- `/<string:package_owner>/<string:package_name>/latest_tag?color=...&ignore=...&label=...&trim=...`
+- `/<package_owner>/<package_name>/latest_tag?color=...&ignore=...&label=...&trim=...`
   - defaults: `color=#e05d44`, `ignore=latest`, `label=version`
   - <https://ghcr-badge.egpl.dev/eggplants/ghcr-badge/latest_tag?trim=major&label=latest>
-- `/<string:package_owner>/<string:package_name>/develop_tag?color=...&label=...`
+- `/<package_owner>/<package_name>/develop_tag?color=...&label=...`
   - defaults: `color=#e05d44`, `label=develop`
   - <https://ghcr-badge.egpl.dev/ptr727/plexcleaner/develop_tag>
-- `/<string:package_owner>/<string:package_name>/size?color=...&tag=...&label=...&trim=...`
+- `/<package_owner>/<package_name>/size?color=...&tag=...&label=...&trim=...`
   - defaults: `color=#e05d44`, `tag=latest`, `label=image size`
   - <https://ghcr-badge.egpl.dev/eggplants/ghcr-badge/size>
 
@@ -42,7 +34,7 @@ homepage: "https://ghcr-badge.egpl.dev/"
 
 ### `label` parameter
 
-- `label=hello`: <https://ghcr-badge.egpl.dev/eggplants/ghcr-badge/tags?trim=major&label=hello>
+- `label=hello`
 
 ### `ignore` parameter
 
@@ -63,4 +55,9 @@ Available color names and hex codes are listed on [here](https://github.com/jong
 
 ## Note
 
-GitHub caches badge data in 604800 seconds(=7 days). To update, try: `curl -X PURGE "https://camo.githubusercontent.com/..."` (it's badge image link)
+Generated badge will be cached for 3666 seconds in GitHub's [Camo](https://github.com/atmos/camo) server.
+To update immediately, send PURGE request to the badge Camo link.
+
+```bash
+curl -X PURGE "https://camo.githubusercontent.com/..."
+```
