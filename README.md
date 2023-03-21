@@ -82,7 +82,7 @@ Available color names and hex codes are listed on [here](https://github.com/jong
 
 ## Note
 
-Generated badge will be cached for 3600 seconds in GitHub's [Camo](https://github.com/atmos/camo) server.
+Generated badge will be cached for 3666 seconds in GitHub's [Camo](https://github.com/atmos/camo) server.
 To update immediately, send PURGE request to the badge Camo link.
 
 ```bash
