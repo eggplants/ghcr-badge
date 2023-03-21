@@ -15,5 +15,4 @@ if [[ -z "${tag}" ]]; then
   __usage
   exit 1
 fi
-space push
-space release -v ${tag} -l
+space push && space release -v "${tag}" -l
