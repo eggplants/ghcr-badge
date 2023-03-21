@@ -309,9 +309,12 @@ class GHCRBadgeGenerator:
             msg = f"manifest contains some error: {manifest.get('errors')}"
             raise InvalidManifestError(msg)
 
-        if (media_type := manifest.get("mediaType")) == _MEDIA_TYPE_MANIFEST_V2:
+        media_type = manifest.get("mediaType")
+
+        if media_type == _MEDIA_TYPE_MANIFEST_V2:
             return cast(ManifestV2, manifest)
-        if (media_type := manifest.get("mediaType")) == _MEDIA_TYPE_OCI_IMAGE_MANIFEST_V1:
+
+        if media_type == _MEDIA_TYPE_OCI_IMAGE_MANIFEST_V1:
             return cast(OCIImageManifestV1, manifest)
 
         if media_type == _MEDIA_TYPE_MANIFEST_LIST_V2:
