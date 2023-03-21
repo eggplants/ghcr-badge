@@ -72,6 +72,7 @@ def get_index() -> Response:
                     "/eggplants/ghcr-badge/size",
                     "/frysztak/orpington-news/size",
                     "/tuananh/aws-cli/size",
+                    "/plantuml/docker%2Fjekyll/tags",
                 ],
                 "repo": "https://github.com/eggplants/ghcr-badge",
                 "version": __version__,
