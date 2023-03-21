@@ -1,4 +1,6 @@
 img/
+.deta/
+.space/
 *.save
 
 # Byte-compiled / optimized / DLL files

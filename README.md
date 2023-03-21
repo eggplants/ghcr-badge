@@ -29,7 +29,7 @@
 [![Deploying on Deta Space](
   <https://img.shields.io/badge/deploying%20on-Deta%20Space-F26DAA>
   )](
-  <https://deta.space/discovery/r/zvaecrbqvbr9y7wn>
+  <https://deta.space/discovery/@eggplants/ghcrbadge>
 )
 
 - <https://ghcr-badge.egpl.dev/>
