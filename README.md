@@ -40,19 +40,19 @@
 
 ## Available paths
 
-- `/<string:package_owner>/<string:package_name>/tags?color=...&ignore=...&n=...&label=...&trim=...`
+- `/<package_owner>/<package_name>/tags?color=...&ignore=...&n=...&label=...&trim=...`
   - defaults: `color=#e05d44`, `ignore=latest`, `n=3`, `label=image tags`
   - <https://ghcr-badge.egpl.dev/eggplants/ghcr-badge/tags?trim=major>
   - 👉: ![1]
-- `/<string:package_owner>/<string:package_name>/latest_tag?color=...&ignore=...&label=...&trim=...`
+- `/<package_owner>/<package_name>/latest_tag?color=...&ignore=...&label=...&trim=...`
   - defaults: `color=#e05d44`, `ignore=latest`, `label=version`
   - <https://ghcr-badge.egpl.dev/eggplants/ghcr-badge/latest_tag?trim=major&label=latest>
   - 👉: ![2]
-- `/<string:package_owner>/<string:package_name>/develop_tag?color=...&label=...`
+- `/<package_owner>/<package_name>/develop_tag?color=...&label=...`
   - defaults: `color=#e05d44`, `label=develop`
   - <https://ghcr-badge.egpl.dev/ptr727/plexcleaner/develop_tag>
   - 👉: ![3]
-- `/<string:package_owner>/<string:package_name>/size?color=...&tag=...&label=...&trim=...`
+- `/<package_owner>/<package_name>/size?color=...&tag=...&label=...&trim=...`
   - defaults: `color=#e05d44`, `tag=latest`, `label=image size`
   - <https://ghcr-badge.egpl.dev/eggplants/ghcr-badge/size>
   - 👉: ![4]

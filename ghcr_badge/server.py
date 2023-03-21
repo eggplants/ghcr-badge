@@ -14,7 +14,7 @@ from .generate import GHCRBadgeGenerator
 if TYPE_CHECKING:
     from flask.wrappers import Response
 
-_PACKAGE_PARAM_RULE = "/<string:package_owner>/<path:package_name>"
+_PACKAGE_PARAM_RULE = "/<package_owner>/<path:package_name>"
 
 app = Flask(__name__)
 app.config["JSONIFY_PRETTYPRINT_REGULAR"] = True
@@ -60,10 +60,10 @@ def get_index() -> Response:
             {
                 "available_paths": [
                     "/",
-                    "/<string:package_owner>/<string:package_name>/tags?color=...&ignore=...&n=...&label=...&trim=...",
-                    "/<string:package_owner>/<string:package_name>/latest_tag?color=...&ignore=...&label=...&trim=...",
-                    "/<string:package_owner>/<string:package_name>/develop_tag?color=...&label=...",
-                    "/<string:package_owner>/<string:package_name>/size?tag=...&color=...&label=...&trim=...",
+                    "/<package_owner>/<package_name>/tags?color=...&ignore=...&n=...&label=...&trim=...",
+                    "/<package_owner>/<package_name>/latest_tag?color=...&ignore=...&label=...&trim=...",
+                    "/<package_owner>/<package_name>/develop_tag?color=...&label=...",
+                    "/<package_owner>/<package_name>/size?tag=...&color=...&label=...&trim=...",
                 ],
                 "example_paths": [
                     "/",
