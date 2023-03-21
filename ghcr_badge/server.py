@@ -19,7 +19,7 @@ app.config["JSONIFY_PRETTYPRINT_REGULAR"] = True
 
 
 def return_svg(svg: str) -> Response:
-    """Return a generated svg as Flask.Response.
+    """Return a generated svg as `Flask.Response`.
 
     Parameters
     ----------
@@ -46,7 +46,7 @@ def return_svg(svg: str) -> Response:
 
 @app.route("/", methods=["GET"])
 def get_index() -> Response:
-    """Handle GET /.
+    """Handle GET `/`.
 
     Returns
     -------
@@ -82,7 +82,7 @@ def get_index() -> Response:
 
 @app.route("/<string:package_owner>/<string:package_name>/tags", methods=["GET"])
 def get_tags(package_owner: str, package_name: str) -> Response:
-    """Handle GET /<string:package_owner>/<string:package_name>/tags.
+    """Handle GET `/<string:package_owner>/<string:package_name>/tags`.
 
     Parameters
     ----------
@@ -123,7 +123,7 @@ def get_tags(package_owner: str, package_name: str) -> Response:
 
 @app.route("/<string:package_owner>/<string:package_name>/latest_tag", methods=["GET"])
 def get_latest_tag(package_owner: str, package_name: str) -> Response:
-    """Handle GET /<string:package_owner>/<string:package_name>/latest_tag.
+    """Handle GET `/<string:package_owner>/<string:package_name>/latest_tag`.
 
     Parameters
     ----------
@@ -162,7 +162,7 @@ def get_latest_tag(package_owner: str, package_name: str) -> Response:
 
 @app.route("/<string:package_owner>/<string:package_name>/develop_tag", methods=["GET"])
 def get_develop_tag(package_owner: str, package_name: str) -> Response:
-    """Handle GET /<string:package_owner>/<string:package_name>/develop_tag.
+    """Handle GET `/<string:package_owner>/<string:package_name>/develop_tag`.
 
     Parameters
     ----------
@@ -195,7 +195,7 @@ def get_develop_tag(package_owner: str, package_name: str) -> Response:
 
 @app.route("/<string:package_owner>/<string:package_name>/size", methods=["GET"])
 def get_size(package_owner: str, package_name: str) -> Response:
-    """Handle GET /<string:package_owner>/<string:package_name>/size.
+    """Handle GET `/<string:package_owner>/<string:package_name>/size`.
 
     Parameters
     ----------
@@ -230,7 +230,7 @@ def get_size(package_owner: str, package_name: str) -> Response:
 
 
 def main() -> None:
-    """Run API server at 0.0.0.0:5000."""
+    """Run API server at `0.0.0.0:5000`."""
     host = environ.get("HOST", "0.0.0.0")  # noqa: S104
     port = int(environ.get("PORT", 5000))
     app.run(host=host, port=port)
