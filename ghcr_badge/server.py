@@ -19,6 +19,7 @@ _PACKAGE_PARAM_RULE = "/<string:package_owner>/<path:package_name>"
 app = Flask(__name__)
 app.config["JSONIFY_PRETTYPRINT_REGULAR"] = True
 
+
 def return_svg(svg: str) -> Response:
     """Return a generated svg as `Flask.Response`.
 
