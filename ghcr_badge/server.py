@@ -14,9 +14,10 @@ from .generate import GHCRBadgeGenerator
 if TYPE_CHECKING:
     from flask.wrappers import Response
 
+_PACKAGE_PARAM_RULE = "/<string:package_owner>/<path:package_name>"
+
 app = Flask(__name__)
 app.config["JSONIFY_PRETTYPRINT_REGULAR"] = True
-
 
 def return_svg(svg: str) -> Response:
     """Return a generated svg as `Flask.Response`.
@@ -80,9 +81,9 @@ def get_index() -> Response:
         return jsonify(exception=type(err).__name__)
 
 
-@app.route("/<string:package_owner>/<string:package_name>/tags", methods=["GET"])
+@app.route(f"{_PACKAGE_PARAM_RULE}/tags", methods=["GET"])
 def get_tags(package_owner: str, package_name: str) -> Response:
-    """Handle GET `/<string:package_owner>/<string:package_name>/tags`.
+    """Get tags as a badge.
 
     Parameters
     ----------
@@ -121,9 +122,9 @@ def get_tags(package_owner: str, package_name: str) -> Response:
     return res
 
 
-@app.route("/<string:package_owner>/<string:package_name>/latest_tag", methods=["GET"])
+@app.route(f"{_PACKAGE_PARAM_RULE}/latest_tag", methods=["GET"])
 def get_latest_tag(package_owner: str, package_name: str) -> Response:
-    """Handle GET `/<string:package_owner>/<string:package_name>/latest_tag`.
+    """Get a latest_tag as a badge.
 
     Parameters
     ----------
@@ -160,9 +161,9 @@ def get_latest_tag(package_owner: str, package_name: str) -> Response:
     return res
 
 
-@app.route("/<string:package_owner>/<string:package_name>/develop_tag", methods=["GET"])
+@app.route(f"{_PACKAGE_PARAM_RULE}/develop_tag", methods=["GET"])
 def get_develop_tag(package_owner: str, package_name: str) -> Response:
-    """Handle GET `/<string:package_owner>/<string:package_name>/develop_tag`.
+    """Get develop_tag as a badge.
 
     Parameters
     ----------
@@ -193,9 +194,9 @@ def get_develop_tag(package_owner: str, package_name: str) -> Response:
     return res
 
 
-@app.route("/<string:package_owner>/<string:package_name>/size", methods=["GET"])
+@app.route(f"{_PACKAGE_PARAM_RULE}/size", methods=["GET"])
 def get_size(package_owner: str, package_name: str) -> Response:
-    """Handle GET `/<string:package_owner>/<string:package_name>/size`.
+    """Get image size as a badge.
 
     Parameters
     ----------
