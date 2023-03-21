@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+from datetime import datetime, timedelta, timezone
 from os import environ
 from typing import TYPE_CHECKING
 
@@ -30,11 +31,16 @@ def return_svg(svg: str) -> Response:
     Response
         Flask response object
     """
+    expiry_time = datetime.now(tz=timezone.utc) + timedelta(3666)
+
     res = make_response(
         svg,
     )
     res.mimetype = "image/svg+xml"
-    res.headers["Cache-Control"] = "max-age=3600, s-maxage=3600"
+    res.headers["Cache-Control"] = "max-age=3666,s-maxage=3666,no-store,proxy-revalidate"
+    res.headers["Pragma"] = "no-cache"  # for HTTP 1.0
+    res.headers["Expires"] = expiry_time.strftime("%a, %d %b %Y %H:%M:%S GMT")
+
     return res
 
 

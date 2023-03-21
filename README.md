@@ -82,7 +82,12 @@ Available color names and hex codes are listed on [here](https://github.com/jong
 
 ## Note
 
-GitHub caches badge data in 604800 seconds(=7 days). To update, try: `curl -X PURGE "https://camo.githubusercontent.com/..."` (it's badge image link)
+Generated badge will be cached for 3600 seconds in GitHub's [Camo](https://github.com/atmos/camo) server.
+To update immediately, send PURGE request to the badge Camo link.
+
+```bash
+curl -X PURGE "https://camo.githubusercontent.com/..."
+```
 
 [1]: <https://ghcr-badge.egpl.dev/eggplants/ghcr-badge/tags?trim=major>
 [2]: <https://ghcr-badge.egpl.dev/eggplants/ghcr-badge/latest_tag?trim=major&label=latest>
