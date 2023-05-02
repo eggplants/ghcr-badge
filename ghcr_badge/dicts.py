@@ -11,7 +11,7 @@ from typing import TypedDict
 
 
 class _ManifestV2Layer(TypedDict):
-    mediaType: str  # noqa: N815
+    mediaType: str
     digest: str
     size: int
 
@@ -19,8 +19,8 @@ class _ManifestV2Layer(TypedDict):
 class ManifestV2(TypedDict):
     """Image Manifest V2."""
 
-    mediaType: str  # noqa: N815
-    schemaVersion: int  # noqa: N815
+    mediaType: str
+    schemaVersion: int
     config: _ManifestV2Layer
     layers: list[_ManifestV2Layer]
 
@@ -28,19 +28,19 @@ class ManifestV2(TypedDict):
 class ManifestListV2(TypedDict):
     """Manifest List V2."""
 
-    mediaType: str  # noqa: N815
-    schemaVersion: int  # noqa: N815
+    mediaType: str
+    schemaVersion: int
     manifests: list[_ManifestV2Layer]
 
 
 class _OCIImageManifestV1Config(TypedDict):
-    mediaType: str  # noqa: N815
+    mediaType: str
     size: int
     digest: str
 
 
 class _OCIImageManifestV1Layer(TypedDict):
-    mediaType: str  # noqa: N815
+    mediaType: str
     size: int
     digest: str
 
@@ -48,8 +48,8 @@ class _OCIImageManifestV1Layer(TypedDict):
 class OCIImageManifestV1(TypedDict):
     """Manifest V1 for OCI Image."""
 
-    schemaVersion: int  # noqa: N815
-    mediaType: str  # noqa: N815
+    schemaVersion: int
+    mediaType: str
     config: _OCIImageManifestV1Config
     layers: list[_OCIImageManifestV1Layer]
     annotations: dict[str, str]
@@ -58,6 +58,6 @@ class OCIImageManifestV1(TypedDict):
 class OCIImageIndexV1(TypedDict):
     """Index V1 for OCI Image."""
 
-    schemaVersion: int  # noqa: N815
-    mediaType: str  # noqa: N815
+    schemaVersion: int
+    mediaType: str
     manifests: list[OCIImageManifestV1]
