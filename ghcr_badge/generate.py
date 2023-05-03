@@ -18,6 +18,9 @@ if TYPE_CHECKING:
 
 _TIMEOUT = 10
 
+# force to cast badge value into str
+Badge.value_type = str
+
 
 class InvalidTokenError(Exception):
     """Exception for invalid token."""
@@ -127,9 +130,10 @@ class GHCRBadgeGenerator:
             tags = self.filter_tags(package_owner, package_name)[::-1][:n][::-1]
         except InvalidTagListError:
             return self.get_invalid_badge(label)
+        badge_value = " " + " | ".join(tags)
         badge = Badge(
             label=label,
-            value=" | ".join(tags),
+            value=badge_value,
             default_color=self.color,
         )
         return str(badge.badge_svg_text)
@@ -163,9 +167,10 @@ class GHCRBadgeGenerator:
             latest_tag = self.filter_tags(package_owner, package_name)[-1]
         except InvalidTagListError:
             return self.get_invalid_badge(label)
+        badge_value = str(latest_tag)
         badge = Badge(
             label=label,
-            value=str(latest_tag),
+            value=badge_value,
             default_color=self.color,
         )
         return str(badge.badge_svg_text)
@@ -202,7 +207,12 @@ class GHCRBadgeGenerator:
             develop_tag = tags[tags.index("develop") + 1]
         except InvalidTagListError:
             return self.get_invalid_badge(label)
-        badge = Badge(label=label, value=str(develop_tag), default_color=self.color)
+        badge_value = str(develop_tag)
+        badge = Badge(
+            label=label,
+            value=badge_value,
+            default_color=self.color,
+        )
         return str(badge.badge_svg_text)
 
     def generate_size(
