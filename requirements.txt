@@ -1,1 +1,1 @@
-ghcr-badge==0.2.0
+ghcr-badge==0.2.1
