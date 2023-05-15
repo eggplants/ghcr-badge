@@ -7,30 +7,6 @@ requires = [
 ]
 
 [tool]
-[tool.black]
-line-length = 120
-target-version = ['py39']
-
-[tool.isort]
-profile = "black"
-
-[tool.mypy]
-pretty = true
-python_version = "3.9"
-show_error_codes = true
-strict = true
-
-[tool.ruff]
-select = ["ALL"]
-ignore = [
-  "D203", # no-blank-line-before-class
-  "D213", # multi-line-summary-second-line
-]
-line-length = 120
-
-[tool.ruff.mccabe]
-max-complexity = 18
-
 [tool.poetry]
 authors = ["eggplants <w10776e8w@yahoo.co.jp>"]
 classifiers = [
@@ -68,6 +44,30 @@ taskipy = "^1.10.3"
 [tool.poetry.scripts]
 ghcr-badge-server = "ghcr_badge.server:main"
 ghcr-badge = "ghcr_badge.main:main"
+
+[tool.black]
+line-length = 120
+target-version = ['py39']
+
+[tool.isort]
+profile = "black"
+
+[tool.mypy]
+pretty = true
+python_version = "3.9"
+show_error_codes = true
+strict = true
+
+[tool.ruff]
+select = ["ALL"]
+ignore = [
+  "D203", # no-blank-line-before-class
+  "D213", # multi-line-summary-second-line
+]
+line-length = 120
+
+[tool.ruff.mccabe]
+max-complexity = 18
 
 [tool.poetry_bumpversion.file."ghcr_badge/__init__.py"]
 

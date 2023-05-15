@@ -301,12 +301,7 @@ class GHCRBadgeGenerator:
             headers={
                 "User-Agent": _USER_AGENT,
                 "Authorization": f"Bearer {token}",
-                "Accept": ", ".join(
-                    (
-                        _MEDIA_TYPE_OCI_IMAGE_INDEX_V1,
-                        _MEDIA_TYPE_OCI_IMAGE_MANIFEST_V1,
-                    ),
-                ),
+                "Accept": f"{_MEDIA_TYPE_OCI_IMAGE_INDEX_V1}, {_MEDIA_TYPE_OCI_IMAGE_MANIFEST_V1}",
             },
             timeout=_TIMEOUT,
         ).json()
