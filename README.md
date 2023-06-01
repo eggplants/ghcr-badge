@@ -37,7 +37,6 @@
 
 - <https://ghcr-badge.deta.dev/> (Deprecated)
   - [![Website](https://img.shields.io/website?label=deta.dev&url=https%3A%2F%2Fghcr-badge.deta.dev)](https://ghcr-badge.deta.dev)
-  - This domain will be unavailable after June 1, 2023 due to [Deta Cloud Deprecation](https://deta.space/migration/introduction#deta-cloud-deprecation-information) and [Discontinuing Custom sub-domains](https://deta.space/migration/other/FAQs#are-custom-domains-and-sub-domains-available-on-deta-space)...
 
 ## Available paths
 
