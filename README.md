@@ -35,7 +35,7 @@
 - <https://ghcr-badge.egpl.dev/>
   - [![Website](https://img.shields.io/website?label=egpl.dev&url=https%3A%2F%2Fghcr-badge.egpl.dev)](https://ghcr-badge.egpl.dev)
 
-- <https://ghcr-badge.deta.dev/> (Deprecated)
+- <https://ghcr-badge.deta.dev/>
   - [![Website](https://img.shields.io/website?label=deta.dev&url=https%3A%2F%2Fghcr-badge.deta.dev)](https://ghcr-badge.deta.dev)
 
 ## Available paths
