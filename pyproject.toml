@@ -49,15 +49,6 @@ ghcr-badge = "ghcr_badge.main:main"
 line-length = 120
 target-version = ['py39']
 
-[tool.isort]
-profile = "black"
-
-[tool.mypy]
-pretty = true
-python_version = "3.9"
-show_error_codes = true
-strict = true
-
 [tool.ruff]
 select = ["ALL"]
 ignore = [
@@ -68,6 +59,15 @@ line-length = 120
 
 [tool.ruff.mccabe]
 max-complexity = 18
+
+[tool.isort]
+profile = "black"
+
+[tool.mypy]
+pretty = true
+python_version = "3.9"
+show_error_codes = true
+strict = true
 
 [tool.poetry_bumpversion.file."ghcr_badge/__init__.py"]
 
