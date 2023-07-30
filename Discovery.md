@@ -18,16 +18,16 @@ homepage: "https://ghcr-badge.egpl.dev/"
 ## Available paths
 
 - `/<package_owner>/<package_name>/tags?color=...&ignore=...&n=...&label=...&trim=...`
-  - defaults: `color=#e05d44`, `ignore=latest`, `n=3`, `label=image tags`
+  - defaults: `color=#44cc11`, `ignore=latest`, `n=3`, `label=image tags`
   - <https://ghcr-badge.egpl.dev/eggplants/ghcr-badge/tags?trim=major>
 - `/<package_owner>/<package_name>/latest_tag?color=...&ignore=...&label=...&trim=...`
-  - defaults: `color=#e05d44`, `ignore=latest`, `label=version`
+  - defaults: `color=#44cc11`, `ignore=latest`, `label=version`
   - <https://ghcr-badge.egpl.dev/eggplants/ghcr-badge/latest_tag?trim=major&label=latest>
 - `/<package_owner>/<package_name>/develop_tag?color=...&label=...`
-  - defaults: `color=#e05d44`, `label=develop`
+  - defaults: `color=#44cc11`, `label=develop`
   - <https://ghcr-badge.egpl.dev/ptr727/plexcleaner/develop_tag>
 - `/<package_owner>/<package_name>/size?color=...&tag=...&label=...&trim=...`
-  - defaults: `color=#e05d44`, `tag=latest`, `label=image size`
+  - defaults: `color=#44cc11`, `tag=latest`, `label=image size`
   - <https://ghcr-badge.egpl.dev/eggplants/ghcr-badge/size>
 
 ## Common parameters
