@@ -60,9 +60,6 @@ line-length = 120
 [tool.ruff.mccabe]
 max-complexity = 18
 
-[tool.isort]
-profile = "black"
-
 [tool.mypy]
 pretty = true
 python_version = "3.9"
@@ -74,3 +71,4 @@ strict = true
 [tool.taskipy.tasks]
 lint = "pre-commit run -a"
 profile = "python -m cProfile"
+dev = "flask --app ghcr_badge.server run --debug --reload"

@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>ghcr-badge</title>
+  <meta charset="UTF-8">
+  <script>
+  const updateImages = (targetId) => {
+    const owner = encodeURIComponent(document.getElementById("owner").value);
+    const name = encodeURIComponent(document.getElementById("name").value);
+    if(!(owner || name)) return;
+
+    const imgElms = document.querySelectorAll("main > img");
+    Array.from(imgElms).filter((e)=>
+      targetId === undefined || targetId === e.id
+    ).forEach((e) => {
+      console.log(`${targetId} -- ${e.id}`)
+      const url = new URL(`${window.location.origin}/${owner}/${name}/${e.id}`);
+
+      const optionElms = document.querySelectorAll(`div[id="${e.id}-options"] > input`);
+      Array.from(optionElms).forEach((o) => {
+        url.searchParams.set(o.className, o.value);
+      });
+      e.src = url.toString();
+    });
+  };
+  window.onload = (_event) => updateImages(undefined);
+  </script>
+  <style>
+    main > h2 {
+      margin-block: 20px
+    }
+    main > img {
+      margin-bottom: 10px
+    }
+    main > div.options > input[type="text"] {
+      width: 70px
+    }
+    main > div.options > input[type="number"] {
+      width: 35px
+    }
+    footer > span {
+      display: inline-block;
+      vertical-align: middle;
+    }
+  </style>
+</head>
+<body style="text-align: center">
+  <header>
+    <h1>ghcr-badge</h1>
+  </header>
+  <main>
+    <hr>
+    <div>
+      ghcr.io/
+      <input type="text" id="owner" placeholder="owner" value="eggplants" required>
+      /
+      <input type="text" id="name" placeholder="name" value="ghcr-badge" required>
+      <button type="submit" onclick="updateImages(undefined)">
+        Generate!
+      </button>
+    </div>
+    <hr>
+    <h2>tags</h2>
+    <img alt="tags-badge" id="tags" src="data:,">
+    <div class="options" id="tags-options">
+       <label for="tags-color">color:</label>
+       <input type="color" name="color" class="color" id="tags-color" value="#44cc11">
+       /
+       <label for="tags-ignore">ignore:</label>
+       <input type="text" name="ignore" class="ignore" id="tags-ignore" value="latest">
+       /
+       <label for="tags-n">n:</label>
+       <input type="number" name="n" class="n" id="tags-n" value="3" min="1">
+       /
+       <label for="tags-label">label:</label>
+       <input type="text" name="label" class="label" id="tags-label" value="image tags">
+       /
+       <label for="tags-trim">trim:</label>
+       <input type="text" name="trim" class="trim" id="tags-trim" value="">
+       <button type="submit" onclick="updateImages('tags')">
+         Apply
+       </button> 
+    </div>
+    <hr>
+    <h2>latest_tag</h2>
+    <img alt="latest_tags-badge" id="latest_tag" src="data:,">
+    <div class="options" id="latest_tags-options">
+       <label for="latest_tag-color">color:</label>
+       <input type="color" name="color" class="color" id="latest_tag-color" value="#44cc11">
+       /
+       <label for="latest_tag-ignore">ignore:</label>
+       <input type="text" name="ignore" class="ignore" id="latest_tag-ignore" value="latest">
+       /
+       <label for="latest_tag-label">label:</label>
+       <input type="text" name="label" class="label" id="latest_tag-label" value="version">
+       /
+       <label for="latest_tag-trim">trim:</label>
+       <input type="text" name="trim" class="trim" id="latest_tag-trim" value="">
+       <button type="submit" onclick="updateImages('tags')">
+         Apply
+       </button> 
+    </div>
+    <hr>
+    <h2>develop_tag</h2>
+    <img alt="develop_tag-badge" id="develop_tag" src="data:,">
+    <div class="options" id="develop_tag-options">
+       <label for="develop_tag-color">color:</label>
+       <input type="color" name="color" class="color" id="develop_tag-color" value="#44cc11">
+       /
+       <label for="develop_tag-label">label:</label>
+       <input type="text" name="label" class="label" id="develop_tag-label" value="image tags">
+       <button type="submit" onclick="updateImages('tags')">
+         Apply
+       </button> 
+    </div>
+    <hr>
+    <h2>size</h2>
+    <img alt="size-badge" id="size" src="data:,">
+    <div class="options" id="size-options">
+       <label for="size-color">color:</label>
+       <input type="color" name="color" class="color" id="size-color" value="#44cc11">
+       /
+       <label for="size-tag">tag:</label>
+       <input type="text" name="tag" class="tag" id="size-tag" value="latest">
+       /
+       <label for="size-label">label:</label>
+       <input type="text" name="label" class="label" id="size-label" value="image size">
+       /
+       <label for="size-trim">trim:</label>
+       <input type="text" name="trim" class="trim" id="size-trim" value="">
+       <button type="submit" onclick="updateImages('tags')">
+         Apply
+       </button> 
+    </div>
+
+    <hr>
+  </main>
+  <footer>
+    <span>
+      <a href="{{ repo_link }}" target="_blank">eggplants/ghcr-badge</a> / v{{ version }}
+    </span>
+    <span>
+      <a href="https://validator.w3.org/nu/?doc=https%3A%2F%2Fghcr-badge.egpl.dev">
+        <img alt="w3 valid html 4.01" src="https://raw.githubusercontent.com/bradleytaunt/html5-valid-badge/master/html5-validator-badge.svg">
+      </a>
+    </span>
+  </footer>
+</body>

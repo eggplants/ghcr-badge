@@ -6,15 +6,18 @@ from datetime import datetime, timedelta, timezone
 from os import environ
 from typing import TYPE_CHECKING
 
-from flask import Flask, jsonify, make_response, request
+from flask import Flask, jsonify, make_response, render_template, request
+from flask.wrappers import Response
 
 from . import __version__
 from .generate import GHCRBadgeGenerator
 
 if TYPE_CHECKING:
-    from flask.wrappers import Response
+    from typing import Literal
+
 
 _PACKAGE_PARAM_RULE = "/<package_owner>/<path:package_name>"
+_REPO_LINK = "https://github.com/eggplants/ghcr-badge"
 
 app = Flask(__name__)
 app.config["JSONIFY_PRETTYPRINT_REGULAR"] = True
@@ -47,8 +50,34 @@ def return_svg(svg: str) -> Response:
 
 
 @app.route("/", methods=["GET"])
-def get_index() -> Response:
+@app.route("/index", methods=["GET"])
+@app.route("/index<any('.html', '.json'):ext>", methods=["GET"])
+def get_index(ext: Literal[".html"] | Literal[".json"] = ".html") -> Response:
     """Handle GET `/`.
+
+    Returns
+    -------
+    Response
+        JSON or HTML
+    """
+    if ext == ".json":
+        return __get_index_json()
+    return __get_index_html()
+
+
+def __get_index_html() -> Response:
+    """Handle GET `/` and response as html.
+
+    Returns
+    -------
+    Response
+        HTML
+    """
+    return Response(render_template("index.j2", version=__version__, repo_link=_REPO_LINK))
+
+
+def __get_index_json() -> Response:
+    """Handle GET `/` and response as json.
 
     Returns
     -------
@@ -75,7 +104,7 @@ def get_index() -> Response:
                     "/tuananh/aws-cli/size",
                     "/plantuml/docker%2Fjekyll/tags",
                 ],
-                "repo": "https://github.com/eggplants/ghcr-badge",
+                "repo": _REPO_LINK,
                 "version": __version__,
             },
         )

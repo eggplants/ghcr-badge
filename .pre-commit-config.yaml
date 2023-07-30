@@ -31,6 +31,10 @@ repos:
   rev: 23.7.0
   hooks:
   - id: black
+- repo: https://github.com/Riverside-Healthcare/djLint
+  rev: v1.32.1
+  hooks:
+  - id: djlint-jinja
 - repo: https://github.com/astral-sh/ruff-pre-commit
   rev: v0.0.280
   hooks:
