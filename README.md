@@ -93,3 +93,9 @@ curl -X PURGE "https://camo.githubusercontent.com/..."
 [2]: <https://ghcr-badge.egpl.dev/eggplants/ghcr-badge/latest_tag?trim=major&label=latest>
 [3]: <https://ghcr-badge.egpl.dev/ptr727/plexcleaner/develop_tag>
 [4]: <https://ghcr-badge.egpl.dev/eggplants/ghcr-badge/size>
+
+## Development
+
+1. Install [`poetry`](https://python-poetry.org/docs/#installation)
+1. Run `poetry install && poetry shell && pre-commit install`
+1. Launch live server with `task dev`
