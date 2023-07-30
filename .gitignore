@@ -1,3 +1,4 @@
 ghcr_badge
 
 .space
+__pycache__/

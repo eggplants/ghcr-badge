@@ -1,0 +1,9 @@
+README.md
+publish.sh
+*.pyc
+
+ghcr_badge/
+
+.git/
+.space/
+__pycache__/
