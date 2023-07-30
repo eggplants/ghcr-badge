@@ -7,3 +7,5 @@ micros:
     primary: true
     public_routes:
       - "/*"
+    run: "gunicorn"
+    dev: "gunicorn --reload -e FLASK_ENV=development"
