@@ -15,4 +15,4 @@ if [[ -z "${tag}" ]]; then
   __usage
   exit 1
 fi
-space validate && space push && space release -v "${tag}" -l
+space validate && space push && space release -v "${tag}" --listed

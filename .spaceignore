@@ -1,9 +1,9 @@
 README.md
 publish.sh
 *.pyc
+.gitignore
 
 ghcr_badge/
-
 .git/
 .space/
 __pycache__/
