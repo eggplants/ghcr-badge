@@ -78,4 +78,4 @@ js.indent_size = 2
 [tool.taskipy.tasks]
 lint = "pre-commit run -a"
 profile = "python -m cProfile"
-dev = "flask --app ghcr_badge.server run --debug --reload"
+dev = "FLASK_ENV=development gunicorn --reload"
