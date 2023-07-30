@@ -1,9 +1,32 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" dir="ltr">
   <head>
     <title>ghcr-badge</title>
     <meta charset="UTF-8">
-    <script type="application/javascript">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="description"
+          content="Generate ghcr.io (GitHub Container Registory) container's status badge">
+    <meta name="format-detection" content="telephone=no">
+    <link rel="icon" href="/static/favicon.ico">
+    <link rel="apple-touch-icon" href="/static/favicon.png">
+    <meta property="og:site_name" content="ghcr-badge">
+    <meta property="og:url" content="https://ghcr-badge.egpl.dev">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="ghcr-badge">
+    <meta property="og:description"
+          content="Generate ghcr.io (GitHub Container Registory) container's status badge">
+    <meta property="og:image"
+          content="https://ghcr-badge.egpl.dev/static/favicon.png">
+    <meta property="og:image:width" content="160">
+    <meta property="og:image:height" content="160">
+    <meta property="og:locale" content="en_US">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:site" content="@egpl0">
+    <meta name="twitter:description"
+          content="Generate ghcr.io (GitHub Container Registory) container's status badge">
+    <meta name="twitter:image:src"
+          content="https://ghcr-badge.egpl.dev/static/favicon.png">
+    <script>
       const updateImages = (targetId) => {
         const owner = encodeURIComponent(document.getElementById("owner").value);
         const name = encodeURIComponent(document.getElementById("name").value);
