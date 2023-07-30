@@ -1,9 +1,10 @@
 ---
+app_name: "ghcr-badge"
 title: "ghcr-badge"
 tagline: "Generate ghcr.io (GitHub Container Registory) container's status badge."
 theme_color: "#44cc11"
-git: "https://github.com/eggplants/ghcr-badge"
-homepage: "https://ghcr-badge.egpl.dev/"
+git: "<https://github.com/eggplants/ghcr-badge>"
+homepage: "<https://ghcr-badge.egpl.dev>"
 ---
 
 ## Motivation
