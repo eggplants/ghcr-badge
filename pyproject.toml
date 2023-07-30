@@ -66,6 +66,13 @@ python_version = "3.9"
 show_error_codes = true
 strict = true
 
+[tool.djlint]
+format_css=true
+format_js=true
+indent = 2
+css.indent_size = 2
+js.indent_size = 2
+
 [tool.poetry_bumpversion.file."ghcr_badge/__init__.py"]
 
 [tool.taskipy.tasks]
