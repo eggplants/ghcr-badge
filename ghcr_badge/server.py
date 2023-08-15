@@ -52,7 +52,7 @@ def return_svg(svg: str) -> Response:
 @app.route("/", methods=["GET"])
 @app.route("/index", methods=["GET"])
 @app.route("/index<any('.html', '.json'):ext>", methods=["GET"])
-def get_index(ext: Literal[".html"] | Literal[".json"] = ".html") -> Response:
+def get_index(ext: Literal[".html", ".json"] = ".html") -> Response:
     """Handle GET `/`.
 
     Returns
