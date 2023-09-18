@@ -32,11 +32,11 @@ repos:
   hooks:
   - id: black
 - repo: https://github.com/Riverside-Healthcare/djLint
-  rev: v1.32.1
+  rev: v1.33.0
   hooks:
   - id: djlint-reformat-jinja
 - repo: https://github.com/astral-sh/ruff-pre-commit
-  rev: v0.0.287
+  rev: v0.0.290
   hooks:
   - id: ruff
     args: [--fix]
