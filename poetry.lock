@@ -662,13 +662,13 @@ files = [
 
 [[package]]
 name = "types-humanfriendly"
-version = "10.0.1.10"
+version = "10.0.1.11"
 description = "Typing stubs for humanfriendly"
 optional = false
-python-versions = "*"
+python-versions = ">=3.7"
 files = [
-    {file = "types-humanfriendly-10.0.1.10.tar.gz", hash = "sha256:0cd36cd18e9ea7dded0457f808ac5d3f1bf445e68f02156f85cc6c8e554e2285"},
-    {file = "types_humanfriendly-10.0.1.10-py3-none-any.whl", hash = "sha256:e76951af9fe65f2ec33a6b491e89b97c125d18a52abafd27fc603c60b8ca024a"},
+    {file = "types-humanfriendly-10.0.1.11.tar.gz", hash = "sha256:c87b2eb8ec2ab1ae51cb3cc2c0efee31622a6711b2a7627d8109e22b4cfd4366"},
+    {file = "types_humanfriendly-10.0.1.11-py3-none-any.whl", hash = "sha256:c0ca654b16ff36ed4c059152085a76c9909272f5ea6ac03cdb7e59b5dcd392c7"},
 ]
 
 [[package]]
