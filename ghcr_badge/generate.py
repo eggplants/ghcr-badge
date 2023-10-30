@@ -8,7 +8,7 @@ import re
 from typing import TYPE_CHECKING, cast
 
 import requests
-from anybadge import Badge  # type: ignore[import]
+from anybadge import Badge  # type: ignore[import,unused-ignore]
 from humanfriendly import format_size, parse_size
 
 from .dicts import ManifestListV2, ManifestV2, OCIImageIndexV1, OCIImageManifestV1
