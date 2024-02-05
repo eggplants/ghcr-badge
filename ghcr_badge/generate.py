@@ -82,6 +82,7 @@ class GHCRBadgeGenerator:
             tag name to hide, by default "latest"
         trim_type : str, optional
             type to hide tags
+
         """
         self.color = color
         self.ignore_tags: list[str] = ignore_tag.split(",")
@@ -122,6 +123,7 @@ class GHCRBadgeGenerator:
         ------
         ValueError
             raise if number of displayed tags is invalid
+
         """
         if n < 0:
             msg = f"{n} should be positive."
@@ -162,6 +164,7 @@ class GHCRBadgeGenerator:
         -------
         str
             svg string of generated badge of latest tag
+
         """
         try:
             latest_tag = self.filter_tags(package_owner, package_name)[-1]
@@ -199,6 +202,7 @@ class GHCRBadgeGenerator:
         -------
         str
             svg string of generated badge of develop tag
+
         """
         try:
             tags = [tag for tag in self.get_tags(package_owner, package_name) if tag != "latest"]
@@ -241,6 +245,7 @@ class GHCRBadgeGenerator:
         -------
         str
             svg string of generated badge of size
+
         """
         try:
             manifest = self.get_manifest(package_owner, package_name, tag=tag)
@@ -290,6 +295,7 @@ class GHCRBadgeGenerator:
             raise if response is invalid manifest
         InvalidMediaTypeError
             raise if response is invalid media type
+
         """
         if re.match(_IMAGE_TAG_PATTERN, tag) is None:
             raise InvalidTagError(tag)
@@ -367,6 +373,7 @@ class GHCRBadgeGenerator:
         ------
         InvalidTagListError
             raise if response is invalid
+
         """
         token = self.__auth(package_owner, package_name)
         url = f"https://ghcr.io/v2/{package_owner}/{package_name}/tags/list"
@@ -397,6 +404,7 @@ class GHCRBadgeGenerator:
         -------
         list[str]
             Filtered tags
+
         """
         tags: list[str] = []
         target_tags = [t for t in self.get_tags(package_owner, package_name) if not re.match(self.trim_pattern, t)]
@@ -423,6 +431,7 @@ class GHCRBadgeGenerator:
         -------
         str
             svg string
+
         """
         badge = Badge(label=label, value="invalid", default_color="#e05d44")
         return str(badge.badge_svg_text)

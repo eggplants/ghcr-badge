@@ -38,6 +38,7 @@ def check_connectivity(url: str = "www.google.com", timeout: int = 3) -> bool:
     -------
     bool
         True if online.
+
     """
     conn = HTTPConnection(url, timeout=timeout)
     try:
@@ -104,6 +105,7 @@ def main() -> None:
     ------
     HttpConnectionNotFountError
         raise if offline
+
     """
     args = parse_args()
     color = str(args.color)
