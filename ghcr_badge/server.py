@@ -35,6 +35,7 @@ def return_svg(svg: str) -> Response:
     -------
     Response
         Flask response object
+
     """
     expiry_time = datetime.now(tz=timezone.utc) + timedelta(3666)
 
@@ -59,6 +60,7 @@ def get_index(ext: Literal[".html", ".json"] = ".html") -> Response:
     -------
     Response
         JSON or HTML
+
     """
     if ext == ".json":
         return __get_index_json()
@@ -72,6 +74,7 @@ def __get_index_html() -> Response:
     -------
     Response
         HTML
+
     """
     return Response(render_template("index.j2", version=__version__, repo_link=_REPO_LINK))
 
@@ -83,6 +86,7 @@ def __get_index_json() -> Response:
     -------
     Response
         JSON
+
     """
     try:
         return jsonify(
@@ -127,6 +131,7 @@ def get_tags(package_owner: str, package_name: str) -> Response:
     -------
     Response
         Tag badge
+
     """
     try:
         q_params = request.args
@@ -168,6 +173,7 @@ def get_latest_tag(package_owner: str, package_name: str) -> Response:
     -------
     Response
         latest tag badge
+
     """
     try:
         q_params = request.args
@@ -207,6 +213,7 @@ def get_develop_tag(package_owner: str, package_name: str) -> Response:
     -------
     Response
         develop tag badge
+
     """
     try:
         q_params = request.args
@@ -240,6 +247,7 @@ def get_size(package_owner: str, package_name: str) -> Response:
     -------
     Response
         image size badge
+
     """
     try:
         q_params = request.args
