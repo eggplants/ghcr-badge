@@ -32,7 +32,7 @@
         const name = encodeURIComponent(document.getElementById("name").value);
         if (!(owner || name)) return;
 
-        const imgElms = document.querySelectorAll("main > img");
+        const imgElms = document.querySelectorAll("main > a > img");
         Array.from(imgElms).filter((e) =>
           targetId === undefined || targetId === e.id
         ).forEach((e) => {
