@@ -42,7 +42,9 @@
           Array.from(optionElms).forEach((o) => {
             url.searchParams.set(o.className, o.value);
           });
-          e.src = url.toString();
+          const urlString = url.toString();
+          e.src = urlString;
+          document.getElementById(`${e.id}-link`).href = urlString;
         });
       };
       window.onload = (_event) => updateImages(undefined);
@@ -89,7 +91,9 @@
       </div>
       <hr>
       <h2>tags</h2>
-      <img alt="tags-badge" id="tags" src="data:,">
+      <a id="tags-link">
+        <img alt="tags-badge" id="tags" src="data:,">
+      </a>
       <div class="options" id="tags-options">
         <label for="tags-color">color:</label>
         <input type="color"
@@ -121,7 +125,9 @@
       </div>
       <hr>
       <h2>latest_tag</h2>
-      <img alt="latest_tags-badge" id="latest_tag" src="data:,">
+      <a id="latest_tag-link">
+        <img alt="latest_tags-badge" id="latest_tag" src="data:,">
+      </a>
       <div class="options" id="latest_tag-options">
         <label for="latest_tag-color">color:</label>
         <input type="color"
@@ -150,7 +156,9 @@
       </div>
       <hr>
       <h2>develop_tag</h2>
-      <img alt="develop_tag-badge" id="develop_tag" src="data:,">
+      <a id="develop_tag-link">
+        <img alt="develop_tag-badge" id="develop_tag" src="data:,">
+      </a>
       <div class="options" id="develop_tag-options">
         <label for="develop_tag-color">color:</label>
         <input type="color"
@@ -169,7 +177,9 @@
       </div>
       <hr>
       <h2>size</h2>
-      <img alt="size-badge" id="size" src="data:,">
+      <a id="size-link">
+        <img alt="size-badge" id="size" src="data:,">
+      </a>
       <div class="options" id="size-options">
         <label for="size-color">color:</label>
         <input type="color"
