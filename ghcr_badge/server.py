@@ -95,14 +95,12 @@ def __get_index_json() -> Response:
                     "/",
                     "/<package_owner>/<package_name>/tags?color=...&ignore=...&n=...&label=...&trim=...",
                     "/<package_owner>/<package_name>/latest_tag?color=...&ignore=...&label=...&trim=...",
-                    "/<package_owner>/<package_name>/develop_tag?color=...&label=...",
                     "/<package_owner>/<package_name>/size?tag=...&color=...&label=...&trim=...",
                 ],
                 "example_paths": [
                     "/",
                     "/eggplants/ghcr-badge/tags",
                     "/eggplants/ghcr-badge/latest_tag",
-                    "/ptr727/plexcleaner/develop_tag",
                     "/eggplants/ghcr-badge/size",
                     "/frysztak/orpington-news/size",
                     "/tuananh/aws-cli/size",
@@ -187,40 +185,6 @@ def get_latest_tag(package_owner: str, package_name: str) -> Response:
                 ignore_tag=ignore_tag,
                 trim_type=trim,
             ).generate_latest_tag(
-                package_owner,
-                package_name,
-                label=label,
-            ),
-        )
-    except Exception as err:  # noqa: BLE001
-        return jsonify(exception=type(err).__name__)
-
-    return res
-
-
-@app.route(f"{_PACKAGE_PARAM_RULE}/develop_tag", methods=["GET"])
-def get_develop_tag(package_owner: str, package_name: str) -> Response:
-    """Get develop_tag as a badge.
-
-    Parameters
-    ----------
-    package_owner : str
-        package owner name, e.g. 'eggplants'
-    package_name : str
-        package name, e.g. 'asciiquarium-docker'
-
-    Returns
-    -------
-    Response
-        develop tag badge
-
-    """
-    try:
-        q_params = request.args
-        color = q_params.get("color", "#44cc11")
-        label = q_params.get("label", "develop")
-        res = return_svg(
-            GHCRBadgeGenerator(color=color).generate_develop_tag(
                 package_owner,
                 package_name,
                 label=label,

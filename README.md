@@ -1,6 +1,6 @@
 # ghcr-badge: Generate ghcr.io container's status badge
 
-[![1] ![2] ![4]](https://github.com/eggplants/ghcr-badge/pkgs/container/ghcr-badge)
+[![1] ![2] ![3]](https://github.com/eggplants/ghcr-badge/pkgs/container/ghcr-badge)
 
 [![PyPI version](
   <https://badge.fury.io/py/ghcr-badge.svg>
@@ -48,14 +48,10 @@
   - defaults: `color=#44cc11`, `ignore=latest`, `label=version`
   - <https://ghcr-badge.egpl.dev/eggplants/ghcr-badge/latest_tag?trim=major&label=latest>
   - 👉: ![2]
-- `/<package_owner>/<package_name>/develop_tag?color=...&label=...`
-  - defaults: `color=#44cc11`, `label=develop`
-  - <https://ghcr-badge.egpl.dev/ptr727/plexcleaner/develop_tag>
-  - 👉: ![3]
 - `/<package_owner>/<package_name>/size?color=...&tag=...&label=...&trim=...`
   - defaults: `color=#44cc11`, `tag=latest`, `label=image size`
   - <https://ghcr-badge.egpl.dev/eggplants/ghcr-badge/size>
-  - 👉: ![4]
+  - 👉: ![3]
 
 ## Common parameters
 
@@ -91,8 +87,7 @@ curl -X PURGE "https://camo.githubusercontent.com/..."
 
 [1]: <https://ghcr-badge.egpl.dev/eggplants/ghcr-badge/tags?trim=major>
 [2]: <https://ghcr-badge.egpl.dev/eggplants/ghcr-badge/latest_tag?trim=major&label=latest>
-[3]: <https://ghcr-badge.egpl.dev/ptr727/plexcleaner/develop_tag>
-[4]: <https://ghcr-badge.egpl.dev/eggplants/ghcr-badge/size>
+[3]: <https://ghcr-badge.egpl.dev/eggplants/ghcr-badge/size>
 
 ## Development
 

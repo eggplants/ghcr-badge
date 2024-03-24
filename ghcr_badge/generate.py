@@ -178,47 +178,6 @@ class GHCRBadgeGenerator:
         )
         return str(badge.badge_svg_text)
 
-    def generate_develop_tag(
-        self: Self,
-        package_owner: str,
-        package_name: str,
-        *,
-        label: str = "version",
-    ) -> str:
-        """Generate badge of develop tag.
-
-        Parameters
-        ----------
-        self : Self
-            class instance
-        package_owner : str
-            package owner name
-        package_name : str
-            package name
-        label : str, optional
-            label text, by default "version"
-
-        Returns
-        -------
-        str
-            svg string of generated badge of develop tag
-
-        """
-        try:
-            tags = [tag for tag in self.get_tags(package_owner, package_name) if tag != "latest"]
-            if "develop" not in tags or tags.index("develop") + 1 == len(tags):
-                return self.get_invalid_badge(label)
-            develop_tag = tags[tags.index("develop") + 1]
-        except InvalidTagListError:
-            return self.get_invalid_badge(label)
-        badge_value = str(develop_tag)
-        badge = Badge(
-            label=label,
-            value=badge_value,
-            default_color=self.color,
-        )
-        return str(badge.badge_svg_text)
-
     def generate_size(
         self: Self,
         package_owner: str,
