@@ -24,9 +24,6 @@ homepage: "https://ghcr-badge.egpl.dev"
 - `/<package_owner>/<package_name>/latest_tag?color=...&ignore=...&label=...&trim=...`
   - defaults: `color=#44cc11`, `ignore=latest`, `label=version`
   - <https://ghcr-badge.egpl.dev/eggplants/ghcr-badge/latest_tag?trim=major&label=latest>
-- `/<package_owner>/<package_name>/develop_tag?color=...&label=...`
-  - defaults: `color=#44cc11`, `label=develop`
-  - <https://ghcr-badge.egpl.dev/ptr727/plexcleaner/develop_tag>
 - `/<package_owner>/<package_name>/size?color=...&tag=...&label=...&trim=...`
   - defaults: `color=#44cc11`, `tag=latest`, `label=image size`
   - <https://ghcr-badge.egpl.dev/eggplants/ghcr-badge/size>
