@@ -6,9 +6,10 @@ requires = [
   "poetry-core",
 ]
 
-[tool]
 [tool.poetry]
-authors = ["eggplants <w10776e8w@yahoo.co.jp>"]
+authors = [
+  "eggplants <w10776e8w@yahoo.co.jp>",
+]
 classifiers = [
   "Development Status :: 3 - Alpha",
   "License :: OSI Approved :: MIT License",
@@ -17,9 +18,15 @@ classifiers = [
   "Programming Language :: Python :: Implementation :: CPython",
 ]
 description = "Generate ghcr.io container's status badge"
-keywords = ["github-container-registry", "badge", "ghcr"]
+keywords = [
+  "github-container-registry",
+  "badge",
+  "ghcr",
+]
 name = "ghcr_badge"
-packages = [{include = "ghcr_badge"}]
+packages = [
+  { include = "ghcr_badge" },
+]
 license = "MIT"
 readme = "README.md"
 repository = "https://github.com/eggplants/ghcr-badge"
@@ -27,13 +34,13 @@ version = "0.4.0"
 
 [tool.poetry.dependencies]
 python = ">=3.8,<3.13"
-anybadge="^1.9.0"
-flask=">=2.1.2,<4.0.0"
-gunicorn=">=20.1,<23.0"
-humanfriendly="^10.0"
-requests="^2.28.0"
-types-humanfriendly="^10.0"
-types-requests="^2.28.0"
+anybadge = "^1.9.0"
+flask = ">=2.1.2,<4.0.0"
+gunicorn = ">=20.1,<23.0"
+humanfriendly = "^10.0"
+requests = "^2.28.0"
+types-humanfriendly = "^10.0"
+types-requests = "^2.28.0"
 typing-extensions = "^4.5.0"
 
 [tool.poetry.group.dev.dependencies]
@@ -47,18 +54,21 @@ ghcr-badge = "ghcr_badge.main:main"
 
 [tool.black]
 line-length = 120
-target-version = ['py39']
+target-version = [
+  'py39',
+]
 
 [tool.ruff]
-select = ["ALL"]
+line-length = 120
+
+select = [
+  "ALL",
+]
 ignore = [
   "D203", # no-blank-line-before-class
   "D213", # multi-line-summary-second-line
 ]
-line-length = 120
-
-[tool.ruff.mccabe]
-max-complexity = 18
+mccabe.max-complexity = 18
 
 [tool.mypy]
 pretty = true
@@ -66,9 +76,11 @@ python_version = "3.9"
 show_error_codes = true
 strict = true
 
+[tool]
+
 [tool.djlint]
-format_css=true
-format_js=true
+format_css = true
+format_js = true
 indent = 2
 css.indent_size = 2
 js.indent_size = 2
