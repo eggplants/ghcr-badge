@@ -1,0 +1,12 @@
+version: 1
+services:
+- type: web
+  name: ghcr-badge
+  runtime: docker
+  repo: https://github.com/eggplants/ghcr-badge
+  plan: free
+  region: singapore
+  dockerContext: .
+  dockerfilePath: ./Dockerfile
+  domains:
+  - ghcr-badge.egpl.dev
