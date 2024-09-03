@@ -234,6 +234,14 @@ def get_size(package_owner: str, package_name: str) -> Response:
     return res
 
 
+@app.route("/health")
+def health() -> Response:
+    """Check if server is up."""
+    res = make_response("OK", 200)
+    res.mimetype = "text/plain"
+    return res
+
+
 def main() -> None:
     """Run API server at `0.0.0.0:5000`."""
     host = environ.get("HOST", "0.0.0.0")  # noqa: S104
