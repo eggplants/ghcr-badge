@@ -762,6 +762,21 @@ docs = ["furo (>=2023.7.26)", "proselint (>=0.13)", "sphinx (>=7.1.2)", "sphinx-
 test = ["covdefaults (>=2.3)", "coverage (>=7.2.7)", "coverage-enable-subprocess (>=1)", "flaky (>=3.7)", "packaging (>=23.1)", "pytest (>=7.4)", "pytest-env (>=0.8.2)", "pytest-freezer (>=0.4.8)", "pytest-mock (>=3.11.1)", "pytest-randomly (>=3.12)", "pytest-timeout (>=2.1)", "setuptools (>=68)", "time-machine (>=2.10)"]
 
 [[package]]
+name = "waitress"
+version = "3.0.0"
+description = "Waitress WSGI server"
+optional = false
+python-versions = ">=3.8.0"
+files = [
+    {file = "waitress-3.0.0-py3-none-any.whl", hash = "sha256:2a06f242f4ba0cc563444ca3d1998959447477363a2d7e9b8b4d75d35cfd1669"},
+    {file = "waitress-3.0.0.tar.gz", hash = "sha256:005da479b04134cdd9dd602d1ee7c49d79de0537610d653674cc6cbde222b8a1"},
+]
+
+[package.extras]
+docs = ["Sphinx (>=1.8.1)", "docutils", "pylons-sphinx-themes (>=1.0.9)"]
+testing = ["coverage (>=5.0)", "pytest", "pytest-cov"]
+
+[[package]]
 name = "werkzeug"
 version = "3.0.1"
 description = "The comprehensive WSGI web application library."
@@ -796,4 +811,4 @@ testing = ["big-O", "jaraco.functools", "jaraco.itertools", "more-itertools", "p
 [metadata]
 lock-version = "2.0"
 python-versions = ">=3.8,<3.13"
-content-hash = "a59e2241133982d234e929cdafdd5eb9ff5feb0f1118eab897f565aa3ed32318"
+content-hash = "0822b719a1cd628e35e2f3a8b1a0f3e3ca8ad5b1b3fa0d4da905cb51c31a30aa"

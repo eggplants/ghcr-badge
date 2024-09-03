@@ -51,6 +51,7 @@ repos:
     - natsort
     - types-requests
     - types-humanfriendly
+    - types-waitress
     - typing-extensions
     files: ^ghcr_badge/
     args: [--strict]

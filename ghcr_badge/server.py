@@ -8,6 +8,7 @@ from typing import TYPE_CHECKING
 
 from flask import Flask, jsonify, make_response, render_template, request
 from flask.wrappers import Response
+from waitress import serve
 
 from . import __version__
 from .generate import GHCRBadgeGenerator
@@ -237,7 +238,7 @@ def main() -> None:
     """Run API server at `0.0.0.0:5000`."""
     host = environ.get("HOST", "0.0.0.0")  # noqa: S104
     port = int(environ.get("PORT", 5000))
-    app.run(host=host, port=port)
+    serve(app, host=host, port=port)
 
 
 if __name__ == "__main__":
