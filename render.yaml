@@ -6,6 +6,7 @@ services:
   repo: https://github.com/eggplants/ghcr-badge
   plan: free
   region: singapore
+  healthCheckPath: /health
   dockerContext: .
   dockerfilePath: ./Dockerfile
   domains:
