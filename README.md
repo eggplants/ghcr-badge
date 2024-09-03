@@ -26,11 +26,15 @@
 
 ## Deployment
 
+[![Deploy to Render]](https://render.com/deploy?repo=https://github.com/eggplants/ghcr-badge)
+
 - <https://ghcr-badge.egpl.dev/>
   - [![Website](https://img.shields.io/website?label=egpl.dev&url=https%3A%2F%2Fghcr-badge.egpl.dev)](https://ghcr-badge.egpl.dev)
 
-- ~https://ghcr-badge.deta.dev/~
+- ~<https://ghcr-badge.deta.dev/>~
   - Deta Space [will be closed](https://deta.space/sunset) at 2024-10-17
+
+[Deploy to Render]: <https://render.com/images/deploy-to-render-button.svg>
 
 ## Available paths
 
