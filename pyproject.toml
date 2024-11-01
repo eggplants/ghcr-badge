@@ -45,7 +45,7 @@ typing-extensions = "^4.5.0"
 waitress = "^3.0.0"
 
 [tool.poetry.group.dev.dependencies]
-mypy = ">=0.991,<1.12"
+mypy = ">=0.991,<1.14"
 pre-commit = ">=2.20,<4.0"
 taskipy = "^1.10.3"
 
