@@ -11,7 +11,7 @@
   )](
   <https://results.pre-commit.ci/latest/github/eggplants/ghcr-badge/master>
 ) [![Maintainability](
-  <https://api.codeclimate.com/v1/badges/f77401f6fb543dd8c436/maintainability>
+  <https://api.codeclimate.com/v1/badges/161ff3365545764605ed/maintainability>
   )](
   <https://codeclimate.com/github/eggplants/ghcr-badge/maintainability>
 ) [![Release Package](
