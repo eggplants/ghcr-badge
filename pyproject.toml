@@ -1,57 +1,64 @@
-# poetry self add poetry-bumpversion
-
 [build-system]
 build-backend = "poetry.core.masonry.api"
 requires = [
-  "poetry-core",
+  "poetry-core>=2",
 ]
 
-[tool.poetry]
-authors = [
-  "eggplants <w10776e8w@yahoo.co.jp>",
+[project]
+name = "ghcr-badge"
+version = "0.5.0"
+description = "Generate ghcr.io container's status badge"
+readme = "README.md"
+keywords = [
+  "badge",
+  "ghcr",
+  "github-container-registry",
 ]
+license = { text = "MIT" }
+authors = [
+  { name = "eggplants", email = "w10776e8w@yahoo.co.jp" },
+]
+requires-python = ">=3.9,<4"
 classifiers = [
   "Development Status :: 3 - Alpha",
   "License :: OSI Approved :: MIT License",
-  "Programming Language :: Python :: 3",
   "Programming Language :: Python :: 3 :: Only",
+  "Programming Language :: Python :: 3.9",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Programming Language :: Python :: 3.13",
   "Programming Language :: Python :: Implementation :: CPython",
+  "Typing :: Typed",
 ]
-description = "Generate ghcr.io container's status badge"
-keywords = [
-  "github-container-registry",
-  "badge",
-  "ghcr",
+dependencies = [
+  "anybadge>=1.16,<2",
+  "flask>=3.1,<4",
+  "gunicorn>=23,<24",
+  "humanfriendly>=10,<11",
+  "requests>=2.32.3,<3",
+  "types-humanfriendly>=10.0.1.20241221,<11",
+  "types-requests>=2.32.0.20241016,<3",
+  "typing-extensions>=4.12.2,<5",
+  "waitress>=3.0.2,<4",
 ]
-name = "ghcr_badge"
+urls.Repository = "https://github.com/eggplants/ghcr-badge"
+scripts.ghcr-badge = "ghcr_badge.main:main"
+scripts.ghcr-badge-server = "ghcr_badge.server:main"
+
+[tool.poetry]
+requires-poetry = ">=2.0"
 packages = [
   { include = "ghcr_badge" },
 ]
-license = "MIT"
-readme = "README.md"
-repository = "https://github.com/eggplants/ghcr-badge"
-version = "0.5.0"
-
-[tool.poetry.dependencies]
-python = ">=3.8,<4"
-anybadge = "^1.9.0"
-flask = ">=2.1.2,<4.0.0"
-gunicorn = ">=20.1,<24.0"
-humanfriendly = "^10.0"
-requests = "^2.28.0"
-types-humanfriendly = "^10.0"
-types-requests = "^2.28.0"
-typing-extensions = "^4.5.0"
-waitress = "^3.0.0"
 
 [tool.poetry.group.dev.dependencies]
 mypy = ">=0.991,<1.15"
 pre-commit = ">=2.20,<4.0"
 taskipy = "^1.10.3"
 
-[tool.poetry.scripts]
-ghcr-badge-server = "ghcr_badge.server:main"
-ghcr-badge = "ghcr_badge.main:main"
+[tool.poetry.requires-plugins]
+poetry-plugin-shell = ">=1.0"
 
 [tool.black]
 line-length = 120
@@ -77,16 +84,12 @@ python_version = "3.9"
 show_error_codes = true
 strict = true
 
-[tool]
-
 [tool.djlint]
 format_css = true
 format_js = true
 indent = 2
 css.indent_size = 2
 js.indent_size = 2
-
-[tool.poetry_bumpversion.file."ghcr_badge/__init__.py"]
 
 [tool.taskipy.tasks]
 lint = "pre-commit run -a"
