@@ -282,13 +282,13 @@ class GHCRBadgeGenerator:
         media_type = manifest.get("mediaType")
 
         if media_type == _MEDIA_TYPE_MANIFEST_V2:
-            return cast(ManifestV2, manifest)
+            return cast("ManifestV2", manifest)
 
         if media_type == _MEDIA_TYPE_OCI_IMAGE_MANIFEST_V1:
-            return cast(OCIImageManifestV1, manifest)
+            return cast("OCIImageManifestV1", manifest)
 
         if media_type == _MEDIA_TYPE_MANIFEST_LIST_V2:
-            manifest = cast(ManifestListV2, manifest)
+            manifest = cast("ManifestListV2", manifest)
             manifests = manifest.get("manifests")
             if not isinstance(manifests, list) or len(manifests) == 0:
                 msg = "Returned list of manifest is empty."
@@ -299,7 +299,7 @@ class GHCRBadgeGenerator:
             return self.get_manifest(package_owner, package_name, tag=digest)
 
         if media_type == _MEDIA_TYPE_OCI_IMAGE_INDEX_V1:
-            manifest = cast(OCIImageIndexV1, manifest)
+            manifest = cast("OCIImageIndexV1", manifest)
             manifests = manifest.get("manifests")
             if not isinstance(manifests, list) or len(manifests) == 0:
                 msg = "Returned list of manifest is empty."
