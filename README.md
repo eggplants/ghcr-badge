@@ -11,10 +11,10 @@
   )](
   <https://results.pre-commit.ci/latest/github/eggplants/ghcr-badge/master>
 ) [![Maintainability](
-  <https://api.codeclimate.com/v1/badges/161ff3365545764605ed/maintainability>
+  <https://qlty.sh/badges/e53a09a0-bc44-44d9-a974-77c40c5d0387/maintainability.svg>
   )](
-  <https://codeclimate.com/github/eggplants/ghcr-badge/maintainability>
-) [![Release Package](
+  <https://qlty.sh/gh/eggplants/projects/ghcr-badge>
+  ) [![Release Package](
   <https://github.com/eggplants/ghcr-badge/actions/workflows/release.yml/badge.svg>
   )](
   <https://github.com/eggplants/ghcr-badge/actions/workflows/release.yml>
