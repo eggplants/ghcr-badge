@@ -245,7 +245,7 @@ def health() -> Response:
 def main() -> None:
     """Run API server at `0.0.0.0:5000`."""
     host = environ.get("HOST", "0.0.0.0")  # noqa: S104
-    port = int(environ.get("PORT", 5000))
+    port = int(environ.get("PORT", "5000"))
     serve(app, host=host, port=port)
 
 

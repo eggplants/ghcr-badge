@@ -71,8 +71,8 @@ lint.ignore = [
   "D203", # no-blank-line-before-class
   "D213", # multi-line-summary-second-line
 ]
+lint.mccabe.max-complexity = 12
 lint.pydocstyle.convention = "google"
-mccabe.max-complexity = 12
 
 [tool.mypy]
 pretty = true

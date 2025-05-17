@@ -11,10 +11,10 @@ import requests
 from anybadge import Badge  # type: ignore[import,unused-ignore]
 from humanfriendly import format_size, parse_size
 
-from .dicts import ManifestListV2, ManifestV2, OCIImageIndexV1, OCIImageManifestV1
-
 if TYPE_CHECKING:
     from typing_extensions import Self
+
+    from .dicts import ManifestListV2, ManifestV2, OCIImageIndexV1, OCIImageManifestV1
 
 _TIMEOUT = 10
 
@@ -282,13 +282,13 @@ class GHCRBadgeGenerator:
         media_type = manifest.get("mediaType")
 
         if media_type == _MEDIA_TYPE_MANIFEST_V2:
-            return cast(ManifestV2, manifest)
+            return cast("ManifestV2", manifest)
 
         if media_type == _MEDIA_TYPE_OCI_IMAGE_MANIFEST_V1:
-            return cast(OCIImageManifestV1, manifest)
+            return cast("OCIImageManifestV1", manifest)
 
         if media_type == _MEDIA_TYPE_MANIFEST_LIST_V2:
-            manifest = cast(ManifestListV2, manifest)
+            manifest = cast("ManifestListV2", manifest)
             manifests = manifest.get("manifests")
             if not isinstance(manifests, list) or len(manifests) == 0:
                 msg = "Returned list of manifest is empty."
@@ -299,7 +299,7 @@ class GHCRBadgeGenerator:
             return self.get_manifest(package_owner, package_name, tag=digest)
 
         if media_type == _MEDIA_TYPE_OCI_IMAGE_INDEX_V1:
-            manifest = cast(OCIImageIndexV1, manifest)
+            manifest = cast("OCIImageIndexV1", manifest)
             manifests = manifest.get("manifests")
             if not isinstance(manifests, list) or len(manifests) == 0:
                 msg = "Returned list of manifest is empty."
