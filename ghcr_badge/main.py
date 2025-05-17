@@ -34,7 +34,7 @@ def check_connectivity(url: str = "www.google.com", timeout: int = 3) -> bool:
     timeout : int, optional
         second to wait, by default 3
 
-    Returns
+    Returns:
     -------
     bool
         True if online.
@@ -101,7 +101,7 @@ def parse_args(test: list[str] | None = None) -> Namespace:
 def main() -> None:
     """Execute main script.
 
-    Raises
+    Raises:
     ------
     HttpConnectionNotFountError
         raise if offline

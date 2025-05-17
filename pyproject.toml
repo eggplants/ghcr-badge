@@ -1,8 +1,6 @@
 [build-system]
-build-backend = "poetry.core.masonry.api"
-requires = [
-  "poetry-core>=2",
-]
+build-backend = "hatchling.build"
+requires = [ "hatchling", "uv-dynamic-versioning" ]
 
 [project]
 name = "ghcr-badge"
@@ -15,9 +13,7 @@ keywords = [
   "github-container-registry",
 ]
 license = { text = "MIT" }
-authors = [
-  { name = "eggplants", email = "w10776e8w@yahoo.co.jp" },
-]
+authors = [ { name = "eggplants", email = "w10776e8w@yahoo.co.jp" } ]
 requires-python = ">=3.9,<4"
 classifiers = [
   "Development Status :: 3 - Alpha",
@@ -42,47 +38,57 @@ dependencies = [
   "typing-extensions>=4.12.2,<5",
   "waitress>=3.0.2,<4",
 ]
+
 urls.Repository = "https://github.com/eggplants/ghcr-badge"
 scripts.ghcr-badge = "ghcr_badge.main:main"
 scripts.ghcr-badge-server = "ghcr_badge.server:main"
 
-[tool.poetry]
-requires-poetry = ">=2.0"
-packages = [
-  { include = "ghcr_badge" },
+[dependency-groups]
+dev = [
+  "mypy>=0.991,<1.16",
+  "pre-commit>=2.20,<5",
+  "taskipy>=1.10.3,<2",
 ]
+docs = [ "pdoc" ]
 
-[tool.poetry.group.dev.dependencies]
-mypy = ">=0.991,<1.16"
-pre-commit = ">=2.20,<5.0"
-taskipy = "^1.10.3"
+[tool.hatch.version]
+source = "uv-dynamic-versioning"
 
-[tool.poetry.requires-plugins]
-poetry-plugin-shell = ">=1.0"
+[tool.hatch.build.targets.sdist]
+include = [ "ghcr_badge" ]
 
-[tool.black]
-line-length = 120
-target-version = [
-  'py39',
-]
+[tool.hatch.build.targets.wheel]
+include = [ "ghcr_badge" ]
 
 [tool.ruff]
 line-length = 120
-
-select = [
+format.indent-style = "space"
+format.quote-style = "double"
+lint.select = [
   "ALL",
 ]
-ignore = [
+lint.ignore = [
   "D203", # no-blank-line-before-class
   "D213", # multi-line-summary-second-line
 ]
-mccabe.max-complexity = 18
+lint.pydocstyle.convention = "google"
 
 [tool.mypy]
 pretty = true
 python_version = "3.9"
 show_error_codes = true
 strict = true
+
+[tool.uv]
+default-groups = [
+  "dev",
+  "docs",
+]
+
+[tool.uv-dynamic-versioning]
+vcs = "git"
+style = "semver"
+fallback-version = "0.0.0"
 
 [tool.djlint]
 format_css = true
@@ -95,3 +101,4 @@ js.indent_size = 2
 lint = "pre-commit run -a"
 profile = "python -m cProfile"
 dev = "FLASK_ENV=development gunicorn --reload"
+gendoc = "pdoc ghcr_badge -o ./docs --docformat google"

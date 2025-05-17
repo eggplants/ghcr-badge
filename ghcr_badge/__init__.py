@@ -1,4 +1,4 @@
-"""Initialize package."""
+""".. include:: ../README.md"""  # noqa: D415
 
 from .generate import GHCRBadgeGenerator
 

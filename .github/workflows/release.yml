@@ -1,7 +1,7 @@
 name: Release Package
 
 # need to setup:
-# secrets.PYPI_PASSWORD (See: https://pypi.org/help/#apitoken)
+# secrets.PYPI_TOKEN (See: https://pypi.org/help/#apitoken)
 
 on:
   push:
@@ -30,19 +30,19 @@ jobs:
     - uses: actions/checkout@v4
       with:
         persist-credentials: false
-    - name: Build and publish to pypi
-      uses: JRubics/poetry-publish@v2.1
+    - uses: astral-sh/setup-uv@v6
       with:
-        pypi_token: ${{ secrets.PYPI_PASSWORD }}
+        enable-cache: true
+        cache-dependency-glob: uv.lock
+    - run: uv build
+    - run: uv publish --token "${{ env.PYPI_TOKEN }}"
+      env:
+        PYPI_TOKEN: ${{ secrets.PYPI_TOKEN }}
   ghcr:
     needs: release
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v4
-    - uses: docker/setup-buildx-action@v3
-      id: buildx
-      with:
-        install: true
     - uses: docker/metadata-action@v5
       id: meta
       with:

@@ -114,12 +114,12 @@ class GHCRBadgeGenerator:
         label : str, optional
             label text, by default "image tags"
 
-        Returns
+        Returns:
         -------
         str
             svg string of generated badge of package tags
 
-        Raises
+        Raises:
         ------
         ValueError
             raise if number of displayed tags is invalid
@@ -160,7 +160,7 @@ class GHCRBadgeGenerator:
         label : str, optional
             label text, by default "version"
 
-        Returns
+        Returns:
         -------
         str
             svg string of generated badge of latest tag
@@ -200,7 +200,7 @@ class GHCRBadgeGenerator:
         label : str, optional
             label text, by default "image size"
 
-        Returns
+        Returns:
         -------
         str
             svg string of generated badge of size
@@ -241,12 +241,12 @@ class GHCRBadgeGenerator:
         tag : str, optional
             tag name, by default "latest"
 
-        Returns
+        Returns:
         -------
         ManifestV2
             dict containing returned manifest information
 
-        Raises
+        Raises:
         ------
         InvalidTagError
             raise if response contains invalid tag
@@ -323,12 +323,12 @@ class GHCRBadgeGenerator:
         package_name : str
             package name
 
-        Returns
+        Returns:
         -------
         list[str]
             tags, e.g. '1.0.0'
 
-        Raises
+        Raises:
         ------
         InvalidTagListError
             raise if response is invalid
@@ -359,7 +359,7 @@ class GHCRBadgeGenerator:
         package_name : str
             package name
 
-        Returns
+        Returns:
         -------
         list[str]
             Filtered tags
@@ -386,7 +386,7 @@ class GHCRBadgeGenerator:
         label : str
             badge label
 
-        Returns
+        Returns:
         -------
         str
             svg string

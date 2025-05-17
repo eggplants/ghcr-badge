@@ -32,7 +32,7 @@ def return_svg(svg: str) -> Response:
     svg : str
         svg source string
 
-    Returns
+    Returns:
     -------
     Response
         Flask response object
@@ -57,7 +57,7 @@ def return_svg(svg: str) -> Response:
 def get_index(ext: Literal[".html", ".json"] = ".html") -> Response:
     """Handle GET `/`.
 
-    Returns
+    Returns:
     -------
     Response
         JSON or HTML
@@ -71,7 +71,7 @@ def get_index(ext: Literal[".html", ".json"] = ".html") -> Response:
 def __get_index_html() -> Response:
     """Handle GET `/` and response as html.
 
-    Returns
+    Returns:
     -------
     Response
         HTML
@@ -83,7 +83,7 @@ def __get_index_html() -> Response:
 def __get_index_json() -> Response:
     """Handle GET `/` and response as json.
 
-    Returns
+    Returns:
     -------
     Response
         JSON
@@ -126,7 +126,7 @@ def get_tags(package_owner: str, package_name: str) -> Response:
     package_name : str
         package name, e.g. 'asciiquarium-docker'
 
-    Returns
+    Returns:
     -------
     Response
         Tag badge
@@ -168,7 +168,7 @@ def get_latest_tag(package_owner: str, package_name: str) -> Response:
     package_name : str
         package name, e.g. 'asciiquarium-docker'
 
-    Returns
+    Returns:
     -------
     Response
         latest tag badge
@@ -208,7 +208,7 @@ def get_size(package_owner: str, package_name: str) -> Response:
     package_name : str
         package name, e.g. 'asciiquarium-docker'
 
-    Returns
+    Returns:
     -------
     Response
         image size badge
