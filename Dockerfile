@@ -1,4 +1,4 @@
-FROM python:3.11-slim AS builder
+FROM python:3.13.7-slim AS builder
 
 ARG VERSION
 ENV VERSION=${VERSION:-master}
