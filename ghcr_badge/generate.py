@@ -344,7 +344,7 @@ class GHCRBadgeGenerator:
                 url,
                 headers={"User-Agent": _USER_AGENT, "Authorization": f"Bearer {token}"},
                 timeout=10,
-                params = params,
+                params=params,
             )
             .json()
             .get("tags")
