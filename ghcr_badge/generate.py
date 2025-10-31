@@ -336,11 +336,15 @@ class GHCRBadgeGenerator:
         """
         token = self.__auth(package_owner, package_name)
         url = f"https://ghcr.io/v2/{package_owner}/{package_name}/tags/list"
+        params = {
+            "n": 300,
+        }
         tags = (
             requests.get(
                 url,
                 headers={"User-Agent": _USER_AGENT, "Authorization": f"Bearer {token}"},
                 timeout=10,
+                params=params,
             )
             .json()
             .get("tags")
@@ -398,7 +402,7 @@ class GHCRBadgeGenerator:
     @staticmethod
     def __auth(package_owner: str, package_name: str) -> str:
         m_user = re.match(_GITHUB_USER_PATTERN, package_owner)
-        m_repo = re.match(_GITHUB_REPO_PATTERN, package_owner)
+        m_repo = re.match(_GITHUB_REPO_PATTERN, package_name)
         if m_user is None or m_repo is None:
             raise InvalidImageError
         token = base64.b64encode(f"v1:{package_owner}/{package_name}:0".encode())
