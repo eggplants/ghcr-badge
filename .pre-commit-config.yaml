@@ -2,7 +2,7 @@ ci:
   autoupdate_schedule: monthly
 repos:
 - repo: https://github.com/pre-commit/pre-commit-hooks
-  rev: v5.0.0
+  rev: v6.0.0
   hooks:
   - id: check-added-large-files
     args: [--maxkb=2000]
@@ -21,12 +21,12 @@ repos:
   - id: trailing-whitespace
     files: \.(py|sh|rst|yml|yaml)$
 - repo: https://github.com/macisamuele/language-formatters-pre-commit-hooks
-  rev: v2.14.0
+  rev: v2.15.0
   hooks:
   - id: pretty-format-yaml
     args: [--autofix, --indent, '2']
 - repo: https://github.com/tox-dev/pyproject-fmt
-  rev: v2.5.1
+  rev: v2.11.0
   hooks:
   - id: pyproject-fmt
 - repo: https://github.com/Riverside-Healthcare/djLint
@@ -34,12 +34,12 @@ repos:
   hooks:
   - id: djlint-reformat-jinja
 - repo: https://github.com/astral-sh/ruff-pre-commit
-  rev: v0.11.10
+  rev: v0.14.3
   hooks:
   - id: ruff
     args: [--fix]
 - repo: https://github.com/pre-commit/mirrors-mypy
-  rev: v1.15.0
+  rev: v1.18.2
   hooks:
   - id: mypy
     additional_dependencies:
@@ -52,7 +52,7 @@ repos:
     files: ^ghcr_badge/
     args: [--strict]
 - repo: https://github.com/igorshubovych/markdownlint-cli
-  rev: v0.44.0
+  rev: v0.45.0
   hooks:
   - id: markdownlint
     exclude: ^.github/PULL_REQUEST_TEMPLATE.md
