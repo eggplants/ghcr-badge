@@ -35,6 +35,7 @@ dependencies = [
   "requests>=2.32.3,<3",
   "types-humanfriendly>=10.0.1.20241221,<11",
   "types-requests>=2.32.0.20241016,<3",
+  "types-waitress>=3.0.1.20250801",
   "typing-extensions>=4.12.2,<5",
   "waitress>=3.0.2,<4",
 ]
@@ -48,7 +49,6 @@ dev = [
   "mypy>=0.991,<1.16",
   "pre-commit>=2.20,<5",
   "taskipy>=1.10.3,<2",
-  "types-waitress>=3.0.1.20250801",
 ]
 docs = [ "pdoc" ]
 

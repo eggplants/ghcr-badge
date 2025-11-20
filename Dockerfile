@@ -12,5 +12,6 @@ RUN /opt/venv/bin/pip install git+https://github.com/eggplants/ghcr-badge@${VERS
 FROM gcr.io/distroless/python3-debian12:nonroot
 COPY --from=builder /opt/venv /opt/venv
 ENV PATH="/opt/venv/bin:$PATH"
+ENV PYTHONPATH="/opt/venv/lib/python3.14/site-packages"
 
 ENTRYPOINT ["ghcr-badge-server"]
