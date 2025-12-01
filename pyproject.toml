@@ -46,7 +46,7 @@ scripts.ghcr-badge-server = "ghcr_badge.server:main"
 
 [dependency-groups]
 dev = [
-  "mypy>=0.991,<1.16",
+  "mypy>=0.991,<1.20",
   "pre-commit>=2.20,<5",
   "taskipy>=1.10.3,<2",
 ]
