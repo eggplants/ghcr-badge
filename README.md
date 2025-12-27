@@ -72,7 +72,7 @@ Use the ignore parameter to filter returned tags, supports pattern matching and 
 
 ### `color` parameter
 
-Available color names and hex codes are listed on [here](https://github.com/jongracecox/anybadge#colors).
+Available color names and hex codes are listed on: <https://github.com/jongracecox/anybadge#colors>
 
 ## Note
 
