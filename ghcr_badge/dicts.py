@@ -55,9 +55,15 @@ class OCIImageManifestV1(TypedDict):
     annotations: dict[str, str]
 
 
+class _OCIImageIndexV1Descriptor(TypedDict):
+    mediaType: str
+    size: int
+    digest: str
+
+
 class OCIImageIndexV1(TypedDict):
     """Index V1 for OCI Image."""
 
     schemaVersion: int
     mediaType: str
-    manifests: list[OCIImageManifestV1]
+    manifests: list[_OCIImageIndexV1Descriptor]
