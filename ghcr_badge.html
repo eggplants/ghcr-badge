@@ -28,7 +28,6 @@
     <li><a href="#available-paths">Available paths</a></li>
     <li><a href="#common-parameters">Common parameters</a></li>
     <li><a href="#note">Note</a></li>
-    <li><a href="#development">Development</a></li>
   </ul></li>
 </ul>
 
@@ -97,13 +96,9 @@ ghcr_badge    </h1>
 
 <p><a href="https://badge.fury.io/py/ghcr-badge
 "><img src="https://badge.fury.io/py/ghcr-badge.svg
-  " alt="PyPI version" /></a> <a href="https://results.pre-commit.ci/latest/github/eggplants/ghcr-badge/master
-"><img src="https://results.pre-commit.ci/badge/github/eggplants/ghcr-badge/master.svg
-  " alt="pre-commit.ci status" /></a> <a href="https://qlty.sh/gh/eggplants/projects/ghcr-badge
-  "><img src="https://qlty.sh/badges/e53a09a0-bc44-44d9-a974-77c40c5d0387/maintainability.svg
-  " alt="Maintainability" /></a> <a href="https://github.com/eggplants/ghcr-badge/actions/workflows/release.yml
-"><img src="https://github.com/eggplants/ghcr-badge/actions/workflows/release.yml/badge.svg
-  " alt="Release Package" /></a></p>
+  " alt="PyPI version" /></a> <a href="https://github.com/eggplants/ghcr-badge/actions/workflows/ci.yml
+"><img src="https://github.com/eggplants/ghcr-badge/actions/workflows/ci.yml/badge.svg
+  " alt="CI" /></a></p>
 
 <h2 id="motivation">Motivation</h2>
 
@@ -187,14 +182,6 @@ To update immediately, send PURGE request to the badge Camo link.</p>
 <pre><span></span><code>curl<span class="w"> </span>-X<span class="w"> </span>PURGE<span class="w"> </span><span class="s2">&quot;https://camo.githubusercontent.com/...&quot;</span>
 </code></pre>
 </div>
-
-<h2 id="development">Development</h2>
-
-<ol>
-<li>Install <a href="https://python-poetry.org/docs/#installation"><code>poetry</code></a></li>
-<li>Run <code>poetry install &amp;&amp; poetry shell &amp;&amp; pre-commit install</code></li>
-<li>Launch live server with <code>task dev</code></li>
-</ol>
 </div>
 
                         <input id="mod-ghcr_badge-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
