@@ -18,9 +18,6 @@ if TYPE_CHECKING:
 
 _TIMEOUT = 10
 
-# force to cast badge value into str
-Badge.value_type = str
-
 
 class InvalidTokenError(Exception):
     """Exception for invalid token."""
@@ -135,7 +132,7 @@ class GHCRBadgeGenerator:
         badge_value = " " + " | ".join(tags)
         badge = Badge(
             label=label,
-            value=badge_value,
+            value=str(badge_value),
             default_color=self.color,
         )
         return str(badge.badge_svg_text)
@@ -173,7 +170,7 @@ class GHCRBadgeGenerator:
         badge_value = str(latest_tag)
         badge = Badge(
             label=label,
-            value=badge_value,
+            value=str(badge_value),
             default_color=self.color,
         )
         return str(badge.badge_svg_text)
@@ -216,7 +213,7 @@ class GHCRBadgeGenerator:
         size = f"{config_size + layer_size}B"
         badge = Badge(
             label=label,
-            value=format_size(parse_size(size), binary=True),
+            value=str(format_size(parse_size(size), binary=True)),
             default_color=self.color,
         )
         return str(badge.badge_svg_text)
@@ -396,7 +393,7 @@ class GHCRBadgeGenerator:
             svg string
 
         """
-        badge = Badge(label=label, value="invalid", default_color="#e05d44")
+        badge = Badge(label=label, value=str("invalid"), default_color="#e05d44")
         return str(badge.badge_svg_text)
 
     @staticmethod

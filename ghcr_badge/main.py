@@ -111,12 +111,12 @@ def main() -> None:
     color = str(args.color)
     user = str(args.user)
     name = str(args.name)
-    out = Path(args.out)
     if not check_connectivity():
         raise HttpConnectionNotFountError
     g = GHCRBadgeGenerator(color=color)
     data = g.generate_tags(user, name)
     if args.out:
+        out = Path(args.out)
         print(data, file=out.open("w"))
     else:
         print(data)  # noqa: T201

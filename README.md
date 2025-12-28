@@ -6,18 +6,10 @@
   <https://badge.fury.io/py/ghcr-badge.svg>
   )](
   <https://badge.fury.io/py/ghcr-badge>
-) [![pre-commit.ci status](
-  <https://results.pre-commit.ci/badge/github/eggplants/ghcr-badge/master.svg>
+) [![CI](
+  <https://github.com/eggplants/ghcr-badge/actions/workflows/ci.yml/badge.svg>
   )](
-  <https://results.pre-commit.ci/latest/github/eggplants/ghcr-badge/master>
-) [![Maintainability](
-  <https://qlty.sh/badges/e53a09a0-bc44-44d9-a974-77c40c5d0387/maintainability.svg>
-  )](
-  <https://qlty.sh/gh/eggplants/projects/ghcr-badge>
-  ) [![Release Package](
-  <https://github.com/eggplants/ghcr-badge/actions/workflows/release.yml/badge.svg>
-  )](
-  <https://github.com/eggplants/ghcr-badge/actions/workflows/release.yml>
+  <https://github.com/eggplants/ghcr-badge/actions/workflows/ci.yml>
 )
 
 ## Motivation
@@ -86,9 +78,3 @@ curl -X PURGE "https://camo.githubusercontent.com/..."
 [1]: <https://ghcr-badge.egpl.dev/eggplants/ghcr-badge/tags?trim=major>
 [2]: <https://ghcr-badge.egpl.dev/eggplants/ghcr-badge/latest_tag?trim=major&label=latest>
 [3]: <https://ghcr-badge.egpl.dev/eggplants/ghcr-badge/size>
-
-## Development
-
-1. Install [`poetry`](https://python-poetry.org/docs/#installation)
-1. Run `poetry install && poetry shell && pre-commit install`
-1. Launch live server with `task dev`

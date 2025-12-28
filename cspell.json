@@ -1,0 +1,45 @@
+{
+  "language": "en_US",
+  "words": [
+    "anybadge",
+    "asciiquarium",
+    "Camo",
+    "Deta",
+    "djlint",
+    "docformat",
+    "egpl",
+    "Fjekyll",
+    "frysztak",
+    "gunicorn",
+    "humanfriendly",
+    "junitxml",
+    "maxage",
+    "mccabe",
+    "onclick",
+    "pdoc",
+    "pydocstyle",
+    "pymarkdown",
+    "pymarkdownlnt",
+    "pyproject",
+    "pytest",
+    "rootfs",
+    "sdist",
+    "testrepo",
+    "tuananh"
+  ],
+  "dictionaries": [
+    "companies",
+    "markdown",
+    "misc",
+    "softwareTerms",
+    "useCompounds"
+  ],
+  "ignorePaths": [
+    ".gitignore",
+    ".cspell.json"
+  ],
+  "features": {
+    "weighted-suggestions": true
+  },
+  "useGitignore": true
+}

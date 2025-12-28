@@ -4,7 +4,7 @@ requires = [ "hatchling", "uv-dynamic-versioning" ]
 
 [project]
 name = "ghcr-badge"
-version = "0.6.1"
+version = "1.0.0"
 description = "Generate ghcr.io container's status badge"
 readme = "README.md"
 keywords = [
@@ -14,12 +14,11 @@ keywords = [
 ]
 license = { text = "MIT" }
 authors = [ { name = "eggplants", email = "w10776e8w@yahoo.co.jp" } ]
-requires-python = ">=3.9,<4"
+requires-python = ">=3.10,<4"
 classifiers = [
   "Development Status :: 3 - Alpha",
   "License :: OSI Approved :: MIT License",
   "Programming Language :: Python :: 3 :: Only",
-  "Programming Language :: Python :: 3.9",
   "Programming Language :: Python :: 3.10",
   "Programming Language :: Python :: 3.11",
   "Programming Language :: Python :: 3.12",
@@ -47,11 +46,15 @@ scripts.ghcr-badge-server = "ghcr_badge.server:main"
 
 [dependency-groups]
 dev = [
-  "mypy>=0.991,<1.20",
-  "pre-commit>=2.20,<5",
-  "taskipy>=1.10.3,<2",
+  "djlint>=1.36.4",
+  "pymarkdownlnt>=0.9.33",
+  "pyproject-fmt>=2.11.1",
+  "pytest>=9.0.2",
+  "pytest-cov>=7",
 ]
-docs = [ "pdoc" ]
+docs = [
+  "pdoc>=16",
+]
 
 [tool.hatch.version]
 source = "uv-dynamic-versioning"
@@ -63,30 +66,25 @@ include = [ "ghcr_badge" ]
 include = [ "ghcr_badge" ]
 
 [tool.uv]
+preview = true
 default-groups = [
   "dev",
   "docs",
 ]
+exclude-newer = "P7D"
 
 [tool.ruff]
 line-length = 120
 format.indent-style = "space"
 format.quote-style = "double"
-lint.select = [
-  "ALL",
-]
+lint.select = [ "ALL" ]
 lint.ignore = [
-  "D203", # no-blank-line-before-class
-  "D213", # multi-line-summary-second-line
+  "COM812",
+  "D203",   # no-blank-line-before-class
+  "D213",   # multi-line-summary-second-line
 ]
 lint.mccabe.max-complexity = 12
 lint.pydocstyle.convention = "google"
-
-[tool.mypy]
-pretty = true
-python_version = "3.9"
-show_error_codes = true
-strict = true
 
 [tool.uv-dynamic-versioning]
 vcs = "git"
@@ -99,9 +97,3 @@ format_js = true
 indent = 2
 css.indent_size = 2
 js.indent_size = 2
-
-[tool.taskipy.tasks]
-lint = "pre-commit run -a"
-profile = "python -m cProfile"
-dev = "FLASK_ENV=development gunicorn --reload"
-gendoc = "pdoc ghcr_badge -o ./docs --docformat google"
