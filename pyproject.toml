@@ -4,6 +4,8 @@ requires = [ "hatchling", "uv-dynamic-versioning" ]
 
 [project]
 name = "ghcr-badge"
+# dynamic = [ "version" ]
+version = "1.0.2"
 description = "Generate ghcr.io container's status badge"
 readme = "README.md"
 keywords = [
@@ -26,7 +28,6 @@ classifiers = [
   "Programming Language :: Python :: Implementation :: CPython",
   "Typing :: Typed",
 ]
-dynamic = [ "version" ]
 dependencies = [
   "anybadge>=1.16,<2",
   "flask>=3.1,<4",
