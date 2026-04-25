@@ -3,7 +3,7 @@ revision = 3
 requires-python = ">=3.10, <4"
 
 [options]
-exclude-newer = "2026-04-18T16:10:21.234677383Z"
+exclude-newer = "2026-04-18T16:22:13.927522544Z"
 exclude-newer-span = "P7D"
 
 [[package]]
@@ -413,7 +413,6 @@ wheels = [
 
 [[package]]
 name = "ghcr-badge"
-version = "1.0.1"
 source = { editable = "." }
 dependencies = [
     { name = "anybadge" },
