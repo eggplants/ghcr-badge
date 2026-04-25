@@ -12,7 +12,7 @@ keywords = [
   "ghcr",
   "github-container-registry",
 ]
-license = { text = "MIT" }
+license = "MIT"
 authors = [ { name = "eggplants", email = "w10776e8w@yahoo.co.jp" } ]
 requires-python = ">=3.10,<4"
 classifiers = [
@@ -39,7 +39,6 @@ dependencies = [
   "typing-extensions>=4.12.2,<5",
   "waitress>=3.0.2,<4",
 ]
-
 urls.Repository = "https://github.com/eggplants/ghcr-badge"
 scripts.ghcr-badge = "ghcr_badge.main:main"
 scripts.ghcr-badge-server = "ghcr_badge.server:main"
@@ -56,22 +55,19 @@ docs = [
   "pdoc>=16",
 ]
 
-[tool.hatch.version]
-source = "uv-dynamic-versioning"
-
-[tool.hatch.build.targets.sdist]
-include = [ "ghcr_badge" ]
-
-[tool.hatch.build.targets.wheel]
-include = [ "ghcr_badge" ]
+[tool.hatch]
+build.targets.sdist.include = [ "ghcr_badge" ]
+build.targets.wheel.include = [ "ghcr_badge" ]
+version.source = "uv-dynamic-versioning"
 
 [tool.uv]
-preview = true
+python-downloads = "never"
 default-groups = [
   "dev",
   "docs",
 ]
 exclude-newer = "P7D"
+preview = true
 
 [tool.ruff]
 line-length = 120
