@@ -97,14 +97,14 @@ def __get_index_json() -> Response:
                     "/<package_owner>/<package_name>/tags?color=...&ignore=...&n=...&label=...&trim=...",
                     "/<package_owner>/<package_name>/latest_tag?color=...&ignore=...&label=...&trim=...",
                     "/<package_owner>/<package_name>/size?tag=...&color=...&label=...&trim=...",
-                    "/<package_owner>/<package_name>/downloads?color=...&label=...",
+                    "/<package_owner>/<package_name>/pulls?color=...&label=...",
                 ],
                 "example_paths": [
                     "/",
                     "/eggplants/ghcr-badge/tags",
                     "/eggplants/ghcr-badge/latest_tag",
                     "/eggplants/ghcr-badge/size",
-                    "/eggplants/ghcr-badge/downloads",
+                    "/eggplants/ghcr-badge/pulls",
                     "/frysztak/orpington-news/size",
                     "/tuananh/aws-cli/size",
                     "/plantuml/docker%2Fjekyll/tags",
@@ -236,9 +236,9 @@ def get_size(package_owner: str, package_name: str) -> Response:
     return res
 
 
-@app.route(f"{_PACKAGE_PARAM_RULE}/downloads", methods=["GET"])
-def get_downloads(package_owner: str, package_name: str) -> Response:
-    """Get image downloads as a badge.
+@app.route(f"{_PACKAGE_PARAM_RULE}/pulls", methods=["GET"])
+def get_pulls(package_owner: str, package_name: str) -> Response:
+    """Get image pulls as a badge.
 
     Parameters
     ----------
@@ -250,15 +250,15 @@ def get_downloads(package_owner: str, package_name: str) -> Response:
     Returns:
     -------
     Response
-        image download badge
+        image pull badge
 
     """
     try:
         q_params = request.args
         color = q_params.get("color", "#44cc11")
-        label = q_params.get("label", "downloads")
+        label = q_params.get("label", "pulls")
         res = return_svg(
-            GHCRBadgeGenerator(color=color).generate_downloads(
+            GHCRBadgeGenerator(color=color).generate_pulls(
                 package_owner,
                 package_name,
                 label=label,

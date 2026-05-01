@@ -41,8 +41,8 @@ class InvalidImageError(Exception):
     """Exception for invalid image."""
 
 
-class InvalidDownloadCountError(Exception):
-    """Exception for invalid download count."""
+class InvalidPullCountError(Exception):
+    """Exception for invalid pull count."""
 
 
 class InvalidMediaTypeError(Exception):
@@ -62,7 +62,7 @@ _MEDIA_TYPE_OCI_IMAGE_MANIFEST = "application/vnd.oci.image.manifest"
 _MEDIA_TYPE_OCI_IMAGE_MANIFEST_V1 = f"{_MEDIA_TYPE_OCI_IMAGE_MANIFEST}.v1+json"
 _MEDIA_TYPE_OCI_IMAGE_INDEX_V1 = "application/vnd.oci.image.index.v1+json"
 
-_TOTAL_DOWNLOADS_PATTERN = re.compile(r"Total downloads[\s\S]{0,500}?<h3\b([^>]*)>([^<]+)</h3>", re.IGNORECASE)
+_TOTAL_PULLS_PATTERN = re.compile(r"Total downloads[\s\S]{0,500}?<h3\b([^>]*)>([^<]+)</h3>", re.IGNORECASE)
 
 
 class GHCRBadgeGenerator:
@@ -226,14 +226,14 @@ class GHCRBadgeGenerator:
         )
         return str(badge.badge_svg_text)
 
-    def generate_downloads(
+    def generate_pulls(
         self: Self,
         package_owner: str,
         package_name: str,
         *,
-        label: str = "downloads",
+        label: str = "pulls",
     ) -> str:
-        """Generate image downloads badge.
+        """Generate image pulls badge.
 
         Parameters
         ----------
@@ -244,21 +244,21 @@ class GHCRBadgeGenerator:
         package_name : str
             package name
         label : str, optional
-            label text, by default "downloads"
+            label text, by default "pulls"
 
         Returns:
         -------
         str
-            svg string of generated badge of download count
+            svg string of generated badge of pull count
 
         """
         try:
-            downloads = self.get_download_count(package_owner, package_name)
-        except InvalidDownloadCountError:
+            pulls = self.get_pull_count(package_owner, package_name)
+        except InvalidPullCountError:
             return self.get_invalid_badge(label)
         badge = Badge(
             label=label,
-            value=downloads,
+            value=pulls,
             default_color=self.color,
         )
         return str(badge.badge_svg_text)
@@ -395,8 +395,8 @@ class GHCRBadgeGenerator:
             raise InvalidTagListError
         return [str(tag) for tag in tags]
 
-    def get_download_count(self: Self, package_owner: str, package_name: str) -> str:
-        """Get download count from a GitHub package page.
+    def get_pull_count(self: Self, package_owner: str, package_name: str) -> str:
+        """Get pull count from a GitHub package page.
 
         Parameters
         ----------
@@ -410,12 +410,12 @@ class GHCRBadgeGenerator:
         Returns:
         -------
         str
-            Displayed download count string, e.g. "1.2K"
+            Displayed pull count string, e.g. "1.2K"
 
         Raises:
         ------
-        InvalidDownloadCountError
-            raise if the download count cannot be fetched or parsed
+        InvalidPullCountError
+            raise if the pull count cannot be fetched or parsed
 
         """
         if re.match(_GITHUB_USER_PATTERN, package_owner) is None:
@@ -428,19 +428,19 @@ class GHCRBadgeGenerator:
             response = requests.get(url, headers={"User-Agent": _USER_AGENT}, timeout=_TIMEOUT)
             response.raise_for_status()
         except requests.RequestException as err:
-            raise InvalidDownloadCountError(str(err)) from err
+            raise InvalidPullCountError(str(err)) from err
 
-        matched = _TOTAL_DOWNLOADS_PATTERN.search(response.text)
+        matched = _TOTAL_PULLS_PATTERN.search(response.text)
         if matched is None:
-            msg = "download count section was not found"
-            raise InvalidDownloadCountError(msg)
+            msg = "pull count section was not found"
+            raise InvalidPullCountError(msg)
 
-        downloads = unescape(matched.group(2)).strip()
-        if not downloads:
-            msg = "download count was empty"
-            raise InvalidDownloadCountError(msg)
+        pulls = unescape(matched.group(2)).strip()
+        if not pulls:
+            msg = "pull count was empty"
+            raise InvalidPullCountError(msg)
 
-        return downloads
+        return pulls
 
     def filter_tags(self: Self, package_owner: str, package_name: str) -> list[str]:
         """Filter tags by regex pattern.

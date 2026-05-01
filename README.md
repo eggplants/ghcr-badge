@@ -42,9 +42,9 @@
   - defaults: `color=#44cc11`, `tag=latest`, `label=image size`
   - <https://ghcr-badge.egpl.dev/eggplants/ghcr-badge/size>
   - 👉: ![3]
-- `/<package_owner>/<package_name>/downloads?color=...&label=...`
-  - defaults: `color=#44cc11`, `label=downloads`
-  - <https://ghcr-badge.egpl.dev/eggplants/ghcr-badge/downloads>
+- `/<package_owner>/<package_name>/pulls?color=...&label=...`
+  - defaults: `color=#44cc11`, `label=pulls`
+  - <https://ghcr-badge.egpl.dev/eggplants/ghcr-badge/pulls>
 
 ## Common parameters
 

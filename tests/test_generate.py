@@ -10,7 +10,7 @@ import requests
 
 from ghcr_badge.generate import (
     GHCRBadgeGenerator,
-    InvalidDownloadCountError,
+    InvalidPullCountError,
     InvalidImageError,
     InvalidManifestError,
     InvalidMediaTypeError,
@@ -129,20 +129,20 @@ class TestGHCRBadgeGenerator:
         result = gen.generate_size("user", "repo")
         assert "invalid" in result
 
-    @patch("ghcr_badge.generate.GHCRBadgeGenerator.get_download_count")
-    def test_generate_downloads_success(self, mock_get_download_count: MagicMock) -> None:
-        """Test generate_downloads with successful response."""
-        mock_get_download_count.return_value = "1.2K"
+    @patch("ghcr_badge.generate.GHCRBadgeGenerator.get_pull_count")
+    def test_generate_pulls_success(self, mock_get_pull_count: MagicMock) -> None:
+        """Test generate_pulls with successful response."""
+        mock_get_pull_count.return_value = "1.2K"
         gen = GHCRBadgeGenerator()
-        result = gen.generate_downloads("user", "repo")
+        result = gen.generate_pulls("user", "repo")
         assert "1.2K" in result
 
-    @patch("ghcr_badge.generate.GHCRBadgeGenerator.get_download_count")
-    def test_generate_downloads_invalid(self, mock_get_download_count: MagicMock) -> None:
-        """Test generate_downloads with invalid response."""
-        mock_get_download_count.side_effect = InvalidDownloadCountError
+    @patch("ghcr_badge.generate.GHCRBadgeGenerator.get_pull_count")
+    def test_generate_pulls_invalid(self, mock_get_pull_count: MagicMock) -> None:
+        """Test generate_pulls with invalid response."""
+        mock_get_pull_count.side_effect = InvalidPullCountError
         gen = GHCRBadgeGenerator()
-        result = gen.generate_downloads("user", "repo")
+        result = gen.generate_pulls("user", "repo")
         assert "invalid" in result
 
     @patch("ghcr_badge.generate.requests.get")
@@ -259,15 +259,15 @@ class TestGHCRBadgeGenerator:
             gen.get_tags("user", "repo")
 
     @patch("ghcr_badge.generate.requests.get")
-    def test_get_download_count_user_scoped(self, mock_get: MagicMock) -> None:
-        """Test get_download_count for a user-scoped package page."""
+    def test_get_pull_count_user_scoped(self, mock_get: MagicMock) -> None:
+        """Test get_pull_count for a user-scoped package page."""
         mock_response = Mock()
         mock_response.raise_for_status.return_value = None
         mock_response.text = '<section><span>Total downloads</span><h3 title="1,234">1.2K</h3></section>'
         mock_get.return_value = mock_response
 
         gen = GHCRBadgeGenerator()
-        result = gen.get_download_count("user", "repo")
+        result = gen.get_pull_count("user", "repo")
 
         assert result == "1.2K"
         mock_get.assert_called_once_with(
@@ -277,27 +277,27 @@ class TestGHCRBadgeGenerator:
         )
 
     @patch("ghcr_badge.generate.requests.get")
-    def test_get_download_count_invalid_response(self, mock_get: MagicMock) -> None:
-        """Test get_download_count when the page does not contain a count."""
+    def test_get_pull_count_invalid_response(self, mock_get: MagicMock) -> None:
+        """Test get_pull_count when the page does not contain a count."""
         mock_response = Mock()
         mock_response.raise_for_status.return_value = None
         mock_response.text = "<html><body>No stats here</body></html>"
         mock_get.return_value = mock_response
 
         gen = GHCRBadgeGenerator()
-        with pytest.raises(InvalidDownloadCountError, match="section was not found"):
-            gen.get_download_count("user", "repo")
+        with pytest.raises(InvalidPullCountError, match="section was not found"):
+            gen.get_pull_count("user", "repo")
 
     @patch("ghcr_badge.generate.requests.get")
-    def test_get_download_count_http_error(self, mock_get: MagicMock) -> None:
-        """Test get_download_count when the package page request fails."""
+    def test_get_pull_count_http_error(self, mock_get: MagicMock) -> None:
+        """Test get_pull_count when the package page request fails."""
         mock_response = Mock()
         mock_response.raise_for_status.side_effect = requests.HTTPError("404 Client Error")
         mock_get.return_value = mock_response
 
         gen = GHCRBadgeGenerator()
-        with pytest.raises(InvalidDownloadCountError, match="404 Client Error"):
-            gen.get_download_count("user", "repo")
+        with pytest.raises(InvalidPullCountError, match="404 Client Error"):
+            gen.get_pull_count("user", "repo")
 
     @patch("ghcr_badge.generate.GHCRBadgeGenerator.get_tags")
     def test_filter_tags_basic(self, mock_get_tags: MagicMock) -> None:
