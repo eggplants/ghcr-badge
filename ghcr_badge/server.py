@@ -97,12 +97,14 @@ def __get_index_json() -> Response:
                     "/<package_owner>/<package_name>/tags?color=...&ignore=...&n=...&label=...&trim=...",
                     "/<package_owner>/<package_name>/latest_tag?color=...&ignore=...&label=...&trim=...",
                     "/<package_owner>/<package_name>/size?tag=...&color=...&label=...&trim=...",
+                    "/<package_owner>/<package_name>/downloads?repo=...&color=...&label=...",
                 ],
                 "example_paths": [
                     "/",
                     "/eggplants/ghcr-badge/tags",
                     "/eggplants/ghcr-badge/latest_tag",
                     "/eggplants/ghcr-badge/size",
+                    "/eggplants/ghcr-badge/downloads?repo=ghcr-badge",
                     "/frysztak/orpington-news/size",
                     "/tuananh/aws-cli/size",
                     "/plantuml/docker%2Fjekyll/tags",
@@ -225,6 +227,42 @@ def get_size(package_owner: str, package_name: str) -> Response:
                 package_owner,
                 package_name,
                 tag=tag,
+                label=label,
+            ),
+        )
+    except Exception as err:  # noqa: BLE001
+        return jsonify(exception=type(err).__name__)
+
+    return res
+
+
+@app.route(f"{_PACKAGE_PARAM_RULE}/downloads", methods=["GET"])
+def get_downloads(package_owner: str, package_name: str) -> Response:
+    """Get image downloads as a badge.
+
+    Parameters
+    ----------
+    package_owner : str
+        package owner name, e.g. 'eggplants'
+    package_name : str
+        package name, e.g. 'ghcr-badge'
+
+    Returns:
+    -------
+    Response
+        image download badge
+
+    """
+    try:
+        q_params = request.args
+        repo = q_params.get("repo") or None
+        color = q_params.get("color", "#44cc11")
+        label = q_params.get("label", "downloads")
+        res = return_svg(
+            GHCRBadgeGenerator(color=color).generate_downloads(
+                package_owner,
+                package_name,
+                repo=repo,
                 label=label,
             ),
         )

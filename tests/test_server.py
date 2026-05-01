@@ -67,6 +67,7 @@ class TestIndexRoute:
         assert response.content_type == "application/json"
         data = response.get_json()
         assert "available_paths" in data
+        assert any("/downloads" in path for path in data["available_paths"])
 
 
 class TestTagsRoute:
@@ -173,6 +174,61 @@ class TestSizeRoute:
         response = client.get("/testuser/org/repo/size")
         assert response.status_code == 200
         mock_generator.generate_size.assert_called_once_with("testuser", "org/repo", tag="latest", label="image size")
+
+
+class TestDownloadsRoute:
+    """Test downloads route."""
+
+    @patch("ghcr_badge.server.GHCRBadgeGenerator")
+    def test_get_downloads_default(self, mock_generator_class: MagicMock, client: FlaskClient) -> None:
+        """Test GET /<owner>/<name>/downloads with default parameters."""
+        mock_generator = Mock()
+        mock_generator.generate_downloads.return_value = "<svg><text>1.2K</text></svg>"
+        mock_generator_class.return_value = mock_generator
+
+        response = client.get("/testuser/testrepo/downloads")
+        assert response.status_code == 200
+        assert response.mimetype == "image/svg+xml"
+        mock_generator_class.assert_called_once_with(color="#44cc11")
+        mock_generator.generate_downloads.assert_called_once_with(
+            "testuser",
+            "testrepo",
+            repo=None,
+            label="downloads",
+        )
+
+    @patch("ghcr_badge.server.GHCRBadgeGenerator")
+    def test_get_downloads_with_parameters(self, mock_generator_class: MagicMock, client: FlaskClient) -> None:
+        """Test GET /<owner>/<name>/downloads with custom parameters."""
+        mock_generator = Mock()
+        mock_generator.generate_downloads.return_value = "<svg><text>3.4K</text></svg>"
+        mock_generator_class.return_value = mock_generator
+
+        response = client.get("/testuser/testrepo/downloads?repo=myrepo&color=blue&label=pulls")
+        assert response.status_code == 200
+        mock_generator_class.assert_called_once_with(color="blue")
+        mock_generator.generate_downloads.assert_called_once_with(
+            "testuser",
+            "testrepo",
+            repo="myrepo",
+            label="pulls",
+        )
+
+    @patch("ghcr_badge.server.GHCRBadgeGenerator")
+    def test_get_downloads_nested_path(self, mock_generator_class: MagicMock, client: FlaskClient) -> None:
+        """Test GET downloads with nested package path."""
+        mock_generator = Mock()
+        mock_generator.generate_downloads.return_value = "<svg><text>9</text></svg>"
+        mock_generator_class.return_value = mock_generator
+
+        response = client.get("/testuser/nested/path/repo/downloads?repo=demo")
+        assert response.status_code == 200
+        mock_generator.generate_downloads.assert_called_once_with(
+            "testuser",
+            "nested/path/repo",
+            repo="demo",
+            label="downloads",
+        )
 
 
 class TestMain:

@@ -6,9 +6,11 @@ from typing import TYPE_CHECKING
 from unittest.mock import MagicMock, Mock, patch
 
 import pytest
+import requests
 
 from ghcr_badge.generate import (
     GHCRBadgeGenerator,
+    InvalidDownloadCountError,
     InvalidImageError,
     InvalidManifestError,
     InvalidMediaTypeError,
@@ -127,6 +129,22 @@ class TestGHCRBadgeGenerator:
         result = gen.generate_size("user", "repo")
         assert "invalid" in result
 
+    @patch("ghcr_badge.generate.GHCRBadgeGenerator.get_download_count")
+    def test_generate_downloads_success(self, mock_get_download_count: MagicMock) -> None:
+        """Test generate_downloads with successful response."""
+        mock_get_download_count.return_value = "1.2K"
+        gen = GHCRBadgeGenerator()
+        result = gen.generate_downloads("user", "repo")
+        assert "1.2K" in result
+
+    @patch("ghcr_badge.generate.GHCRBadgeGenerator.get_download_count")
+    def test_generate_downloads_invalid(self, mock_get_download_count: MagicMock) -> None:
+        """Test generate_downloads with invalid response."""
+        mock_get_download_count.side_effect = InvalidDownloadCountError
+        gen = GHCRBadgeGenerator()
+        result = gen.generate_downloads("user", "repo")
+        assert "invalid" in result
+
     @patch("ghcr_badge.generate.requests.get")
     def test_get_manifest_manifest_v2(self, mock_get: MagicMock) -> None:
         """Test get_manifest with ManifestV2 response."""
@@ -239,6 +257,65 @@ class TestGHCRBadgeGenerator:
         gen = GHCRBadgeGenerator()
         with pytest.raises(InvalidTagListError):
             gen.get_tags("user", "repo")
+
+    @patch("ghcr_badge.generate.requests.get")
+    def test_get_download_count_user_scoped(self, mock_get: MagicMock) -> None:
+        """Test get_download_count for a user-scoped package page."""
+        mock_response = Mock()
+        mock_response.raise_for_status.return_value = None
+        mock_response.text = '<section><span>Total downloads</span><h3 title="1,234">1.2K</h3></section>'
+        mock_get.return_value = mock_response
+
+        gen = GHCRBadgeGenerator()
+        result = gen.get_download_count("user", "repo")
+
+        assert result == "1.2K"
+        mock_get.assert_called_once_with(
+            "https://github.com/users/user/packages/container/package/repo",
+            headers={"User-Agent": "Docker-Client/20.10.2 (linux)"},
+            timeout=10,
+        )
+
+    @patch("ghcr_badge.generate.requests.get")
+    def test_get_download_count_repo_scoped(self, mock_get: MagicMock) -> None:
+        """Test get_download_count for a repository-scoped package page."""
+        mock_response = Mock()
+        mock_response.raise_for_status.return_value = None
+        mock_response.text = '<section>Total downloads<div><h3 title="56,789">56.8K</h3></div></section>'
+        mock_get.return_value = mock_response
+
+        gen = GHCRBadgeGenerator()
+        result = gen.get_download_count("user", "docker/jekyll", repo="docs")
+
+        assert result == "56.8K"
+        mock_get.assert_called_once_with(
+            "https://github.com/user/docs/pkgs/container/docker%2Fjekyll",
+            headers={"User-Agent": "Docker-Client/20.10.2 (linux)"},
+            timeout=10,
+        )
+
+    @patch("ghcr_badge.generate.requests.get")
+    def test_get_download_count_invalid_response(self, mock_get: MagicMock) -> None:
+        """Test get_download_count when the page does not contain a count."""
+        mock_response = Mock()
+        mock_response.raise_for_status.return_value = None
+        mock_response.text = "<html><body>No stats here</body></html>"
+        mock_get.return_value = mock_response
+
+        gen = GHCRBadgeGenerator()
+        with pytest.raises(InvalidDownloadCountError, match="section was not found"):
+            gen.get_download_count("user", "repo")
+
+    @patch("ghcr_badge.generate.requests.get")
+    def test_get_download_count_http_error(self, mock_get: MagicMock) -> None:
+        """Test get_download_count when the package page request fails."""
+        mock_response = Mock()
+        mock_response.raise_for_status.side_effect = requests.HTTPError("404 Client Error")
+        mock_get.return_value = mock_response
+
+        gen = GHCRBadgeGenerator()
+        with pytest.raises(InvalidDownloadCountError, match="404 Client Error"):
+            gen.get_download_count("user", "repo")
 
     @patch("ghcr_badge.generate.GHCRBadgeGenerator.get_tags")
     def test_filter_tags_basic(self, mock_get_tags: MagicMock) -> None:

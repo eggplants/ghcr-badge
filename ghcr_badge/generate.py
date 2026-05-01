@@ -5,7 +5,9 @@ from __future__ import annotations
 import base64
 import fnmatch
 import re
+from html import unescape
 from typing import TYPE_CHECKING, cast
+from urllib.parse import quote
 
 import requests
 from anybadge import Badge  # type: ignore[import,unused-ignore]
@@ -39,6 +41,10 @@ class InvalidImageError(Exception):
     """Exception for invalid image."""
 
 
+class InvalidDownloadCountError(Exception):
+    """Exception for invalid download count."""
+
+
 class InvalidMediaTypeError(Exception):
     """Exception for invalid media type."""
 
@@ -55,6 +61,8 @@ _MEDIA_TYPE_MANIFEST_LIST_V2 = f"{_MEDIA_TYPE_MANIFEST}.list.v2+json"
 _MEDIA_TYPE_OCI_IMAGE_MANIFEST = "application/vnd.oci.image.manifest"
 _MEDIA_TYPE_OCI_IMAGE_MANIFEST_V1 = f"{_MEDIA_TYPE_OCI_IMAGE_MANIFEST}.v1+json"
 _MEDIA_TYPE_OCI_IMAGE_INDEX_V1 = "application/vnd.oci.image.index.v1+json"
+
+_TOTAL_DOWNLOADS_PATTERN = re.compile(r"Total downloads[\s\S]{0,500}?<h3\b([^>]*)>([^<]+)</h3>", re.IGNORECASE)
 
 
 class GHCRBadgeGenerator:
@@ -218,6 +226,46 @@ class GHCRBadgeGenerator:
         )
         return str(badge.badge_svg_text)
 
+    def generate_downloads(
+        self: Self,
+        package_owner: str,
+        package_name: str,
+        *,
+        repo: str | None = None,
+        label: str = "downloads",
+    ) -> str:
+        """Generate image downloads badge.
+
+        Parameters
+        ----------
+        self : Self
+            class instance
+        package_owner : str
+            package owner name
+        package_name : str
+            package name
+        repo : str | None, optional
+            repository name for repository-scoped package pages, by default None
+        label : str, optional
+            label text, by default "downloads"
+
+        Returns:
+        -------
+        str
+            svg string of generated badge of download count
+
+        """
+        try:
+            downloads = self.get_download_count(package_owner, package_name, repo=repo)
+        except InvalidDownloadCountError:
+            return self.get_invalid_badge(label)
+        badge = Badge(
+            label=label,
+            value=downloads,
+            default_color=self.color,
+        )
+        return str(badge.badge_svg_text)
+
     def get_manifest(
         self: Self,
         package_owner: str,
@@ -349,6 +397,60 @@ class GHCRBadgeGenerator:
         if not isinstance(tags, list) or len(tags) == 0:
             raise InvalidTagListError
         return [str(tag) for tag in tags]
+
+    def get_download_count(self: Self, package_owner: str, package_name: str, *, repo: str | None = None) -> str:
+        """Get download count from a GitHub package page.
+
+        Parameters
+        ----------
+        self : Self
+            class instance
+        package_owner : str
+            package owner name
+        package_name : str
+            package name
+        repo : str | None, optional
+            repository name for repository-scoped package pages, by default None
+
+        Returns:
+        -------
+        str
+            Displayed download count string, e.g. "1.2K"
+
+        Raises:
+        ------
+        InvalidDownloadCountError
+            raise if the download count cannot be fetched or parsed
+
+        """
+        if re.match(_GITHUB_USER_PATTERN, package_owner) is None:
+            raise InvalidImageError
+        if repo is not None and re.match(_GITHUB_REPO_PATTERN, repo) is None:
+            raise InvalidImageError
+
+        encoded_package_name = quote(package_name, safe="")
+        if repo is None:
+            url = f"https://github.com/users/{package_owner}/packages/container/package/{encoded_package_name}"
+        else:
+            url = f"https://github.com/{package_owner}/{repo}/pkgs/container/{encoded_package_name}"
+
+        try:
+            response = requests.get(url, headers={"User-Agent": _USER_AGENT}, timeout=_TIMEOUT)
+            response.raise_for_status()
+        except requests.RequestException as err:
+            raise InvalidDownloadCountError(str(err)) from err
+
+        matched = _TOTAL_DOWNLOADS_PATTERN.search(response.text)
+        if matched is None:
+            msg = "download count section was not found"
+            raise InvalidDownloadCountError(msg)
+
+        downloads = unescape(matched.group(2)).strip()
+        if not downloads:
+            msg = "download count was empty"
+            raise InvalidDownloadCountError(msg)
+
+        return downloads
 
     def filter_tags(self: Self, package_owner: str, package_name: str) -> list[str]:
         """Filter tags by regex pattern.

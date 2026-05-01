@@ -182,6 +182,30 @@
         <button type="submit" onclick="updateImages('size')">Apply</button>
       </div>
       <hr>
+      <h2>downloads</h2>
+      <a id="downloads-link">
+        <img alt="downloads-badge" id="downloads" src="data:,">
+      </a>
+      <div class="options" id="downloads-options">
+        <label for="downloads-color">color:</label>
+        <input type="color"
+               name="color"
+               class="color"
+               id="downloads-color"
+               value="#44cc11">
+        /
+        <label for="downloads-repo">repo:</label>
+        <input type="text" name="repo" class="repo" id="downloads-repo" value="">
+        /
+        <label for="downloads-label">label:</label>
+        <input type="text"
+               name="label"
+               class="label"
+               id="downloads-label"
+               value="downloads">
+        <button type="submit" onclick="updateImages('downloads')">Apply</button>
+      </div>
+      <hr>
     </main>
     <footer>
       <span>

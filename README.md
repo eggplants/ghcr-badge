@@ -42,6 +42,10 @@
   - defaults: `color=#44cc11`, `tag=latest`, `label=image size`
   - <https://ghcr-badge.egpl.dev/eggplants/ghcr-badge/size>
   - 👉: ![3]
+- `/<package_owner>/<package_name>/downloads?repo=...&color=...&label=...`
+  - defaults: `color=#44cc11`, `label=downloads`
+  - use `repo=...` for repository-scoped package pages
+  - <https://ghcr-badge.egpl.dev/eggplants/ghcr-badge/downloads?repo=ghcr-badge>
 
 ## Common parameters
 
@@ -65,6 +69,13 @@ Use the ignore parameter to filter returned tags, supports pattern matching and 
 ### `color` parameter
 
 Available color names and hex codes are listed on: <https://github.com/jongracecox/anybadge#colors>
+
+### `repo` parameter
+
+Use the `repo` parameter with the `downloads` endpoint when the package is published on a repository-scoped GitHub package page.
+
+- `repo=ghcr-badge` fetches `https://github.com/eggplants/ghcr-badge/pkgs/container/ghcr-badge`
+- omitting `repo` fetches `https://github.com/users/<owner>/packages/container/package/<package>`
 
 ## Note
 
