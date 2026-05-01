@@ -277,24 +277,6 @@ class TestGHCRBadgeGenerator:
         )
 
     @patch("ghcr_badge.generate.requests.get")
-    def test_get_download_count_repo_scoped(self, mock_get: MagicMock) -> None:
-        """Test get_download_count for a repository-scoped package page."""
-        mock_response = Mock()
-        mock_response.raise_for_status.return_value = None
-        mock_response.text = '<section>Total downloads<div><h3 title="56,789">56.8K</h3></div></section>'
-        mock_get.return_value = mock_response
-
-        gen = GHCRBadgeGenerator()
-        result = gen.get_download_count("user", "docker/jekyll", repo="docs")
-
-        assert result == "56.8K"
-        mock_get.assert_called_once_with(
-            "https://github.com/user/docs/pkgs/container/docker%2Fjekyll",
-            headers={"User-Agent": "Docker-Client/20.10.2 (linux)"},
-            timeout=10,
-        )
-
-    @patch("ghcr_badge.generate.requests.get")
     def test_get_download_count_invalid_response(self, mock_get: MagicMock) -> None:
         """Test get_download_count when the page does not contain a count."""
         mock_response = Mock()

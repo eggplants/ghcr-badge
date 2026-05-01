@@ -97,14 +97,14 @@ def __get_index_json() -> Response:
                     "/<package_owner>/<package_name>/tags?color=...&ignore=...&n=...&label=...&trim=...",
                     "/<package_owner>/<package_name>/latest_tag?color=...&ignore=...&label=...&trim=...",
                     "/<package_owner>/<package_name>/size?tag=...&color=...&label=...&trim=...",
-                    "/<package_owner>/<package_name>/downloads?repo=...&color=...&label=...",
+                    "/<package_owner>/<package_name>/downloads?color=...&label=...",
                 ],
                 "example_paths": [
                     "/",
                     "/eggplants/ghcr-badge/tags",
                     "/eggplants/ghcr-badge/latest_tag",
                     "/eggplants/ghcr-badge/size",
-                    "/eggplants/ghcr-badge/downloads?repo=ghcr-badge",
+                    "/eggplants/ghcr-badge/downloads",
                     "/frysztak/orpington-news/size",
                     "/tuananh/aws-cli/size",
                     "/plantuml/docker%2Fjekyll/tags",
@@ -255,14 +255,12 @@ def get_downloads(package_owner: str, package_name: str) -> Response:
     """
     try:
         q_params = request.args
-        repo = q_params.get("repo") or None
         color = q_params.get("color", "#44cc11")
         label = q_params.get("label", "downloads")
         res = return_svg(
             GHCRBadgeGenerator(color=color).generate_downloads(
                 package_owner,
                 package_name,
-                repo=repo,
                 label=label,
             ),
         )

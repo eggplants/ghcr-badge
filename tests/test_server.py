@@ -193,7 +193,6 @@ class TestDownloadsRoute:
         mock_generator.generate_downloads.assert_called_once_with(
             "testuser",
             "testrepo",
-            repo=None,
             label="downloads",
         )
 
@@ -204,13 +203,12 @@ class TestDownloadsRoute:
         mock_generator.generate_downloads.return_value = "<svg><text>3.4K</text></svg>"
         mock_generator_class.return_value = mock_generator
 
-        response = client.get("/testuser/testrepo/downloads?repo=myrepo&color=blue&label=pulls")
+        response = client.get("/testuser/testrepo/downloads?color=blue&label=pulls")
         assert response.status_code == 200
         mock_generator_class.assert_called_once_with(color="blue")
         mock_generator.generate_downloads.assert_called_once_with(
             "testuser",
             "testrepo",
-            repo="myrepo",
             label="pulls",
         )
 
@@ -221,12 +219,11 @@ class TestDownloadsRoute:
         mock_generator.generate_downloads.return_value = "<svg><text>9</text></svg>"
         mock_generator_class.return_value = mock_generator
 
-        response = client.get("/testuser/nested/path/repo/downloads?repo=demo")
+        response = client.get("/testuser/nested/path/repo/downloads")
         assert response.status_code == 200
         mock_generator.generate_downloads.assert_called_once_with(
             "testuser",
             "nested/path/repo",
-            repo="demo",
             label="downloads",
         )
 

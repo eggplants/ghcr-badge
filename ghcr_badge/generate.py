@@ -231,7 +231,6 @@ class GHCRBadgeGenerator:
         package_owner: str,
         package_name: str,
         *,
-        repo: str | None = None,
         label: str = "downloads",
     ) -> str:
         """Generate image downloads badge.
@@ -244,8 +243,6 @@ class GHCRBadgeGenerator:
             package owner name
         package_name : str
             package name
-        repo : str | None, optional
-            repository name for repository-scoped package pages, by default None
         label : str, optional
             label text, by default "downloads"
 
@@ -256,7 +253,7 @@ class GHCRBadgeGenerator:
 
         """
         try:
-            downloads = self.get_download_count(package_owner, package_name, repo=repo)
+            downloads = self.get_download_count(package_owner, package_name)
         except InvalidDownloadCountError:
             return self.get_invalid_badge(label)
         badge = Badge(
@@ -398,7 +395,7 @@ class GHCRBadgeGenerator:
             raise InvalidTagListError
         return [str(tag) for tag in tags]
 
-    def get_download_count(self: Self, package_owner: str, package_name: str, *, repo: str | None = None) -> str:
+    def get_download_count(self: Self, package_owner: str, package_name: str) -> str:
         """Get download count from a GitHub package page.
 
         Parameters
@@ -409,8 +406,6 @@ class GHCRBadgeGenerator:
             package owner name
         package_name : str
             package name
-        repo : str | None, optional
-            repository name for repository-scoped package pages, by default None
 
         Returns:
         -------
@@ -425,14 +420,9 @@ class GHCRBadgeGenerator:
         """
         if re.match(_GITHUB_USER_PATTERN, package_owner) is None:
             raise InvalidImageError
-        if repo is not None and re.match(_GITHUB_REPO_PATTERN, repo) is None:
-            raise InvalidImageError
 
         encoded_package_name = quote(package_name, safe="")
-        if repo is None:
-            url = f"https://github.com/users/{package_owner}/packages/container/package/{encoded_package_name}"
-        else:
-            url = f"https://github.com/{package_owner}/{repo}/pkgs/container/{encoded_package_name}"
+        url = f"https://github.com/users/{package_owner}/packages/container/package/{encoded_package_name}"
 
         try:
             response = requests.get(url, headers={"User-Agent": _USER_AGENT}, timeout=_TIMEOUT)
