@@ -4,7 +4,6 @@ requires = [ "hatchling", "uv-dynamic-versioning" ]
 
 [project]
 name = "ghcr-badge"
-# dynamic = [ "version" ]
 version = "1.0.2"
 description = "Generate ghcr.io container's status badge"
 readme = "README.md"
@@ -28,6 +27,7 @@ classifiers = [
   "Programming Language :: Python :: Implementation :: CPython",
   "Typing :: Typed",
 ]
+# dynamic = [ "version" ]
 dependencies = [
   "anybadge>=1.16,<2",
   "flask>=3.1,<4",
@@ -57,9 +57,9 @@ docs = [
 ]
 
 [tool.hatch]
-build.targets.sdist.include = [ "ghcr_badge" ]
-build.targets.wheel.include = [ "ghcr_badge" ]
 version.source = "uv-dynamic-versioning"
+build.targets.wheel.include = [ "ghcr_badge" ]
+build.targets.sdist.include = [ "ghcr_badge" ]
 
 [tool.uv]
 python-downloads = "never"
@@ -69,6 +69,13 @@ default-groups = [
 ]
 exclude-newer = "P7D"
 preview = true
+
+[tool.djlint]
+indent = 2
+format_css = true
+format_js = true
+css.indent_size = 2
+js.indent_size = 2
 
 [tool.ruff]
 line-length = 120
@@ -87,10 +94,3 @@ lint.pydocstyle.convention = "google"
 vcs = "git"
 style = "semver"
 fallback-version = "0.0.0"
-
-[tool.djlint]
-format_css = true
-format_js = true
-indent = 2
-css.indent_size = 2
-js.indent_size = 2

@@ -49,7 +49,7 @@ run = "uv run pyproject-fmt ./pyproject.toml"
 
 [tasks.djlint]
 description = "Run djLint"
-run = "uv run djlint --reformat --profile=jinja ."
+run = "uv run djlint --reformat --profile=jinja ghcr_badge/templates/index.j2"
 
 [tasks.pre-commit]
 description = "Run checks on pre-commit"
