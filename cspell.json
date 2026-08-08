@@ -10,7 +10,8 @@
     "egpl",
     "Fjekyll",
     "frysztak",
-    "gunicorn",
+    "fastapi",
+    "httpx",
     "humanfriendly",
     "junitxml",
     "maxage",
@@ -25,7 +26,8 @@
     "rootfs",
     "sdist",
     "testrepo",
-    "tuananh"
+    "tuananh",
+    "uvicorn"
   ],
   "dictionaries": [
     "companies",

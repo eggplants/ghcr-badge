@@ -37,7 +37,7 @@ run = "uv build"
 
 [tasks.dev]
 description = "Run Dev Server in local"
-run = "FLASK_ENV=development gunicorn --reload"
+run = "uv run uvicorn ghcr_badge.server:app --reload --port ${PORT:-5000}"
 
 [tasks.docs]
 description = "Generate documentation"

@@ -30,16 +30,15 @@ classifiers = [
 # dynamic = [ "version" ]
 dependencies = [
   "anybadge>=1.16,<2",
-  "flask>=3.1,<4",
-  "gunicorn>=23,<26",
+  "fastapi>=0.115,<1",
   "humanfriendly>=10,<11",
+  "jinja2>=3.1,<4",
   "pydantic>=2.9,<3",
   "requests>=2.32.3,<3",
   "types-humanfriendly>=10.0.1.20241221,<11",
   "types-requests>=2.32.0.20241016,<3",
-  "types-waitress>=3.0.1.20250801",
   "typing-extensions>=4.12.2,<5",
-  "waitress>=3.0.2,<4",
+  "uvicorn>=0.34,<1",
 ]
 urls.Repository = "https://github.com/eggplants/ghcr-badge"
 scripts.ghcr-badge = "ghcr_badge.main:main"
@@ -48,6 +47,7 @@ scripts.ghcr-badge-server = "ghcr_badge.server:main"
 [dependency-groups]
 dev = [
   "djlint>=1.36.4",
+  "httpx2>=2,<3",
   "pymarkdownlnt>=0.9.33",
   "pyproject-fmt>=2.11.1",
   "pytest>=9.0.2",
