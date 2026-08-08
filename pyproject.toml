@@ -33,6 +33,7 @@ dependencies = [
   "flask>=3.1,<4",
   "gunicorn>=23,<26",
   "humanfriendly>=10,<11",
+  "pydantic>=2.9,<3",
   "requests>=2.32.3,<3",
   "types-humanfriendly>=10.0.1.20241221,<11",
   "types-requests>=2.32.0.20241016,<3",

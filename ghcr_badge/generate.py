@@ -5,18 +5,20 @@ from __future__ import annotations
 import base64
 import fnmatch
 import re
-from typing import TYPE_CHECKING, cast
+from typing import TYPE_CHECKING, TypeVar
 
 import requests
 from anybadge import Badge  # type: ignore[import,unused-ignore]
 from humanfriendly import format_size, parse_size
+from pydantic import BaseModel, ValidationError
+
+from .models import ErrorResponse, ImageIndex, ImageManifest, TagList
 
 if TYPE_CHECKING:
     from typing_extensions import Self
 
-    from .dicts import ManifestListV2, ManifestV2, OCIImageIndexV1, OCIImageManifestV1
-
 _TIMEOUT = 10
+_MAX_INDEX_DEPTH = 4
 
 
 class InvalidTokenError(Exception):
@@ -55,6 +57,43 @@ _MEDIA_TYPE_MANIFEST_LIST_V2 = f"{_MEDIA_TYPE_MANIFEST}.list.v2+json"
 _MEDIA_TYPE_OCI_IMAGE_MANIFEST = "application/vnd.oci.image.manifest"
 _MEDIA_TYPE_OCI_IMAGE_MANIFEST_V1 = f"{_MEDIA_TYPE_OCI_IMAGE_MANIFEST}.v1+json"
 _MEDIA_TYPE_OCI_IMAGE_INDEX_V1 = "application/vnd.oci.image.index.v1+json"
+
+# ghcr.io serves Docker media types for images pushed as such regardless of what
+# we ask for, so every type we can handle is advertised here.
+_ACCEPT_MANIFEST = (
+    f"{_MEDIA_TYPE_OCI_IMAGE_INDEX_V1}, {_MEDIA_TYPE_OCI_IMAGE_MANIFEST_V1}, "
+    f"{_MEDIA_TYPE_MANIFEST_LIST_V2}, {_MEDIA_TYPE_MANIFEST_V2}"
+)
+
+_ModelT = TypeVar("_ModelT", bound=BaseModel)
+
+
+def _validate(model: type[_ModelT], payload: object) -> _ModelT:
+    """Validate a registry response against a model.
+
+    Parameters
+    ----------
+    model : type[_ModelT]
+        model to validate against
+    payload : object
+        decoded JSON response
+
+    Returns:
+    -------
+    _ModelT
+        validated model instance
+
+    Raises:
+    ------
+    InvalidManifestError
+        raise if the response does not match the model
+
+    """
+    try:
+        return model.model_validate(payload)
+    except ValidationError as err:
+        msg = f"{model.__name__} does not match the registry response: {err}"
+        raise InvalidManifestError(msg) from err
 
 
 class GHCRBadgeGenerator:
@@ -207,10 +246,7 @@ class GHCRBadgeGenerator:
             manifest = self.get_manifest(package_owner, package_name, tag=tag)
         except (InvalidManifestError, InvalidMediaTypeError):
             return self.get_invalid_badge(label)
-        config_size = int(manifest.get("config", {"size": 0}).get("size", 0))
-        layers = [int(layer.get("size", 0)) for layer in manifest.get("layers", [])]
-        layer_size = sum(layers)
-        size = f"{config_size + layer_size}B"
+        size = f"{manifest.total_size}B"
         badge = Badge(
             label=label,
             value=str(format_size(parse_size(size), binary=True)),
@@ -224,8 +260,12 @@ class GHCRBadgeGenerator:
         package_name: str,
         *,
         tag: str = "latest",
-    ) -> ManifestV2 | OCIImageManifestV1:
+        _depth: int = 0,
+    ) -> ImageManifest:
         """Get manifest from ghcr api.
+
+        An index (multi-arch image) is resolved to the manifest of one of the
+        images it points at.
 
         Parameters
         ----------
@@ -237,11 +277,13 @@ class GHCRBadgeGenerator:
             package name
         tag : str, optional
             tag name, by default "latest"
+        _depth : int, optional
+            current index resolution depth, used internally to stop cycles
 
         Returns:
         -------
-        ManifestV2
-            dict containing returned manifest information
+        ImageManifest
+            validated manifest of a single image
 
         Raises:
         ------
@@ -256,6 +298,10 @@ class GHCRBadgeGenerator:
         if re.match(_IMAGE_TAG_PATTERN, tag) is None:
             raise InvalidTagError(tag)
 
+        if _depth > _MAX_INDEX_DEPTH:
+            msg = f"Index resolution exceeded {_MAX_INDEX_DEPTH} levels."
+            raise InvalidManifestError(msg)
+
         token = self.__auth(package_owner, package_name)
         url = f"https://ghcr.io/v2/{package_owner}/{package_name}/manifests/{tag}"
         manifest = requests.get(
@@ -263,48 +309,37 @@ class GHCRBadgeGenerator:
             headers={
                 "User-Agent": _USER_AGENT,
                 "Authorization": f"Bearer {token}",
-                "Accept": f"{_MEDIA_TYPE_OCI_IMAGE_INDEX_V1}, {_MEDIA_TYPE_OCI_IMAGE_MANIFEST_V1}",
+                "Accept": _ACCEPT_MANIFEST,
             },
             timeout=_TIMEOUT,
         ).json()
 
-        if manifest is None:
+        if not isinstance(manifest, dict):
             msg = "manifest is empty."
             raise InvalidManifestError(msg)
 
         if "errors" in manifest:
-            msg = f"manifest contains some error: {manifest.get('errors')}"
+            errors = ErrorResponse.model_validate(manifest).describe()
+            msg = f"manifest contains some error: {errors}"
             raise InvalidManifestError(msg)
 
         media_type = manifest.get("mediaType")
 
-        if media_type == _MEDIA_TYPE_MANIFEST_V2:
-            return cast("ManifestV2", manifest)
+        if media_type in (_MEDIA_TYPE_MANIFEST_V2, _MEDIA_TYPE_OCI_IMAGE_MANIFEST_V1):
+            return _validate(ImageManifest, manifest)
 
-        if media_type == _MEDIA_TYPE_OCI_IMAGE_MANIFEST_V1:
-            return cast("OCIImageManifestV1", manifest)
-
-        if media_type == _MEDIA_TYPE_MANIFEST_LIST_V2:
-            manifest = cast("ManifestListV2", manifest)
-            manifests = manifest.get("manifests")
-            if not isinstance(manifests, list) or len(manifests) == 0:
+        if media_type in (_MEDIA_TYPE_MANIFEST_LIST_V2, _MEDIA_TYPE_OCI_IMAGE_INDEX_V1):
+            index = _validate(ImageIndex, manifest)
+            descriptor = index.pick_image_descriptor()
+            if descriptor is None:
                 msg = "Returned list of manifest is empty."
                 raise InvalidManifestError(msg)
-            if (digest := manifests[0].get("digest")) is None:
-                msg = f"Digest of a manifest is empty:\n{manifests[0]}"
-                raise InvalidManifestError(msg)
-            return self.get_manifest(package_owner, package_name, tag=digest)
-
-        if media_type == _MEDIA_TYPE_OCI_IMAGE_INDEX_V1:
-            manifest = cast("OCIImageIndexV1", manifest)
-            manifests = manifest.get("manifests")
-            if not isinstance(manifests, list) or len(manifests) == 0:
-                msg = "Returned list of manifest is empty."
-                raise InvalidManifestError(msg)
-            if (digest := manifests[0].get("digest")) is None:
-                msg = f"Digest of a manifest is empty:\n{manifests[0]}"
-                raise InvalidManifestError(msg)
-            return self.get_manifest(package_owner, package_name, tag=digest)
+            return self.get_manifest(
+                package_owner,
+                package_name,
+                tag=descriptor.digest,
+                _depth=_depth + 1,
+            )
 
         raise InvalidMediaTypeError(media_type)
 
@@ -336,19 +371,21 @@ class GHCRBadgeGenerator:
         params = {
             "n": 300,
         }
-        tags = (
-            requests.get(
-                url,
-                headers={"User-Agent": _USER_AGENT, "Authorization": f"Bearer {token}"},
-                timeout=10,
-                params=params,
-            )
-            .json()
-            .get("tags")
-        )
-        if not isinstance(tags, list) or len(tags) == 0:
+        payload = requests.get(
+            url,
+            headers={"User-Agent": _USER_AGENT, "Authorization": f"Bearer {token}"},
+            timeout=10,
+            params=params,
+        ).json()
+
+        try:
+            tag_list = TagList.model_validate(payload)
+        except ValidationError as err:
+            raise InvalidTagListError from err
+
+        if not tag_list.tags:
             raise InvalidTagListError
-        return [str(tag) for tag in tags]
+        return tag_list.tags
 
     def filter_tags(self: Self, package_owner: str, package_name: str) -> list[str]:
         """Filter tags by regex pattern.

@@ -2,7 +2,6 @@
 
 from __future__ import annotations
 
-from typing import TYPE_CHECKING
 from unittest.mock import MagicMock, Mock, patch
 
 import pytest
@@ -15,9 +14,7 @@ from ghcr_badge.generate import (
     InvalidTagError,
     InvalidTagListError,
 )
-
-if TYPE_CHECKING:
-    from ghcr_badge.dicts import ManifestV2, OCIImageManifestV1
+from ghcr_badge.models import ImageManifest
 
 
 class TestGHCRBadgeGenerator:
@@ -93,28 +90,29 @@ class TestGHCRBadgeGenerator:
     @patch("ghcr_badge.generate.GHCRBadgeGenerator.get_manifest")
     def test_generate_size_success(self, mock_get_manifest: MagicMock) -> None:
         """Test generate_size with successful response."""
-        mock_manifest: ManifestV2 = {
-            "mediaType": "application/vnd.docker.distribution.manifest.v2+json",
-            "schemaVersion": 2,
-            "config": {
-                "mediaType": "application/vnd.docker.container.image.v1+json",
-                "size": 1000,
-                "digest": "sha256:abc123",
+        mock_get_manifest.return_value = ImageManifest.model_validate(
+            {
+                "mediaType": "application/vnd.docker.distribution.manifest.v2+json",
+                "schemaVersion": 2,
+                "config": {
+                    "mediaType": "application/vnd.docker.container.image.v1+json",
+                    "size": 1000,
+                    "digest": "sha256:abc123",
+                },
+                "layers": [
+                    {
+                        "mediaType": "application/vnd.docker.image.rootfs.diff.tar.gzip",
+                        "size": 2000,
+                        "digest": "sha256:def456",
+                    },
+                    {
+                        "mediaType": "application/vnd.docker.image.rootfs.diff.tar.gzip",
+                        "size": 3000,
+                        "digest": "sha256:ghi789",
+                    },
+                ],
             },
-            "layers": [
-                {
-                    "mediaType": "application/vnd.docker.image.rootfs.diff.tar.gzip",
-                    "size": 2000,
-                    "digest": "sha256:def456",
-                },
-                {
-                    "mediaType": "application/vnd.docker.image.rootfs.diff.tar.gzip",
-                    "size": 3000,
-                    "digest": "sha256:ghi789",
-                },
-            ],
-        }
-        mock_get_manifest.return_value = mock_manifest
+        )
         gen = GHCRBadgeGenerator()
         result = gen.generate_size("user", "repo", tag="v1.0.0")
         assert "5.9 KiB" in result or "6" in result  # humanfriendly format
@@ -131,7 +129,7 @@ class TestGHCRBadgeGenerator:
     def test_get_manifest_manifest_v2(self, mock_get: MagicMock) -> None:
         """Test get_manifest with ManifestV2 response."""
         mock_response = Mock()
-        mock_manifest: ManifestV2 = {
+        mock_manifest = {
             "mediaType": "application/vnd.docker.distribution.manifest.v2+json",
             "schemaVersion": 2,
             "config": {
@@ -152,13 +150,14 @@ class TestGHCRBadgeGenerator:
 
         gen = GHCRBadgeGenerator()
         result = gen.get_manifest("user", "repo", tag="v1.0.0")
-        assert result == mock_manifest
+        assert result == ImageManifest.model_validate(mock_manifest)
+        assert result.total_size == 3000
 
     @patch("ghcr_badge.generate.requests.get")
     def test_get_manifest_oci_image_manifest_v1(self, mock_get: MagicMock) -> None:
         """Test get_manifest with OCIImageManifestV1 response."""
         mock_response = Mock()
-        mock_manifest: OCIImageManifestV1 = {
+        mock_manifest = {
             "schemaVersion": 2,
             "mediaType": "application/vnd.oci.image.manifest.v1+json",
             "config": {
@@ -176,7 +175,83 @@ class TestGHCRBadgeGenerator:
 
         gen = GHCRBadgeGenerator()
         result = gen.get_manifest("user", "repo", tag="v1.0.0")
-        assert result == mock_manifest
+        assert result == ImageManifest.model_validate(mock_manifest)
+
+    @patch("ghcr_badge.generate.requests.get")
+    def test_get_manifest_oci_manifest_without_annotations(self, mock_get: MagicMock) -> None:
+        """Test get_manifest with an OCI manifest that omits annotations.
+
+        ghcr.io returns OCI manifests with no `annotations` key at all, so the
+        field must stay optional.
+        """
+        mock_response = Mock()
+        mock_response.json.return_value = {
+            "schemaVersion": 2,
+            "mediaType": "application/vnd.oci.image.manifest.v1+json",
+            "config": {
+                "mediaType": "application/vnd.oci.image.config.v1+json",
+                "size": 1000,
+                "digest": "sha256:abc123",
+            },
+            "layers": [
+                {"mediaType": "application/vnd.oci.image.layer.v1.tar+gzip", "size": 2000, "digest": "sha256:def456"},
+            ],
+        }
+        mock_get.return_value = mock_response
+
+        gen = GHCRBadgeGenerator()
+        result = gen.get_manifest("user", "repo", tag="v1.0.0")
+        assert result.annotations is None
+        assert result.total_size == 3000
+
+    @patch("ghcr_badge.generate.requests.get")
+    def test_get_manifest_index_skips_attestation(self, mock_get: MagicMock) -> None:
+        """Test that an index resolves past a leading attestation manifest.
+
+        buildx attaches attestation manifests to an index; picking one as the
+        image would report a few hundred bytes instead of the real size.
+        """
+        index = {
+            "schemaVersion": 2,
+            "mediaType": "application/vnd.oci.image.index.v1+json",
+            "manifests": [
+                {
+                    "mediaType": "application/vnd.oci.image.manifest.v1+json",
+                    "digest": "sha256:" + "a" * 64,
+                    "size": 565,
+                    "platform": {"architecture": "unknown", "os": "unknown"},
+                    "annotations": {"vnd.docker.reference.type": "attestation-manifest"},
+                },
+                {
+                    "mediaType": "application/vnd.oci.image.manifest.v1+json",
+                    "digest": "sha256:" + "b" * 64,
+                    "size": 673,
+                    "platform": {"architecture": "amd64", "os": "linux"},
+                },
+            ],
+        }
+        image = {
+            "schemaVersion": 2,
+            "mediaType": "application/vnd.oci.image.manifest.v1+json",
+            "config": {
+                "mediaType": "application/vnd.oci.image.config.v1+json",
+                "size": 1000,
+                "digest": "sha256:abc123",
+            },
+            "layers": [
+                {"mediaType": "application/vnd.oci.image.layer.v1.tar+gzip", "size": 2000, "digest": "sha256:def456"},
+            ],
+        }
+        responses = [Mock(), Mock()]
+        responses[0].json.return_value = index
+        responses[1].json.return_value = image
+        mock_get.side_effect = responses
+
+        gen = GHCRBadgeGenerator()
+        result = gen.get_manifest("user", "repo", tag="latest")
+        assert result.total_size == 3000
+        # the second request must target the real image, not the attestation
+        assert "b" * 64 in mock_get.call_args_list[1].args[0]
 
     @patch("ghcr_badge.generate.requests.get")
     def test_get_manifest_invalid_tag(self, mock_get: MagicMock) -> None:
