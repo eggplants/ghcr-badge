@@ -1,6 +1,7 @@
 [tools]
 "aqua:azu/dockerfile-pin" = "latest"
 claude = "latest"
+lazydocker = "latest"
 pinact = "latest"
 python = "latest"
 usage = "latest"
