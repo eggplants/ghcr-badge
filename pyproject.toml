@@ -4,7 +4,7 @@ requires = [ "hatchling", "uv-dynamic-versioning" ]
 
 [project]
 name = "ghcr-badge"
-version = "1.0.2"
+version = "2.0.0"
 description = "Generate ghcr.io container's status badge"
 readme = "README.md"
 keywords = [
