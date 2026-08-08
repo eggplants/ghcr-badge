@@ -44,7 +44,7 @@ class InvalidMediaTypeError(Exception):
 
 
 _GITHUB_USER_PATTERN = r"^[a-zA-Z0-9]([a-zA-Z0-9]?|[-]?([a-zA-Z0-9])){0,38}$"
-_GITHUB_REPO_PATTERN = r"^[-a-zA-Z0-9]{1,100}$"
+_GITHUB_REPO_PATTERN = r"^[-a-zA-Z0-9]{1,100}(?:/[-a-zA-Z0-9]{1,100})*$"
 _IMAGE_TAG_PATTERN = r"^([a-zA-Z0-9_][a-zA-Z0-9_.-]{0,127}|sha256:[a-z0-9]{64})$"
 _USER_AGENT = "Docker-Client/20.10.2 (linux)"
 

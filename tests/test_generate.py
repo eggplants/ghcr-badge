@@ -291,3 +291,18 @@ class TestGHCRBadgeGenerator:
         gen = GHCRBadgeGenerator()
         with pytest.raises(InvalidImageError):
             gen.get_tags("user", "invalid repo!")
+
+    @patch("ghcr_badge.generate.GHCRBadgeGenerator.get_tags")
+    def test_auth_valid_repository_scoped(self, mock_get_tags: MagicMock) -> None:
+        """Test authentication with a repository-scoped package name."""
+        mock_get_tags.return_value = ["latest"]
+        gen = GHCRBadgeGenerator()
+        result = gen.get_tags("henrygd", "beszel/beszel")
+        assert result == ["latest"]
+
+    @patch("ghcr_badge.generate.requests.get")
+    def test_auth_invalid_repository_scoped(self, mock_get: MagicMock) -> None:
+        """Test authentication with an invalid repository-scoped package name."""
+        gen = GHCRBadgeGenerator()
+        with pytest.raises(InvalidImageError):
+            gen.get_tags("user", "invalid repo!/name")

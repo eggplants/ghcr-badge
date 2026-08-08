@@ -43,6 +43,10 @@
   - <https://ghcr-badge.egpl.dev/eggplants/ghcr-badge/size>
   - 👉: ![3]
 
+`<package_name>` may itself contain `/` to reference a repository-scoped image, e.g. `ghcr.io/henrygd/beszel/beszel`:
+
+- <https://ghcr-badge.egpl.dev/henrygd/beszel/beszel/tags>
+
 ## Common parameters
 
 ### `label` parameter

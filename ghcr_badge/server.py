@@ -106,6 +106,7 @@ def __get_index_json() -> Response:
                     "/frysztak/orpington-news/size",
                     "/tuananh/aws-cli/size",
                     "/plantuml/docker%2Fjekyll/tags",
+                    "/henrygd/beszel/beszel/tags",
                 ],
                 "repo": _REPO_LINK,
                 "version": __version__,
