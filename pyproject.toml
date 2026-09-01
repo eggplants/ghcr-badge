@@ -9,15 +9,25 @@ description = "Generate ghcr.io container's status badge"
 readme = "README.md"
 keywords = [
   "badge",
+  "container",
+  "docker",
+  "fastapi",
   "ghcr",
   "github-container-registry",
+  "oci",
+  "shields",
+  "svg",
 ]
 license = "MIT"
 authors = [ { name = "eggplants", email = "w10776e8w@yahoo.co.jp" } ]
 requires-python = ">=3.10,<4"
 classifiers = [
-  "Development Status :: 3 - Alpha",
+  "Development Status :: 5 - Production/Stable",
+  "Environment :: Web Environment",
+  "Framework :: FastAPI",
+  "Intended Audience :: Developers",
   "License :: OSI Approved :: MIT License",
+  "Operating System :: OS Independent",
   "Programming Language :: Python :: 3 :: Only",
   "Programming Language :: Python :: 3.10",
   "Programming Language :: Python :: 3.11",
@@ -25,6 +35,8 @@ classifiers = [
   "Programming Language :: Python :: 3.13",
   "Programming Language :: Python :: 3.14",
   "Programming Language :: Python :: Implementation :: CPython",
+  "Topic :: Internet :: WWW/HTTP :: Dynamic Content",
+  "Topic :: Utilities",
   "Typing :: Typed",
 ]
 # dynamic = [ "version" ]
@@ -40,6 +52,9 @@ dependencies = [
   "typing-extensions>=4.12.2,<5",
   "uvicorn>=0.34,<1",
 ]
+urls.Documentation = "https://egpl.dev/ghcr-badge/"
+urls.Homepage = "https://ghcr-badge.egpl.dev"
+urls.Issues = "https://github.com/eggplants/ghcr-badge/issues"
 urls.Repository = "https://github.com/eggplants/ghcr-badge"
 scripts.ghcr-badge = "ghcr_badge.main:main"
 scripts.ghcr-badge-server = "ghcr_badge.server:main"
