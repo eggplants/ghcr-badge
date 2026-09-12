@@ -2,13 +2,16 @@
 
 from __future__ import annotations
 
-from collections.abc import Generator
+from typing import TYPE_CHECKING
 from unittest.mock import MagicMock, Mock, patch
 
 import pytest
 from fastapi.testclient import TestClient
 
-from ghcr_badge.server import app, return_svg
+from ghcr_badge.server import app, main, return_svg
+
+if TYPE_CHECKING:
+    from collections.abc import Generator
 
 
 @pytest.fixture
@@ -226,9 +229,7 @@ class TestMain:
     @patch("ghcr_badge.server.environ.get")
     def test_main_default_port(self, mock_environ_get: MagicMock, mock_run: MagicMock) -> None:
         """Test main function with default port."""
-        from ghcr_badge.server import main
-
-        mock_environ_get.side_effect = lambda key, default: default  # noqa: ARG005
+        mock_environ_get.side_effect = lambda key, default: default
 
         main()
 
@@ -240,8 +241,6 @@ class TestMain:
     @patch("ghcr_badge.server.environ.get")
     def test_main_custom_port(self, mock_environ_get: MagicMock, mock_run: MagicMock) -> None:
         """Test main function with custom port from environment."""
-        from ghcr_badge.server import main
-
         mock_environ_get.return_value = "3000"
 
         main()

@@ -430,7 +430,7 @@ class GHCRBadgeGenerator:
             svg string
 
         """
-        badge = Badge(label=label, value=str("invalid"), default_color="#e05d44")
+        badge = Badge(label=label, value="invalid", default_color="#e05d44")
         return str(badge.badge_svg_text)
 
     @staticmethod

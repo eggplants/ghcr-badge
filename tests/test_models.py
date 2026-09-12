@@ -66,7 +66,7 @@ class TestPlatform:
         assert Platform.model_validate({"architecture": architecture, "os": os_}).is_unknown
 
     def test_missing_required(self) -> None:
-        """architecture and os are required."""
+        """Architecture and os are required."""
         with pytest.raises(ValidationError):
             Platform.model_validate({"os": "linux"})
 
@@ -82,7 +82,7 @@ class TestDescriptor:
         assert not descriptor.is_attestation
 
     def test_attestation_by_annotation(self) -> None:
-        """buildx marks attestations with a reference type annotation."""
+        """Buildx marks attestations with a reference type annotation."""
         descriptor = Descriptor.model_validate(
             _descriptor(annotations={"vnd.docker.reference.type": "attestation-manifest"}),
         )

@@ -100,8 +100,16 @@ format.quote-style = "double"
 lint.select = [ "ALL" ]
 lint.ignore = [
   "COM812",
+  "CPY001", # Missing copyright notice (this project does not use file headers)
   "D203",   # no-blank-line-before-class
   "D213",   # multi-line-summary-second-line
+]
+lint.per-file-ignores."tests/**" = [
+  "ANN",     # Missing type annotations (tests/fixtures)
+  "ARG",     # Unused arguments (pytest fixtures, mock parameters)
+  "INP001",  # Implicit namespace package (no __init__ in tests)
+  "PLR2004", # Magic value used in comparison
+  "S101",    # Use of assert detected
 ]
 lint.mccabe.max-complexity = 12
 lint.pydocstyle.convention = "google"
