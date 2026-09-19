@@ -1,0 +1,212 @@
+[plugins]
+# https://github.com/voidzero-dev/vite-plus/issues/943
+vite-plus = "https://github.com/markmals/mise-vite-plus"
+
+[settings.github]
+use_git_credentials = true
+
+[tools]
+markdownlint-cli2 = "latest"
+node = "latest"
+"npm:cf" = "latest"
+"npm:wrangler" = "latest"
+shellcheck = "latest"
+terraform = "latest"
+tflint = "latest"
+vite-plus = "latest"
+
+[settings]
+minimum_release_age = "7d"
+
+[env]
+_.file = ".env"
+# The release to run: the latest tag of this repository, without its "v".
+# release.yml pushes it as ghcr.io/eggplants/ghcr-badge:<version>.
+APP_VERSION = "{{ exec(command='echo ${APP_VERSION:-$(git -C .. describe --tags --abbrev=0 2>/dev/null | sed s/^v//)}') }}"
+SOURCE_IMAGE = "{{ get_env(name='SOURCE_IMAGE', default='ghcr.io/eggplants/ghcr-badge') }}"
+IMAGE_NAME = "{{ get_env(name='IMAGE_NAME', default='ghcr-badge') }}"
+IMAGE_TAG = "{{ get_env(name='IMAGE_TAG', default=env.APP_VERSION) }}"
+IMAGE = "{{ env.IMAGE_NAME }}:{{ env.IMAGE_TAG }}"
+CLOUDFLARE_API_TOKEN = "{{ exec(command='scripts/cf-token.sh 2>/dev/null || true') }}"
+
+[tasks._check-env]
+hide = true
+dir = "{{config_root}}"
+run = '''
+#!/usr/bin/env bash
+set -euo pipefail
+if [[ -z "${APP_VERSION}" ]]; then
+  echo "[ERROR] APP_VERSION is empty." >&2
+  echo "        No release tag was found; run with APP_VERSION=... mise run <task>" >&2
+  exit 1
+fi
+'''
+
+[tasks.test]
+description = "Run the gateway unit tests"
+dir = "{{config_root}}/worker"
+run = ["vp install --frozen-lockfile", "vp test"]
+
+[tasks.bundle]
+description = "Build the Worker bundle Terraform uploads"
+dir = "{{config_root}}/worker"
+sources = ["src/*", "package.json", "pnpm-lock.yaml"]
+outputs = ["dist/index.mjs"]
+run = ["vp install --frozen-lockfile", "vp run build"]
+
+[tasks.image]
+description = "Pull the released image from ghcr.io and tag it for the Cloudflare registry"
+depends = ["_check-env"]
+dir = "{{config_root}}"
+run = '''
+#!/usr/bin/env bash
+set -euo pipefail
+# Cloudflare Containers pull from their own registry, Docker Hub, ECR and
+# Artifact Registry — not from ghcr.io — and only run linux/amd64 images.
+docker pull --platform linux/amd64 "${SOURCE_IMAGE}:${APP_VERSION}"
+docker tag "${SOURCE_IMAGE}:${APP_VERSION}" "${IMAGE}"
+size="$(docker image inspect "${IMAGE}" | jq -r '.[0].Size' | numfmt --to=si)"
+echo "[INFO] Image ${IMAGE}: ${size}B (the lite instance type allows 2 GB)"
+'''
+
+[tasks.push]
+description = "Push the image to the Cloudflare managed registry"
+depends = ["image"]
+dir = "{{config_root}}"
+run = '''
+#!/usr/bin/env bash
+set -euo pipefail
+for attempt in 1 2 3 4 5; do
+  if CLOUDFLARE_API_TOKEN="$(scripts/cf-token.sh)" wrangler containers push "${IMAGE}"; then
+    exit 0
+  fi
+  echo "[WARN] Push attempt ${attempt} failed; waiting for the registry to finish committing layers before retrying" >&2
+  sleep 60
+done
+echo "[ERROR] Push still failing after 5 attempts" >&2
+exit 1
+'''
+
+[tasks.init]
+description = "terraform init"
+dir = "{{config_root}}/terraform"
+run = "terraform init"
+
+[tasks.plan]
+description = "terraform plan"
+depends = ["bundle", "_check-env"]
+dir = "{{config_root}}/terraform"
+run = '''
+#!/usr/bin/env bash
+set -euo pipefail
+export CLOUDFLARE_API_TOKEN="$(../scripts/cf-token.sh)"
+terraform plan -var "container_image=${IMAGE}" -var "app_version=${APP_VERSION}"
+'''
+
+[tasks.apply]
+description = "terraform apply"
+depends = ["bundle", "_check-env"]
+dir = "{{config_root}}/terraform"
+run = '''
+#!/usr/bin/env bash
+set -euo pipefail
+export CLOUDFLARE_API_TOKEN="$(../scripts/cf-token.sh)"
+terraform apply -auto-approve -var "container_image=${IMAGE}" -var "app_version=${APP_VERSION}"
+'''
+
+[tasks.destroy]
+description = "terraform destroy"
+depends = ["_check-env"]
+dir = "{{config_root}}/terraform"
+run = '''
+#!/usr/bin/env bash
+set -euo pipefail
+export CLOUDFLARE_API_TOKEN="$(../scripts/cf-token.sh)"
+terraform destroy -var "container_image=${IMAGE}" -var "app_version=${APP_VERSION}"
+'''
+
+[tasks.deploy]
+description = "Push the image, then apply"
+dir = "{{config_root}}"
+run = ["mise run push", "mise run apply"]
+
+[tasks.clean]
+description = "Remove the Worker build output"
+dir = "{{config_root}}"
+run = "rm -rf worker/dist worker/node_modules"
+
+[tasks."fmt:mise"]
+run = "mise fmt"
+
+[tasks."lint:mise"]
+run = "mise fmt -c"
+
+[tasks."fmt:markdown"]
+run = 'markdownlint-cli2 --fix "**/*.md" "!**/node_modules/**" "!**/dist/**"'
+
+[tasks."lint:markdown"]
+run = 'markdownlint-cli2 "**/*.md" "!**/node_modules/**" "!**/dist/**"'
+
+[tasks."fmt:terraform"]
+dir = "{{config_root}}"
+run = "terraform fmt -recursive ."
+
+[tasks."lint:terraform"]
+dir = "{{config_root}}"
+run = "terraform fmt -recursive -check -diff ."
+
+[tasks."fmt:tflint"]
+dir = "{{config_root}}"
+wait_for = ["fmt:terraform"]
+run = [
+  "tflint --init",
+  "tflint --recursive --minimum-failure-severity=error --fix",
+]
+
+[tasks."lint:tflint"]
+dir = "{{config_root}}"
+run = ["tflint --init", "tflint --recursive --minimum-failure-severity=error"]
+
+[tasks."fmt:worker"]
+description = "Format, lint --fix and type check the Worker"
+dir = "{{config_root}}/worker"
+run = ["vp install --frozen-lockfile", "vp check --fix"]
+
+[tasks."lint:worker"]
+description = "Format check, lint and type check the Worker"
+dir = "{{config_root}}/worker"
+run = ["vp install --frozen-lockfile", "vp check"]
+
+[tasks."lint:shell"]
+dir = "{{config_root}}"
+run = '''
+#!/usr/bin/env bash
+set -euo pipefail
+while IFS= read -r -d "" script; do
+  echo "[INFO] shellcheck: ${script}"
+  shellcheck "${script}"
+done < <(find . -type f -name "*.sh" -not -path "*/node_modules/*" -not -path "*/.terraform/*" -print0)
+'''
+
+[tasks.fmt]
+depends = [
+  "fmt:mise",
+  "fmt:markdown",
+  "fmt:terraform",
+  "fmt:tflint",
+  "fmt:worker",
+]
+
+[tasks.lint]
+depends = [
+  "lint:mise",
+  "lint:markdown",
+  "lint:terraform",
+  "lint:tflint",
+  "lint:shell",
+  "lint:worker",
+  "test",
+]
+
+[tasks.pre-commit]
+depends = ["lint"]

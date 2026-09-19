@@ -1,0 +1,3 @@
+allowBuilds:
+  # The postinstall only checks that the platform binary matches.
+  esbuild: true

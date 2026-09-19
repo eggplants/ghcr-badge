@@ -1,0 +1,34 @@
+{
+  "name": "ghcr-badge-gateway",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Worker that fronts the ghcr-badge container with the edge cache",
+  "type": "module",
+  "scripts": {
+    "build": "esbuild src/index.ts --bundle --format=esm --platform=neutral --target=es2022 --main-fields=module,main --conditions=workerd,worker,browser --external:cloudflare:* --external:node:* --outfile=dist/index.mjs"
+  },
+  "dependencies": {
+    "@cloudflare/containers": "^0.3.7"
+  },
+  "devDependencies": {
+    "@cloudflare/workers-types": "^5.20260901.0",
+    "@types/node": "^26.4.1",
+    "esbuild": "^0.28.2",
+    "vite-plus": "0.3.1"
+  },
+  "devEngines": {
+    "packageManager": {
+      "name": "pnpm",
+      "version": "^12.0.0",
+      "onFail": "download"
+    }
+  },
+  "engines": {
+    "node": ">=22.18"
+  },
+  "pnpm": {
+    "overrides": {
+      "vite": "npm:@voidzero-dev/vite-plus-core@0.3.1"
+    }
+  }
+}

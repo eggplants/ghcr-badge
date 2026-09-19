@@ -1,0 +1,5 @@
+# Rule configuration for markdownlint. markdownlint-cli2 walks up from each
+# linted file collecting these, so this one file covers cloudflare/.
+MD013: false # line-length
+MD033: false # inline HTML
+MD041: false # first line in file should be a top-level heading
