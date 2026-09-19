@@ -26,6 +26,8 @@
 - ~<https://ghcr-badge.deta.dev/>~
   - Deta Space was [closed](https://deta.space/sunset)
 
+To run your own on Cloudflare Containers, see [cloudflare/](cloudflare/).
+
 [Deploy to Render]: <https://render.com/images/deploy-to-render-button.svg>
 
 ## Available paths
