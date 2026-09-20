@@ -56,7 +56,7 @@ urls.Documentation = "https://egpl.dev/ghcr-badge/"
 urls.Homepage = "https://ghcr-badge.egpl.dev"
 urls.Issues = "https://github.com/eggplants/ghcr-badge/issues"
 urls.Repository = "https://github.com/eggplants/ghcr-badge"
-scripts.ghcr-badge = "ghcr_badge.main:main"
+scripts.ghcr-badge = "ghcr_badge.cli:main"
 scripts.ghcr-badge-server = "ghcr_badge.server:main"
 
 [dependency-groups]

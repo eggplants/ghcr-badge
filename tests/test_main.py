@@ -1,4 +1,4 @@
-"""Tests for ghcr_badge.main module."""
+"""Tests for ghcr_badge.cli module."""
 
 from __future__ import annotations
 
@@ -8,7 +8,7 @@ from unittest.mock import MagicMock, Mock, patch
 
 import pytest
 
-from ghcr_badge.main import (
+from ghcr_badge.cli import (
     HttpConnectionNotFountError,
     check_connectivity,
     main,
@@ -19,7 +19,7 @@ from ghcr_badge.main import (
 class TestCheckConnectivity:
     """Test check_connectivity function."""
 
-    @patch("ghcr_badge.main.HTTPConnection")
+    @patch("ghcr_badge.cli.HTTPConnection")
     def test_connectivity_success(self, mock_http_connection: MagicMock) -> None:
         """Test check_connectivity with successful connection."""
         mock_conn = Mock()
@@ -32,7 +32,7 @@ class TestCheckConnectivity:
         mock_conn.request.assert_called_once_with("HEAD", "/")
         mock_conn.close.assert_called_once()
 
-    @patch("ghcr_badge.main.HTTPConnection")
+    @patch("ghcr_badge.cli.HTTPConnection")
     def test_connectivity_failure(self, mock_http_connection: MagicMock) -> None:
         """Test check_connectivity with failed connection."""
         mock_conn = Mock()
@@ -42,7 +42,7 @@ class TestCheckConnectivity:
         with pytest.raises(ArgumentTypeError, match="No connection"):
             check_connectivity()
 
-    @patch("ghcr_badge.main.HTTPConnection")
+    @patch("ghcr_badge.cli.HTTPConnection")
     def test_connectivity_custom_url(self, mock_http_connection: MagicMock) -> None:
         """Test check_connectivity with custom URL."""
         mock_conn = Mock()
@@ -102,9 +102,9 @@ class TestParseArgs:
 class TestMain:
     """Test main function."""
 
-    @patch("ghcr_badge.main.check_connectivity")
-    @patch("ghcr_badge.main.parse_args")
-    @patch("ghcr_badge.main.GHCRBadgeGenerator")
+    @patch("ghcr_badge.cli.check_connectivity")
+    @patch("ghcr_badge.cli.parse_args")
+    @patch("ghcr_badge.cli.GHCRBadgeGenerator")
     @patch("builtins.print")
     def test_main_success_no_output_file(
         self,
@@ -129,9 +129,9 @@ class TestMain:
         # When out is None, prints to stdout
         assert mock_print.call_count >= 1
 
-    @patch("ghcr_badge.main.check_connectivity")
-    @patch("ghcr_badge.main.parse_args")
-    @patch("ghcr_badge.main.GHCRBadgeGenerator")
+    @patch("ghcr_badge.cli.check_connectivity")
+    @patch("ghcr_badge.cli.parse_args")
+    @patch("ghcr_badge.cli.GHCRBadgeGenerator")
     @patch("builtins.print")
     @patch("pathlib.Path.open")
     def test_main_success_with_output_file(
@@ -160,8 +160,8 @@ class TestMain:
         mock_open.assert_called_once_with("w")
         mock_print.assert_called_once_with("<svg>badge</svg>", file=mock_file)
 
-    @patch("ghcr_badge.main.check_connectivity")
-    @patch("ghcr_badge.main.parse_args")
+    @patch("ghcr_badge.cli.check_connectivity")
+    @patch("ghcr_badge.cli.parse_args")
     def test_main_no_connectivity(self, mock_parse_args: MagicMock, mock_check_connectivity: MagicMock) -> None:
         """Test main with no connectivity."""
         mock_check_connectivity.return_value = False

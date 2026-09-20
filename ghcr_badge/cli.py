@@ -1,4 +1,4 @@
-"""Main script."""
+"""Command line entry point for ghcr-badge."""
 
 from __future__ import annotations
 
