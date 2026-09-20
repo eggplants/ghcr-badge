@@ -1,7 +1,5 @@
 # ghcr-badge on Cloudflare Containers
 
-A Worker in front of the `ghcr-badge-server` container: badges are cached at the edge by URL, only misses reach the container, and the container sleeps when idle.
-
 ## Requirements
 
 - A Cloudflare account on the Workers Paid plan
@@ -26,20 +24,16 @@ $EDITOR terraform/terraform.tfvars
 mise run init
 ```
 
-The hostname must not have a DNS record in iac: the Workers custom domain creates its own.
-
 ## Deploy
 
 ```bash
 # pull ghcr.io/eggplants/ghcr-badge:<latest tag>
 # push it to the Cloudflare registry, terraform apply
 mise run deploy
-```
+APP_VERSION=2.0.0 mise run deploy
 
-The tag comes from `git describe --tags`; override it with `APP_VERSION=2.0.0 mise run deploy`.
-
-```bash
-curl -sSI 'https://ghcr-badge.egpl.dev/eggplants/ghcr-badge/tags?trim=major' | grep -i x-cache   # MISS, then HIT
+# check
+curl -sSI 'https://ghcr-badge.egpl.dev/eggplants/ghcr-badge/tags?trim=major' | grep -i x-cache
 ```
 
 | Task | Command |
