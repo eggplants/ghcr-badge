@@ -36,11 +36,14 @@ for cmd in curl jq; do
   command -v "${cmd}" > /dev/null || { echo "[ERROR] ${cmd} is required" >&2; exit 1; }
 done
 
-auth=(-sS -H "Authorization: Bearer ${CLOUDFLARE_API_TOKEN}")
+# The token goes in on stdin so that it never shows up in curl's argv.
+cf_curl() {
+  curl -sS -H @- "$@" <<< "Authorization: Bearer ${CLOUDFLARE_API_TOKEN}"
+}
 account="${API}/accounts/${CF_ACCOUNT_ID}"
 
 # Idempotent: a namespace for the class means the migration already ran.
-existing="$(curl "${auth[@]}" "${account}/workers/durable_objects/namespaces" |
+existing="$(cf_curl "${account}/workers/durable_objects/namespaces" |
   jq -r --arg script "${CF_WORKER_NAME}" --arg class "${CF_CLASS_NAME}" \
     '.result[] | select(.script == $script and .class == $class) | .id')"
 if [[ -n "${existing}" ]]; then
@@ -49,7 +52,7 @@ if [[ -n "${existing}" ]]; then
 fi
 
 # Migration tags chain: continue from the script's current tag if it has one.
-current_tag="$(curl "${auth[@]}" "${account}/workers/scripts" |
+current_tag="$(cf_curl "${account}/workers/scripts" |
   jq -r --arg script "${CF_WORKER_NAME}" '.result[] | select(.id == $script) | .migration_tag // empty')"
 if [[ -z "${current_tag}" ]]; then
   migrations="$(jq -nc --arg class "${CF_CLASS_NAME}" '{new_tag: "v1", new_sqlite_classes: [$class]}')"
@@ -76,7 +79,7 @@ metadata="$(jq -nc \
   }')"
 
 echo "[INFO] Creating container-enabled Durable Object class ${CF_CLASS_NAME} on ${CF_WORKER_NAME} ($(jq -r '.new_tag' <<< "${migrations}"))"
-response="$(curl "${auth[@]}" -X PUT "${account}/workers/scripts/${CF_WORKER_NAME}" \
+response="$(cf_curl -X PUT "${account}/workers/scripts/${CF_WORKER_NAME}" \
   -F "metadata=${metadata};type=application/json" \
   -F "index.mjs=@${CF_BUNDLE};type=application/javascript+module")"
 if [[ "$(jq -r '.success // false' <<< "${response}")" != "true" ]]; then
@@ -85,7 +88,7 @@ if [[ "$(jq -r '.success // false' <<< "${response}")" != "true" ]]; then
   exit 1
 fi
 
-namespace_id="$(curl "${auth[@]}" "${account}/workers/durable_objects/namespaces" |
+namespace_id="$(cf_curl "${account}/workers/durable_objects/namespaces" |
   jq -r --arg script "${CF_WORKER_NAME}" --arg class "${CF_CLASS_NAME}" \
     '.result[] | select(.script == $script and .class == $class) | .id')"
 echo "[INFO] Durable Object namespace: ${namespace_id:-not visible yet}"

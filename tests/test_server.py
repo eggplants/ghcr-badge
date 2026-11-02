@@ -42,6 +42,8 @@ class TestReturnSvg:
         assert "Pragma" in response.headers
         assert "Expires" in response.headers
         assert response.headers["Pragma"] == "no-cache"
+        assert response.headers["Content-Security-Policy"] == "default-src 'none'"
+        assert response.headers["X-Content-Type-Options"] == "nosniff"
 
 
 class TestIndexRoute:
@@ -153,6 +155,52 @@ class TestTagsRoute:
         response = client.get("/testuser/testrepo/tags")
         assert response.status_code == 200
         assert response.json() == {"exception": "ValueError", "message": "boom"}
+
+
+class TestColorValidation:
+    """Test that `color` cannot inject markup into the SVG."""
+
+    @pytest.mark.parametrize("color", ["#fff", "#44cc11", "#44CC11AA", "red", "light_grey", "brightgreen"])
+    @pytest.mark.parametrize("endpoint", ["tags", "latest_tag", "size"])
+    @patch("ghcr_badge.server.GHCRBadgeGenerator")
+    def test_accepts_hex_and_names(
+        self,
+        mock_generator_class: MagicMock,
+        client: TestClient,
+        endpoint: str,
+        color: str,
+    ) -> None:
+        """Test that hex codes and color names are passed through."""
+        mock_generator_class.return_value = Mock(**{f"generate_{endpoint}.return_value": "<svg/>"})
+
+        response = client.get(f"/testuser/testrepo/{endpoint}", params={"color": color})
+        assert response.status_code == 200
+        assert mock_generator_class.call_args.kwargs["color"] == color
+
+    @pytest.mark.parametrize(
+        "color",
+        [
+            '#000"/><script>alert(1)</script><path d="',
+            "#12345g",
+            "#12",
+            "#",
+            "red;",
+            "",
+        ],
+    )
+    @pytest.mark.parametrize("endpoint", ["tags", "latest_tag", "size"])
+    @patch("ghcr_badge.server.GHCRBadgeGenerator")
+    def test_rejects_other_values(
+        self,
+        mock_generator_class: MagicMock,
+        client: TestClient,
+        endpoint: str,
+        color: str,
+    ) -> None:
+        """Test that anything else is rejected before a badge is generated."""
+        response = client.get(f"/testuser/testrepo/{endpoint}", params={"color": color})
+        assert response.status_code == 422
+        mock_generator_class.assert_not_called()
 
 
 class TestLatestTagRoute:

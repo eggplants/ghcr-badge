@@ -14,7 +14,7 @@ from fastapi import FastAPI, Query, Request
 from fastapi.responses import JSONResponse, PlainTextResponse, Response
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 
 from . import __version__
 from .generate import GHCRBadgeGenerator
@@ -49,7 +49,10 @@ class PrettyJSONResponse(JSONResponse):
 class BadgeQuery(BaseModel):
     """Query parameters shared by every badge endpoint."""
 
-    color: str = "#44cc11"
+    # anybadge embeds a `#`-prefixed color verbatim into the SVG, so only hex digits
+    # may follow it. A bare name is looked up in anybadge's color table and never
+    # reaches the SVG as written.
+    color: str = Field(default="#44cc11", pattern=r"^(#[0-9a-fA-F]{3,8}|[A-Za-z_]+)$")
     trim: str = ""
 
 
@@ -131,6 +134,9 @@ def return_svg(svg: str) -> Response:
             "Cache-Control": "max-age=3666,s-maxage=3666,no-store,proxy-revalidate",
             "Pragma": "no-cache",  # for HTTP 1.0
             "Expires": expiry_time.strftime("%a, %d %b %Y %H:%M:%S GMT"),
+            # A badge opened directly is an SVG document; it must not run scripts.
+            "Content-Security-Policy": "default-src 'none'",
+            "X-Content-Type-Options": "nosniff",
         },
     )
 

@@ -33,12 +33,13 @@ done
 cf_api() {
   local method="$1" path="$2" body="${3:-}"
   local args=(-sS -X "${method}"
-    -H "Authorization: Bearer ${CLOUDFLARE_API_TOKEN}"
+    -H @-
     -H "Content-Type: application/json")
   [[ -n "${body}" ]] && args+=(--data "${body}")
 
+  # The token goes in on stdin so that it never shows up in curl's argv.
   local response
-  response="$(curl "${args[@]}" "${API}${path}")"
+  response="$(curl "${args[@]}" "${API}${path}" <<< "Authorization: Bearer ${CLOUDFLARE_API_TOKEN}")"
 
   if [[ "$(jq -r '.success // false' <<< "${response}")" != "true" ]]; then
     echo "[ERROR] ${method} ${path} failed:" >&2
