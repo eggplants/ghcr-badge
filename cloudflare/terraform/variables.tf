@@ -41,7 +41,7 @@ variable "compatibility_date" {
 
 variable "app_version" {
   type        = string
-  description = "The ghcr-badge release being served, e.g. 2.0.0. Shown by /health; passed in by mise from the latest tag."
+  description = "The ghcr-badge release being served, e.g. 2.0.0. Shown by /health; passed in by mise from the latest release tag on origin."
 }
 
 variable "container_image" {

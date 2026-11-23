@@ -20,9 +20,7 @@ minimum_release_age = "7d"
 
 [env]
 _.file = ".env"
-# The release to run: the latest tag of this repository, without its "v".
-# release.yml pushes it as ghcr.io/eggplants/ghcr-badge:<version>.
-APP_VERSION = "{{ exec(command='echo ${APP_VERSION:-$(git -C .. describe --tags --abbrev=0 2>/dev/null | sed s/^v//)}') }}"
+APP_VERSION = "{{ exec(command=`echo ${APP_VERSION:-$(git -C .. ls-remote --tags --refs origin 2>/dev/null | sed -n 's#.*refs/tags/v##p' | grep -xE '[0-9]+[.][0-9]+[.][0-9]+' | sort -V | tail -n1)}`) }}"
 SOURCE_IMAGE = "{{ get_env(name='SOURCE_IMAGE', default='ghcr.io/eggplants/ghcr-badge') }}"
 IMAGE_NAME = "{{ get_env(name='IMAGE_NAME', default='ghcr-badge') }}"
 IMAGE_TAG = "{{ get_env(name='IMAGE_TAG', default=env.APP_VERSION) }}"
@@ -37,7 +35,7 @@ run = '''
 set -euo pipefail
 if [[ -z "${APP_VERSION}" ]]; then
   echo "[ERROR] APP_VERSION is empty." >&2
-  echo "        No release tag was found; run with APP_VERSION=... mise run <task>" >&2
+  echo "        No vX.Y.Z tag could be read from origin; run with APP_VERSION=... mise run <task>" >&2
   exit 1
 fi
 '''
