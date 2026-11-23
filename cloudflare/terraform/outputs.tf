@@ -1,16 +1,11 @@
 output "badge_url" {
-  value       = var.enable_custom_domain ? "https://${var.hostname}/" : cloudflare_worker.badge.subdomain.url
-  description = "Where the badges (and the landing page) are served: the custom domain, or workers.dev while the domain is not attached."
-}
-
-output "zone_id" {
-  value       = local.zone_id
-  description = "The zone the badges are published under, looked up by zone_name."
+  value       = "https://${var.hostname}/"
+  description = "Where the badges (and the landing page) are served, once the egpl.dev repository has attached the hostname."
 }
 
 output "workers_dev_url" {
   value       = var.enable_workers_dev ? cloudflare_worker.badge.subdomain.url : null
-  description = "The *.workers.dev address, when enable_workers_dev is true. The zone rule does not apply to it."
+  description = "The *.workers.dev address, when enable_workers_dev is true. None of the zone's rules apply to it."
 }
 
 output "worker_name" {

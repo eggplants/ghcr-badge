@@ -123,14 +123,6 @@ resource "cloudflare_workers_deployment" "badge" {
   }
 }
 
-resource "cloudflare_workers_custom_domain" "badge" {
-  count = var.enable_custom_domain ? 1 : 0
-
-  account_id = var.account_id
-  zone_id    = local.zone_id
-  zone_name  = var.zone_name
-  hostname   = var.hostname
-  service    = cloudflare_worker.badge.name
-
-  depends_on = [cloudflare_workers_deployment.badge]
-}
+# The hostname is attached to this Worker from the egpl.dev repository
+# (terraform/workers.tf), which owns everything in the zone. Apply this first
+# when setting up from scratch, and detach the hostname there before a destroy.

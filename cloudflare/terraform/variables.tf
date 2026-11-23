@@ -3,36 +3,13 @@ variable "account_id" {
   description = "Cloudflare account ID that owns the Worker and the container."
 }
 
-variable "zone_id" {
-  type        = string
-  default     = ""
-  description = "Pin the zone by ID instead of looking it up by name. Rarely needed."
-}
-
-variable "zone_name" {
-  type        = string
-  default     = "egpl.dev"
-  description = "Zone apex. The zone and its DNS records are managed in the iac repository; this only looks the zone up."
-}
-
 variable "hostname" {
   type        = string
+  default     = "ghcr-badge.egpl.dev"
   description = <<-EOT
-    Hostname the badges are served on, e.g. ghcr-badge.egpl.dev. Must be inside
-    zone_name, and must have no DNS record of its own in the iac repository: the
-    Workers custom domain creates and owns that record (see enable_custom_domain).
-  EOT
-}
-
-variable "enable_custom_domain" {
-  type        = bool
-  default     = true
-  description = <<-EOT
-    Attach the Worker to hostname as a Workers custom domain. That creates the
-    DNS record and refuses to while another record (the CNAME to Render) still
-    holds the name. Set false, with enable_workers_dev = true, to deploy the
-    Worker and the container first and try them on *.workers.dev while DNS
-    still points at the old deployment.
+    Hostname the badges are served on. Only the outputs use it: the egpl.dev
+    repository attaches it to the Worker (terraform/workers.tf) and holds the
+    zone's rules.
   EOT
 }
 
@@ -42,11 +19,11 @@ variable "enable_workers_dev" {
   description = <<-EOT
     Also serve the Worker on its *.workers.dev hostname.
 
-    Useful before the zone's nameservers have moved. Understand what it costs:
-    workers.dev is not a zone you own, so the rate limiting rule in security.tf
-    does not apply to it. The Worker's own per-IP limit is all that is left, and
-    the hostname is a second door to the same container. Leave it off in
-    production.
+    Useful before the hostname is attached. Understand what it costs:
+    workers.dev is not a zone you own, so none of the zone's rules
+    (terraform/security.tf in the egpl.dev repository) apply to it. The
+    Worker's own per-IP limit is all that is left, and the hostname is a
+    second door to the same container. Leave it off in production.
   EOT
 }
 
@@ -138,32 +115,10 @@ variable "browser_ttl_seconds" {
 variable "rate_limit_miss" {
   type        = number
   default     = 60
-  description = "Cache misses per 60 s per IP, per colo. Hits are never counted."
-}
-
-variable "zone_rate_limit_requests" {
-  type        = number
-  default     = 100
-  description = "Zone-level rate limiting rule: requests per 10 s per IP, per colo, before the rule blocks. Camo fetches every badge of a README at once, so leave room for a page of them."
-}
-
-variable "zone_rate_limit_mitigation_timeout" {
-  type        = number
-  default     = 10
   description = <<-EOT
-    How long the block lasts once the zone rate limit trips, in seconds. The
-    Free plan only allows 10; Pro allows up to an hour, Business up to a day.
-  EOT
-}
-
-variable "enable_zone_rules" {
-  type        = bool
-  default     = false
-  description = <<-EOT
-    Manage the zone-level rate limiting ruleset. A zone holds one ruleset per
-    phase, so this can only be true when nothing else owns http_ratelimit on
-    the zone (on egpl.dev, dbpedia-japanese-mirror's Terraform does — add a
-    rule for this hostname there instead). Off, the Worker's own per-IP limit
-    on cache misses is the only rate limit, which is enough for a badge server.
+    Cache misses per 60 s per IP, per colo. Hits are never counted. There is
+    no zone-level rate limit in front of it: the egpl.dev zone's one rule on
+    the Free plan is the DBpedia mirror's (see terraform/security.tf in the
+    egpl.dev repository).
   EOT
 }
