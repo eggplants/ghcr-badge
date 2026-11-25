@@ -5,26 +5,42 @@ updates:
   schedule:
     interval: monthly
   groups:
-    dependencies:
-      dependency-type: production
-    dev-dependencies:
-      dependency-type: development
+    uv:
+      patterns: ["*"]
+  cooldown:
+    default-days: 7
+- package-ecosystem: npm
+  directory: /cloudflare/worker
+  schedule:
+    interval: monthly
+  groups:
+    npm:
+      patterns: ["*"]
+  cooldown:
+    default-days: 7
+- package-ecosystem: terraform
+  directory: /cloudflare/terraform
+  schedule:
+    interval: monthly
+  groups:
+    terraform:
+      patterns: ["*"]
   cooldown:
     default-days: 7
 - package-ecosystem: github-actions
   directory: /
   schedule:
     interval: monthly
-  cooldown:
-    default-days: 7
-- package-ecosystem: "devcontainers"
-  directory: /
-  schedule:
-    interval: monthly
+  groups:
+    github-actions:
+      patterns: ["*"]
   cooldown:
     default-days: 7
 - package-ecosystem: docker
   directory: /
+  groups:
+    docker:
+      patterns: ["*"]
   schedule:
     interval: monthly
   cooldown:
