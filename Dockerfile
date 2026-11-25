@@ -9,7 +9,7 @@ RUN ln -s /usr/local/bin/python3 /usr/bin/python3
 RUN /usr/bin/python3 -m venv /opt/venv
 RUN /opt/venv/bin/pip install git+https://github.com/eggplants/ghcr-badge@${VERSION}
 
-FROM al3xos/python-distroless:3.14.7-debian13@sha256:ccb9409a6513569adfda0358cbd6d89ccda0933ba807b4f0eac09e0d7f2bf749
+FROM al3xos/python-distroless:3.14.10-debian13@sha256:6e4b946fb54414a8f5eda4587f33de341f0d57c72327fccac88ae7234b56790c
 COPY --from=builder /opt/venv /opt/venv
 ENV PATH="/opt/venv/bin:$PATH"
 ENV PYTHONPATH="/opt/venv/lib/python3.14/site-packages"
