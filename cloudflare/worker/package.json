@@ -11,10 +11,10 @@
     "@cloudflare/containers": "^0.3.7"
   },
   "devDependencies": {
-    "@cloudflare/workers-types": "^5.20260901.0",
-    "@types/node": "^26.4.1",
+    "@cloudflare/workers-types": "^5.20261118.1",
+    "@types/node": "^26.6.6",
     "esbuild": "^0.28.2",
-    "vite-plus": "0.3.1"
+    "vite-plus": "1.7.0"
   },
   "devEngines": {
     "packageManager": {
